@@ -1,0 +1,124 @@
+﻿#ignore white spaces and #s
+//plurals
+bur	বোৰ
+hot	হঁত
+hokol	সকল
+mokha	মখা
+bilak	বিলাক
+hupa	সোপা
+man	মান
+borgo	বৰ্গ
+brinda	বৃন্দ
+mondoli	মণ্ডলী
+raji	ৰাজি
+rakhi	ৰাশি
+homuh	সমুহ
+awoli	আৱলী
+serek	চেৰেক
+diyek	দিয়েক    
+
+
+//case
+k	ক
+ot	ত
+t	ত
+loi	লৈ
+ye	এ
+or	ৰ
+dwara	দ্বাৰা
+di	দি
+e	ই
+orpora	ৰপৰা
+pora	পৰা
+ya	ে
+a	ে
+e	ে
+re	ৰে
+we	ৱে
+ya	য়া
+te	তে
+r	ৰ
+
+
+//definitive
+jon	জন
+joni	 জনী
+khon	খন
+tu	টো
+dal	ডাল
+goraki	গৰাকী
+jak	জাক
+man	মান
+akhi	আখি
+ati	আঁটি
+kotha	কঠা
+kon	কণ
+koni	কণি
+kacholi	কাচলি
+kucha	কোছা
+kura	কুৰা
+khon	খন
+khoni	খনি
+khini	খিনি
+khila	খিলা
+khor	খৰ
+raki	ৰাকী
+ghor	ঘৰ
+chokol	চকল
+sota	চটা
+sati	চটি
+chopora	চপৰা
+chomoka	চমকা
+cholu	চলু
+chola	চলা
+choli	চলি
+chabo	চাব
+sum	চাম
+silim	চিলিম
+sira	চিৰা
+seleka	চেলেকা
+sati	ছাটি
+sali	ছালি
+suwa	ছোৱা
+lu	লো
+
+//pleo
+he	হে
+sun	চোন
+ne	নে
+u	ো
+u	ও
+
+
+//extra
+uwe	োৱে
+utei	োঁতেই
+era	েৰে
+ye	য়ে
+nu	নো
+bhave	ভাৱে
+koi	কৈ
+dore	দৰে
+hok	ঁহক
+orpora	ৰপৰা
+pora	পৰা
+kei	কেই
+ta	টা
+ba	বা
+le	লে
+
+//action
+isil	িছিল
+disilu	 িছিলোঁ
+esu	িছোঁ
+is	 িছ
+im	িম
+isile	িছিলে
+isila	িছিলা
+ise	িছে
+isa	িছা
+oisa	 ৈছে
+oiso	 ৈছ
+oisa	 ৈছা
+uute	 োঁতে 
+ilhetan	িলেহেঁতেন

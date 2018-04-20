@@ -1,0 +1,51 @@
+<RCC>
+    <qresource prefix="/">
+        <file>images/copy.png</file>
+        <file>images/cut.png</file>
+        <file>images/new.png</file>
+        <file>images/open.png</file>
+        <file>images/paste.png</file>
+        <file>images/save.png</file>
+        <file>images/bold.png</file>
+        <file>images/italic.png</file>
+        <file>images/text_color.ico</file>
+        <file>images/underline.png</file>
+        <file>images/keyboard.png</file>
+        <file>images/logo3.png</file>
+        <file>images/font.jpg</file>
+        <file>images/f2.png</file>
+        <file>images/mode2.png</file>
+        <file>images/mode3.png</file>
+        <file>images/_mode2.png</file>
+        <file>images/_mode3.png</file>
+        <file>images/logo.png</file>
+        <file>files/user_keymap.txt</file>
+        <file>images/right.png</file>
+        <file>images/left.png</file>
+        <file>images/center.png</file>
+        <file>images/justify.png</file>
+        <file>images/print.png</file>
+        <file>images/save_html.png</file>
+        <file>images/save_pdf.png</file>
+        <file>files/char_usage.txt</file>
+        <file>files/inflexions_comb.txt</file>
+        <file>files/processed_dictionary.txt</file>
+        <file>files/unicode_to_roman_override.txt</file>
+        <file>files/Siyamrupali_1_01.ttf</file>
+        <file>files/Nabaprabhat.ttf</file>
+        <file>files/kalpurush.ttf</file>
+        <file>files/Lohit-Assamese.ttf</file>
+        <file>files/DEFAULT.dat</file>
+        <file>files/poribhasha-file.txt</file>
+        <file>files/dictionary-file.txt</file>
+        <file>images/welcome1.png</file>
+        <file>images/wait.png</file>
+      <!--    <file>videos/1-LuitPad_installation.m4v</file>
+
+        <file>files/SHREE0550-B.ttf</file>
+        <file>files/SHREE0550-BI.ttf</file>
+        <file>files/SHREE0550-I.ttf</file>
+        <file>files/SHREE0550.ttf</file>
+        -->
+    </qresource>
+</RCC>
