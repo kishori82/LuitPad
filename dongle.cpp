@@ -1,7 +1,12 @@
+
+#ifndef __DONGLE_H_
+#define  __DONGLE_H_
+
 #include "dongle.h"
 
 #include <string>
 
+#ifdef _WINDOWS
 QString diskID(QChar driveLetter) {
 
     wchar_t drive[4] = L"C:\\";
@@ -67,6 +72,7 @@ QChar getInstallableDriveName() {
     return(QChar(' '));
 
 }
+
 
 
 void loadFileNames(QHash<QString, unsigned int> &FileName) {
@@ -275,3 +281,6 @@ QString getNumberForFile(QString filename) {
 
     return QString(szTemp);
 }
+#endif
+
+#endif

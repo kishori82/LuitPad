@@ -1,19 +1,20 @@
 #ifndef WRITEFILES_H
 #define WRITEFILES_H
 #include <QStringList>
-#include <Windows.h>
 #include <QHash>
 #include <QCryptographicHash>
 #include <QDebug>
 #include <QFile>
 #include <QTime>
-#include <Windows.h>
-#include <windows.h>
-#include <winioctl.h>
+
 #include <algorithm>
 #include <QDir>
 #include <QSettings>
 
+#ifdef _WINDOWS
+#include <Windows.h>
+#include <windows.h>
+#include <winioctl.h>
 QString diskID(QChar driveLetter);
 
 QChar getInstallableDriveName() ;
@@ -26,5 +27,8 @@ QString computeSignature();
 QString getStoredKey();
 
 void getStoredKeys(QHash<QString, bool> &keys);
+
+#endif
+
 
 #endif // WRITEFILES_H

@@ -15,6 +15,7 @@ float Min(float a, float b) {
 }
 
 
+#ifdef _WINDOWS
 QString Utilities::driveIDs(){
 
     char  g_szDrvMsg[] = "A:\n";
@@ -40,13 +41,7 @@ QString Utilities::driveIDs(){
 
     return mesg;
 }
-bool Utilities::isAnInflectionalForm(QString a, QString b) {
 
-    QString rootWord = Phonetic::getRootWord(b);
-
-    if(a.compare(rootWord)==0) return true;
-    return false;
-}
 
 QString Utilities::driveID(QString driveLetter) {
 
@@ -63,6 +58,15 @@ QString Utilities::driveID(QString driveLetter) {
 
 }
 
+#endif
+
+bool Utilities::isAnInflectionalForm(QString a, QString b) {
+
+    QString rootWord = Phonetic::getRootWord(b);
+
+    if(a.compare(rootWord)==0) return true;
+    return false;
+}
 
 QPixmap Utilities::UpdateAlphaChannel(QPixmap &px, unsigned int i, unsigned int dissolve_span,  QVector<QPoint> &rVector)
 {
@@ -1152,7 +1156,7 @@ bool Utilities::hasCharAnywhere(QString &str, ushort uCode) {
          return false;
  }
 
-
+#ifdef _WINDOWS
 QString Utilities::getSectorNumber(QString driveLetter) {
 
 
@@ -1222,3 +1226,5 @@ QString Utilities::getSectorNumber(QString driveLetter) {
 
     return QString(szTemp);
 }
+
+#endif

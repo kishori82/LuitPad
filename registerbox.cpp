@@ -20,6 +20,8 @@ void RegisterBox::clearKey() {
 
 void RegisterBox::on_buttonBox_accepted()
 {
+
+#ifdef _WINDOWS
     QSettings storedKey("LuitPad", "Nabaprabhat");
     QString serial = ui->plainTextEdit->toPlainText();
     if(serial.size() ==0 ) {
@@ -53,8 +55,8 @@ void RegisterBox::on_buttonBox_accepted()
         }
     }
 
-
     Utilities::warningBox("Not a valid registration key for this computer!");
+#endif
 }
 
 /*

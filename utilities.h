@@ -16,13 +16,17 @@
 
 #include <QSize>
 #include <QVector>
+
+/*
 #include <Windows.h>
 #include <windows.h>
 #include <winioctl.h>
-
 #include <direct.h>
-#include <stdio.h>
 #include <tchar.h>
+*/
+
+#include <stdio.h>
+
 #include <stdlib.h>
 #include <stddef.h>
 #include <string.h>

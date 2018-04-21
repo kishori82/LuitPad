@@ -1,6 +1,15 @@
 
 QT += core gui
 
+#unix|win32: LIBS += -lQtCore4
+
+win64 {
+     CONFIG+= static
+     DEFINES +=  _WIN32_DCOM
+     DEFINES +=  _WINDOWS
+}
+
+ DEFINES -=_WIN32_DCOM
 
 TEMPLATE = app
 
@@ -72,7 +81,6 @@ RC_FILE = luitpad.rc
 
 
 
-unix|win32: LIBS += -lQtCore4
 
-FORMS += \
-    registerbox.ui
+
+FORMS += registerbox.ui

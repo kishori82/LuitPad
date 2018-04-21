@@ -1,3 +1,7 @@
+#ifdef __SECURITY_H_
+#define  __SECURITY_H
+#ifdef _WINDOWS
+
 #include "security.h"
 
 
@@ -318,3 +322,8 @@ QStringList GetMACaddress()
 
     return encryptedmacAddresses;
 }
+
+
+#endif
+
+#endif

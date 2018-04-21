@@ -15,7 +15,6 @@
 
 
 
-#define _WINDOWS
 
 #ifdef _WINDOWS
 #include "security.h"
@@ -60,8 +59,10 @@ extern bool _auto_character_fill_setting = false;
 extern bool _single_character_mode_setting = false;
 extern bool _hide_tooltip_mode_setting = false;
 
+#ifdef _WINDOWS
 #include <windows.h>
 #include <conio.h>
+#endif
 
 
 
@@ -79,7 +80,9 @@ MainWindow::MainWindow() : completer(0)
 */
 
 
+#ifdef _WINDOWS
     QString cpuinfo_string = cpuinfo();
+
     QStringList mac_adressList = GetMACaddress();
 
     hardDiskIDs.insert("hLaX8p2iMdqw6k/Mh/0nyZtVLFc=",1);
@@ -204,12 +207,13 @@ MainWindow::MainWindow() : completer(0)
         }
     }
 
-
-
     if(hardDiskIDs.contains(computeSignature())) {
         validSoftware++;
         //piratedCopy(mesg);
     }
+#else
+    validSoftware++;
+#endif
   //  validSoftware =0;
 
     Utilities::initializeVowelMap();
@@ -844,6 +848,7 @@ void MainWindow::updateWindowMenu()
 
 void MainWindow::createMessageText(MdiChild *child) {
 
+#ifdef _WINDOWS
     child->setHtml(
                       QString("THIS IS A LIMITED TRIAL VERSION!<br><br>") +\
                       QString("     To register for the full version, copy the following <font color=\"blue\"> blue </font> line <br>") +\
@@ -856,6 +861,7 @@ void MainWindow::createMessageText(MdiChild *child) {
                       QString("3. Trial version allows only a max of 250 characters.<br>")
 
                    );
+#endif
     child->setFixedSize(800,350);
 
 }
@@ -866,7 +872,7 @@ MdiChild *MainWindow::createMdiChild(FILETYPE type)
     MdiChild *child =  new MdiChild;
     setCentralWidget(editor);
     QMdiSubWindow *s= editor->addSubWindow(child);
-    editor->setWindowIcon(QIcon::QIcon(":/images/logo3.png"));
+    editor->setWindowIcon(QIcon(":/images/logo3.png"));
     s->setSizePolicy(QSizePolicy::MinimumExpanding   ,QSizePolicy::Expanding);
 
     connect(child, SIGNAL(copyAvailable(bool)), cutAct, SLOT(setEnabled(bool)));
@@ -1070,19 +1076,19 @@ void MainWindow::createActions()
     iText->setStatusTip(tr("Italic Text"));
     connect(iText, SIGNAL(triggered()),this, SLOT(italicText()));
     iText->setCheckable(true);
-    iText->setShortcut(QKeySequence::QKeySequence(Qt::CTRL + Qt::Key_I));
+    iText->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_I));
 
     bText = new QAction(QIcon(":/images/bold.png"), tr("Bold Text"), this);
     bText->setStatusTip(tr("Bold Text"));
     connect(bText, SIGNAL(triggered()),this, SLOT(boldText()));
     bText->setCheckable(true);
-    bText->setShortcut(QKeySequence::QKeySequence(Qt::CTRL + Qt::Key_B));
+    bText->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_B));
 
     uText = new QAction(QIcon(":/images/underline.png"), tr("UnderLine Text"), this);
     uText->setStatusTip(tr("Underline text"));
     connect(uText, SIGNAL(triggered()),this, SLOT(underlineText()));
     uText->setCheckable(true);
-    uText->setShortcut(QKeySequence::QKeySequence(Qt::CTRL + Qt::Key_U));
+    uText->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_U));
 
     f2Act = new QAction(QIcon(":/images/mode2.png"), tr("Toggle Character->Phonetic mode"), this);
     f2Act->setStatusTip(tr("Character mode"));
@@ -1311,7 +1317,7 @@ void MainWindow::createToolBars()
     comboSize = new QComboBox(formatToolBar);
     comboSize->setObjectName("comboSize");
     comboSize->setEditable(true);
-    comboSize->setFont(QFont::QFont("Times New Roman",12,0,false));
+    comboSize->setFont(QFont("Times New Roman",12,0,false));
 
 
     QFontDatabase db;
@@ -1561,14 +1567,14 @@ void MainWindow::toggleHideToolTipMode() {
 void MainWindow::f2Action(){
 
     if( _state == F3 ) {
-        f2Act->setIcon(QIcon::QIcon(":/images/mode2.png"));
+        f2Act->setIcon(QIcon(":/images/mode2.png"));
         f2Act->setText( tr("Change Character->Phonetic mode"));
         f2Act->setStatusTip(tr("Character mode"));
       //  f3Act->setIcon(QIcon::QIcon(":/images/_mode3.png"));
          _state = F2;
     }
     else {
-        f2Act->setIcon(QIcon::QIcon(":/images/_mode2.png"));
+        f2Act->setIcon(QIcon(":/images/_mode2.png"));
         f2Act->setText(tr("Change Phonetic->Character mode"));
         f2Act->setStatusTip(tr("Phonetic mode"));
     //    f3Act->setIcon(QIcon::QIcon(":/images/mode3.png"));
@@ -1808,7 +1814,7 @@ class SleepThread : public QThread{
      }
 };
 
-
+#ifdef  _WINDOWS
 QString MainWindow::hardDiskID() {
     DWORD dwVolSerial;
     BOOL bIsRetrieved;
@@ -1842,3 +1848,5 @@ QString MainWindow::generateSignature()
     serial.append(cpuinfo_string);
     return(QString("&lt;&lt;") + serial + QString("&gt;&gt;"));
 }
+
+#endif
