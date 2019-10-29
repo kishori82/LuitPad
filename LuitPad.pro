@@ -13,58 +13,65 @@ win64 {
 
 TEMPLATE = app
 
-HEADERS       = mainwindow.h \
-                            mdichild.h \
-    TreeNode.h \
-    wordstrie.h \
-    Constants.h \
-    tooltipsingleton.h \
-    chartrie.h \
-    textedit.h \
-    phonetic.h \
-    profile.h \
-    romanization.h \
-    tablemodel.h \
-    encryption.h \
-    inputdialog.h \
-    loaddatathread.h \
-    utilities.h \
-    asciiTrie.h \
-    Translator.h \
-    dongle.h \
-    searchreplace.h \
-    highlighter.h \
-    inflexTrie.h \
-    dictionary.h \
-    security.h \
-    registerbox.h
+HEADERS  = \
+    src/window/mainwindow.h \
+    src/window/mdichild.h \
+\
+    src/core/TreeNode.h \
+    src/core/loaddatathread.h \
+    src/core/inflexTrie.h \
+    src/core/constants.h \
+    src/core/tablemodel.h \
+    src/core/inputdialog.h \
+\
+    src/phonetic/wordstrie.h \
+    src/phonetic/phonetic.h \
+    src/phonetic/romanization.h \
+    src/phonetic/translator.h \
+\
+    src/editor/tooltipsingleton.h \
+    src/editor/highlighter.h \
+    src/editor/searchreplace.h \
+    src/editor/textedit.h \
+\
+    src/characters/chartrie.h \
+    src/characters/asciiTrie.h \
+\
+    src/profile/profile.h \
+\
+    src/utils/utilities.h \
+\
+    src/dictionary/dictionary.h
 
+SOURCES  = main.cpp \
+    src/window/mainwindow.cpp \
+    src/window/mdichild.cpp \
+    \
+    src/core/TreeNode.cpp \
+    src/core/loaddatathread.cpp \
+    src/core/inflexTrie.cpp \
+    src/core/tablemodel.cpp \
+    src/core/inputdialog.cpp \
+    \
+    src/phonetic/wordstrie.cpp \
+    src/phonetic/phonetic.cpp \
+    src/phonetic/romanization.cpp \
+    src/phonetic/translator.cpp \
+    \
+    src/editor/tooltipsingleton.cpp \
+    src/editor/highlighter.cpp \
+    src/editor/searchreplace.cpp \
+    src/editor/textedit.cpp \
+    \
+    src/characters/chartrie.cpp \
+    src/characters/asciiTrie.cpp \
+    \
+    src/profile/profile.cpp \
+    \
+    src/utils/utilities.cpp \
+    \
+    src/dictionary/dictionary.cpp
 
-SOURCES       = main.cpp \
-                            mainwindow.cpp \
-                            mdichild.cpp \
-    TreeNode.cpp \
-    wordstrie.cpp \
-    tooltipsingleton.cpp \
-    chartrie.cpp \
-    textedit.cpp \
-    phonetic.cpp \
-    profile.cpp \
-    romanization.cpp \
-    tablemodel.cpp \
-    encryption.cpp \
-    inputdialog.cpp \
-    loaddatathread.cpp \
-    utilities.cpp \
-    asciiTrie.cpp \
-    Translator.cpp \
-    dongle.cpp \
-    searchreplace.cpp \
-    highlighter.cpp \
-    inflexTrie.cpp \
-    dictionary.cpp \
-    security.cpp \
-    registerbox.cpp
 RESOURCES     = mdi.qrc
 
 TARGET = LuitPad
@@ -83,4 +90,4 @@ RC_FILE = luitpad.rc
 
 
 
-FORMS += registerbox.ui
+FORMS +=

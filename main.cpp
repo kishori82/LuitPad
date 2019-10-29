@@ -39,13 +39,13 @@
 ****************************************************************************/
 
 #include <QApplication>
-#include "phonetic.h"
-#include "mainwindow.h"
+#include "src/phonetic/phonetic.h"
+#include "src/window/mainwindow.h"
 #include <stdio.h>
 #include <QStringList>
 #include <QHash>
 #include <QDebug>
-#include "loaddatathread.h"
+#include "src/core/loaddatathread.h"
 
 QStringList sysIds, inputIds;
 QHash<QString, bool> validIds;
