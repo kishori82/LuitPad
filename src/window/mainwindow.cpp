@@ -63,10 +63,6 @@ extern QHash<QString, bool> validIds;
 MainWindow::MainWindow() : completer(0)
 {
 
-/*
-    QSettings storedKey("LuitPad", "NabaPrabhat");
-    storedKey.setValue("registration", "nothing");
-*/
 
     Utilities::initializeVowelMap();
     Utilities::initializeConsonantMap();
@@ -93,33 +89,6 @@ MainWindow::MainWindow() : completer(0)
     fontDB.addApplicationFont(":/files/Siyamrupali_1_01.ttf");
     fontDB.addApplicationFont(":/files/kalpurush.ttf");
     fontDB.addApplicationFont(":/files/Lohit-Assamese.ttf");
-
-/*
-
-    fontDB.addApplicationFont(":/files/SHREE0550-B.ttf");
-    fontDB.addApplicationFont(":/files/SHREE0550-BI.ttf");
-    fontDB.addApplicationFont(":/files/SHREE0550-I.ttf");
-    fontDB.addApplicationFont(":/files/SHREE0550.ttf");
-    fontDB.addApplicationFont(":/files/SHREE0552-B.ttf");
-    fontDB.addApplicationFont(":/files/SHREE0552-BI.ttf");
-    fontDB.addApplicationFont(":/files/SHREE0552-I.ttf");
-    fontDB.addApplicationFont(":/files/SHREE0552.ttf");
-    fontDB.addApplicationFont(":/files/SHREE0558-B.ttf");
-    fontDB.addApplicationFont(":/files/SHREE0558-BI.ttf");
-    fontDB.addApplicationFont(":/files/SHREE0558-I.ttf");
-    fontDB.addApplicationFont(":/files/SHREE0558.ttf");
-    fontDB.addApplicationFont(":/files/SHREE0562-B.ttf");
-    fontDB.addApplicationFont(":/files/SHREE0562-BI.ttf");
-    fontDB.addApplicationFont(":/files/SHREE0562-I.ttf");
-    fontDB.addApplicationFont(":/files/SHREE0562.ttf");
-    fontDB.addApplicationFont(":/files/SHREE0574-B.ttf");
-    fontDB.addApplicationFont(":/files/SHREE0574-BI.ttf");
-    fontDB.addApplicationFont(":/files/SHREE0574-I.ttf");
-    fontDB.addApplicationFont(":/files/SHREE0574.ttf");
-    fontDB.addApplicationFont(":/files/SHREE0580-B.ttf");
-    fontDB.addApplicationFont(":/files/SHREE0580-BI.ttf");
-    fontDB.addApplicationFont(":/files/SHREE0580-I.ttf");
-*/
 
 
     //fontDB.addApplicationFont("font/Lohit-Assamese.ttf");
@@ -153,11 +122,9 @@ MainWindow::MainWindow() : completer(0)
 #endif
 
 
-
   //  ShowTutorialThread *showtutorial = new ShowTutorialThread;
     //showtutorial->start();
    // QThreadPool::start(showtutorial);
-
 
     LoadDataThread  *loadData = new LoadDataThread;
     loadData->start();
@@ -350,7 +317,6 @@ void MainWindow::newFile(FILETYPE type)
 #ifdef EDIT_DICTIONARY_READ
     loadWords(child);
 #endif
-
 
     QMenu *childMenu= getNewChildMenu();
 
@@ -708,8 +674,10 @@ MdiChild *MainWindow::createMdiChild(FILETYPE type)
     MdiChild *child =  new MdiChild;
     setCentralWidget(editor);
     QMdiSubWindow *s= editor->addSubWindow(child);
+
     editor->setWindowIcon(QIcon(":/images/logo3.png"));
     s->setSizePolicy(QSizePolicy::MinimumExpanding   ,QSizePolicy::Expanding);
+
 
     connect(child, SIGNAL(copyAvailable(bool)), cutAct, SLOT(setEnabled(bool)));
     connect(child, SIGNAL(copyAvailable(bool)), copyAct, SLOT(setEnabled(bool)));
@@ -725,7 +693,6 @@ MdiChild *MainWindow::createMdiChild(FILETYPE type)
                         " selection-background-color: #005bbf;"
                         " color: black" // text color
                         "}");
-
 
     if(type == TRIAL ) {
       child->setFixedSize(600,100);
@@ -960,22 +927,17 @@ void MainWindow::createActions()
      autoVowelAct->setStatusTip(tr("Turn automatic vowel mode on/off"));
      connect(autoVowelAct, SIGNAL(triggered()), this, SLOT(toggleAutoVowelMode()));
 
-
      autoCharacterSubs = new QAction(tr("&Automatic Character Fill"), this);
      autoCharacterSubs->setStatusTip(tr("Turn automatic character fill mode on/off"));
      connect(autoCharacterSubs, SIGNAL(triggered()), this, SLOT(toggleAutoCharacterFillMode()));
-
-
 
      singleCharacterMode = new QAction(tr("&Fast Character Mode"), this);
      singleCharacterMode->setStatusTip(tr("Turn Fast character  mode on/off"));
      connect(singleCharacterMode, SIGNAL(triggered()), this, SLOT(toggleSingleCharacterMode()));
 
-
      hideToolTipMode = new QAction(tr("&Hide ToolTip Mode"), this);
      hideToolTipMode->setStatusTip(tr("Hide ToolTip  mode on/off"));
      connect(hideToolTipMode, SIGNAL(triggered()), this, SLOT(toggleHideToolTipMode()));
-
 }
 
 
@@ -995,7 +957,6 @@ void MainWindow::createDevelopmentMenus() {
     developmentMenu->addAction( printInternalDictionaryAct );
     developmentMenu->addAction( writeNewDictionaryAct );
     developmentMenu->addAction(loadUndefinedWordsAct);
-
 }
 
 void MainWindow::createMenus()

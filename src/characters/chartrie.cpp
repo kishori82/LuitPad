@@ -13,6 +13,8 @@ CharTrie *CharTrie::getCharTrie() {
     if( charMapTree == NULL) {
         charMapTree = new CharTrie();
         charMapTree->LoadCharTreeMap(":/files/user_keymap.txt" );
+        //qDebug() << "CharTrie::getCharTrie";
+
     }
 
     return charMapTree;
@@ -202,7 +204,7 @@ bool CharTrie::foundPrefixMatch(TreeNode *root,  QList<QString> &prefix_chars_li
          QString key = words.at(0);
          words.removeFirst();
          wordstack.push(key);
-         qDebug() << " links " << root->links.size();
+         //qDebug() << " links " << root->links.size();
        //  Utilities::warningBox("hello 3" + key);
          if( root->links[key] != 0)
             get_choice_words(root->links[key],  choices, words, wordstack, choicesize, autoselect);
@@ -263,7 +265,7 @@ void CharTrie::printTree( TreeNode *root, QStack<QString> & partword)
            if(root->links[key]->fullWord == true ) {
                pit=partword.constBegin();
                while( pit!=partword.constEnd()) {
-                   qDebug() << *pit;
+                 //  qDebug() << *pit;
                    ++pit;
                }
            }
@@ -330,10 +332,12 @@ void CharTrie::LoadCharTreeMap(QString  fileName) {
 
            charTree = new TreeNode();
 
+           //qDebug() << "in CharTrie::LoadCharTreeMap 0";
            //load the map from a file
            load_saved_maps(fileName, charMap);
 
            QList<QString> char_list;
+          // qDebug() << "in CharTrie::LoadCharTreeMap 1";
 
 
            QHash<QString, QString>::const_iterator it= charMap.constBegin();
@@ -349,9 +353,11 @@ void CharTrie::LoadCharTreeMap(QString  fileName) {
               insertWord(charTree, char_list, it.value());
               ++it;
            }
+           //qDebug() << "in CharTrie::LoadCharTreeMap 4";
 
            QStack<QString>  partword;
            printTree(charTree, partword );
+           //qDebug() << "in CharTrie::LoadCharTreeMap 5";
 
 
    }

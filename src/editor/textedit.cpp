@@ -329,13 +329,14 @@ void TextEdit::replaceNewWord( int i) {
 
  void TextEdit::keyPressEvent(QKeyEvent *e)
  {
+     /*
      if( e->key()!= Qt::Key_Backspace  &&  this->toPlainText().length() > 250 ) {
          if( this->toPlainText().length() < 270) {
              this->setText( this->toPlainText() + QString(" Maimum limit exceeded! Please try the full version"));
          }
          Utilities::warningBox("You have exceeded the 250 characters limit per window for the trial version\n For full version please see text in the 2nd window.");
          return;
-     }
+     } */
 
 
      if( _state == F2) {

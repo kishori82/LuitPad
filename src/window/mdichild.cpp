@@ -238,7 +238,9 @@ MdiChild::MdiChild()
     profile->fill_keyboard("DEFAULT");
 
     charMapTree = CharTrie::getCharTrie();
+
     wordMapTree = WordsTrie::getWordsTrie();
+
     highlighter = new Highlighter(this->document(),true);
     highlighter->setIgnoreWords( &(this->ignoreDictionary) );
 
@@ -429,7 +431,7 @@ bool  MdiChild::exportOdf()
 {
     QString truncatedCurFile = curFile;
     truncatedCurFile.chop(truncatedCurFile.lastIndexOf(QRegExp("pad")));
-//    qDebug() <<"Current file = " <<  truncatedCurFile;
+    //qDebug() <<"Current file = " <<  truncatedCurFile;
     QString fileName = QFileDialog::getSaveFileName(this, tr("Save As Open Document Format"),truncatedCurFile, ".odt");
     if (fileName.isEmpty())
         return false;
@@ -1081,7 +1083,7 @@ void MdiChild::characterToolTipText(QKeyEvent *event) {
     else if( (  /* event->key() == Qt::Key_Space || */ event->key() ==  Qt::Key_Return)  && QToolTip::isVisible()) {
         if( toolTipControl->state == 0 ) {
             insertMidCharSelection( Utilities::getUnicode(toolTipControl->getAtIndex(), "0x")  );
-            if(QToolTip::isVisible()) QToolTip::hideText();
+            if(QToolTip::isVisible()) { QToolTip::hideText();}
 
             if(getConfigState()==C1 && Utilities::consonantMap->contains(toolTipControl->getAtIndex())) {
                toolTipControl->state = 1;
@@ -1093,7 +1095,10 @@ void MdiChild::characterToolTipText(QKeyEvent *event) {
          else{
             if(event->key() == Qt::Key_Return)
                insertVowelModSelection( Utilities::getUnicode(toolTipControl->getAtRowCol(), "0x"), toolTipControl->consonantPrefix(this)  );
-            if(QToolTip::isVisible()) QToolTip::hideText();
+            if(QToolTip::isVisible()) {
+                qDebug() << "hiding tooltip on return";
+                QToolTip::hideText();
+             }
             toolTipControl->state = 0;
          }
     }
@@ -1104,7 +1109,10 @@ void MdiChild::characterToolTipText(QKeyEvent *event) {
     else {
       // qDebug() << "This is the " << Qt::Key_Return <<"   " << event->key();
        if(event->key() == Qt::Key_Backspace) {
-          if(QToolTip::isVisible()) QToolTip::hideText();
+          if(QToolTip::isVisible()) {
+              qDebug() << "hiding tooltip coz of backspace";
+              QToolTip::hideText();
+          }
        }
        TextEdit::keyPressEvent(event);
        if( event->key() != Qt::Key_Space &&  event->key() != Qt::Key_Backspace && event->key() != Qt::Key_Tab ) {

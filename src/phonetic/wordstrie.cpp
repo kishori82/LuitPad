@@ -475,7 +475,7 @@ float WordsTrie::wordDistance(QString s, QString t) {
       //     charTree = new TreeNode();
 
            //load the map from a file
-           //qDebug() << "loading the dictionary";
+
            load_dictionary(fileName, charMap);
 
            QList<QString> char_list;

@@ -4,6 +4,7 @@
 
 #include "src/window/mainwindow.h"
 #include "src/profile/profile.h"
+#include "src/profile/encryption.h"
 
 Profile * Profile::keyBoard = NULL ;
 QWidget *Profile::kbd = NULL;
@@ -23,16 +24,16 @@ Profile::Profile(QWidget *parent) : QWidget(parent)
     setModifierOrder(false);
     setChangeDisable();
 
-
     if(!QDir("profile").exists()){
         QDir().mkdir("profile");
     }
-    QString fName = QLatin1String(":files") + QDir::separator() + QLatin1String("DEFAULT.dat");
 
+    QString fName = QLatin1String(":files") + QDir::separator() + QLatin1String("DEFAULT.dat");
     QString foutName = QLatin1String("profile") + QDir::separator()  + QLatin1String("DEFAULT.dat");
 
     QFile file(fName);
     QFile outfile(foutName);
+
 
     if(!isValidProfile("DEFAULT")) {
         Utilities::warningBox(QString("Do not see folder \"profile\"! \n") + \
@@ -40,7 +41,6 @@ Profile::Profile(QWidget *parent) : QWidget(parent)
                               QString("But you can always replace the DEFAULT.dat file in the \"profile\"") +\
                               QString("folder if have your old DEFAULT.dat!! to restore your old preferences and stored words!"));
 
- //   qDebug() << fName;
         if (file.open(QIODevice::ReadOnly | QIODevice::Text) && outfile.open(QIODevice::WriteOnly | QIODevice::Text))
         {
             QTextStream out(&outfile);
@@ -54,6 +54,7 @@ Profile::Profile(QWidget *parent) : QWidget(parent)
             out << outLine;
         }
     }
+
     file.close();
     outfile.close();
 
@@ -73,19 +74,12 @@ void Profile::display()
        deSign();
     }
 
-
-
-
-
 //=======================QACTION=====================
 }
 
 
-
 void Profile::setModifierOrder(bool flag) {
-
     modifierOrder = flag;
-
 }
 
 void Profile::deSign()
@@ -115,9 +109,12 @@ void Profile::deSign()
 /*    for(int i=0;i<63;i++)
         (QLineEdit *) (QString("lbl_%1").arg(i)) = new QLineEdit(this);
 */
-    for(int i=1; i<=53; i++)
+    for(int i=1; i<=53; i++) {
       lbl[i]= new QLineEdit(this);
+      lbl[i]->setStyleSheet("font-weight: bold");
+      lbl[i]->setFixedSize(40,20);
 
+    }
 
 
     /*
@@ -135,8 +132,8 @@ void Profile::deSign()
     lbl_63 = new QLineEdit(this);
     */
 //==========================================
-    for(int i=1; i<=53; i++)
-        lbl[i]->setFixedSize(30,20);
+   // for(int i=1; i<=53; i++)
+     //   lbl[i]->setFixedSize(30,20);
 
 
 
@@ -155,73 +152,73 @@ void Profile::deSign()
     lbl_63 ->setFixedSize(30, 20);
 */
 //=======================================================================
-    QToolButton *ka = new QToolButton(this); ka->setText(trUtf8("ক"));  ka->setFixedSize(30, 20);
-    QToolButton *kha = new QToolButton(this); kha->setText(trUtf8("খ"));  kha->setFixedSize(30, 20);
-    QToolButton *ga = new QToolButton(this); ga->setText(trUtf8("গ")); ga->setFixedSize(30, 20);
-    QToolButton *gha = new QToolButton(this); gha->setText(trUtf8("ঘ")); gha->setFixedSize(30, 20);
-    QToolButton *nga = new QToolButton(this); nga->setText(trUtf8("ঙ")); nga->setFixedSize(30, 20);
+    QToolButton *ka = new QToolButton(this); ka->setStyleSheet("font-weight: bold"); ka->setText(trUtf8("ক"));  ka->setFixedSize(30, 20);
+    QToolButton *kha = new QToolButton(this);kha->setStyleSheet("font-weight: bold"); kha->setText(trUtf8("খ"));  kha->setFixedSize(30, 20);
+    QToolButton *ga = new QToolButton(this); ga->setStyleSheet("font-weight: bold"); ga->setText(trUtf8("গ")); ga->setFixedSize(30, 20);
+    QToolButton *gha = new QToolButton(this);gha->setStyleSheet("font-weight: bold"); gha->setText(trUtf8("ঘ")); gha->setFixedSize(30, 20);
+    QToolButton *nga = new QToolButton(this); nga->setStyleSheet("font-weight: bold"); nga->setText(trUtf8("ঙ")); nga->setFixedSize(30, 20);
 
-    QToolButton *ca = new QToolButton(this); ca->setText(trUtf8("চ")); ca->setFixedSize(30, 20);
-    QToolButton *cha = new QToolButton(this); cha->setText(trUtf8("ছ"));  cha->setFixedSize(30, 20);
-    QToolButton *ja = new QToolButton(this); ja->setText(trUtf8("জ"));     ja ->setFixedSize(30, 20);
-    QToolButton *jha = new QToolButton(this); jha->setText(trUtf8("ঝ")); jha->setFixedSize(30, 20);
-    QToolButton *nya = new QToolButton(this); nya->setText(trUtf8("ঞ")); nya ->setFixedSize(30, 20);
+    QToolButton *ca = new QToolButton(this); ca->setStyleSheet("font-weight: bold"); ca->setText(trUtf8("চ")); ca->setFixedSize(30, 20);
+    QToolButton *cha = new QToolButton(this); cha->setStyleSheet("font-weight: bold"); cha->setText(trUtf8("ছ"));  cha->setFixedSize(30, 20);
+    QToolButton *ja = new QToolButton(this); ja->setStyleSheet("font-weight: bold"); ja->setText(trUtf8("জ"));     ja ->setFixedSize(30, 20);
+    QToolButton *jha = new QToolButton(this); jha->setStyleSheet("font-weight: bold");jha->setText(trUtf8("ঝ")); jha->setFixedSize(30, 20);
+    QToolButton *nya = new QToolButton(this); nya->setStyleSheet("font-weight: bold"); nya->setText(trUtf8("ঞ")); nya ->setFixedSize(30, 20);
 
-    QToolButton *ta = new QToolButton(this); ta->setText(trUtf8("ত")); ta->setFixedSize(30, 20);
-    QToolButton *tha = new QToolButton(this); tha->setText(QChar(0x9A5)); tha->setFixedSize(30, 20);
+    QToolButton *ta = new QToolButton(this);ta->setStyleSheet("font-weight: bold"); ta->setText(trUtf8("ত")); ta->setFixedSize(30, 20);
+    QToolButton *tha = new QToolButton(this); tha->setStyleSheet("font-weight: bold"); tha->setText(QChar(0x9A5)); tha->setFixedSize(30, 20);
   //  QToolButton *tha = new QToolButton(this); tha->setText("tha"); tha->setFixedSize(30, 20);
-    QToolButton *da = new QToolButton(this); da->setText(trUtf8("দ"));  da->setFixedSize(30, 20);
-    QToolButton *dha = new QToolButton(this); dha->setText(trUtf8("ধ"));    dha->setFixedSize(30, 20);
-    QToolButton *na = new QToolButton(this); na->setText(trUtf8("ন")); na->setFixedSize(30, 20);
+    QToolButton *da = new QToolButton(this); da->setStyleSheet("font-weight: bold");da->setText(trUtf8("দ"));  da->setFixedSize(30, 20);
+    QToolButton *dha = new QToolButton(this); dha->setStyleSheet("font-weight: bold");dha->setText(trUtf8("ধ"));    dha->setFixedSize(30, 20);
+    QToolButton *na = new QToolButton(this); na->setStyleSheet("font-weight: bold");na->setText(trUtf8("ন")); na->setFixedSize(30, 20);
 
-    QToolButton *Ta = new QToolButton(this); Ta->setText(trUtf8("ট")); Ta->setFixedSize(30, 20);
+    QToolButton *Ta = new QToolButton(this); Ta->setStyleSheet("font-weight: bold"); Ta->setText(trUtf8("ট")); Ta->setFixedSize(30, 20);
     //QToolButton *Tha = new QToolButton(this); Tha->setText(trUtf8("� ")); Tha->setFixedSize(30, 20);
-    QToolButton *Tha = new QToolButton(this); Tha->setText( QChar(0x9A0)); Tha->setFixedSize(30, 20);
-    QToolButton *Da = new QToolButton(this); Da->setText(trUtf8("ড")); Da->setFixedSize(30, 20);
-    QToolButton *Dha = new QToolButton(this); Dha->setText(trUtf8("ঢ")); Dha->setFixedSize(30, 20);
-    QToolButton *Na = new QToolButton(this); Na->setText(trUtf8("ণ")); Na->setFixedSize(30, 20);
+    QToolButton *Tha = new QToolButton(this); Tha->setStyleSheet("font-weight: bold");Tha->setText( QChar(0x9A0)); Tha->setFixedSize(30, 20);
+    QToolButton *Da = new QToolButton(this); Da->setStyleSheet("font-weight: bold");Da->setText(trUtf8("ড")); Da->setFixedSize(30, 20);
+    QToolButton *Dha = new QToolButton(this);Dha->setStyleSheet("font-weight: bold"); Dha->setText(trUtf8("ঢ")); Dha->setFixedSize(30, 20);
+    QToolButton *Na = new QToolButton(this); Na->setStyleSheet("font-weight: bold"); Na->setText(trUtf8("ণ")); Na->setFixedSize(30, 20);
 
-    QToolButton *pa = new QToolButton(this); pa->setText(trUtf8("প")); pa->setFixedSize(30, 20);
-    QToolButton *pha = new QToolButton(this); pha->setText(trUtf8("ফ")); pha->setFixedSize(30, 20);
-    QToolButton *ba = new QToolButton(this); ba->setText(trUtf8("ব")); ba->setFixedSize(30, 20);
-    QToolButton *bha = new QToolButton(this); bha->setText(trUtf8("ভ")); bha->setFixedSize(30, 20);
-    QToolButton *ma = new QToolButton(this); ma->setText(trUtf8("ম")); ma->setFixedSize(30, 20);
+    QToolButton *pa = new QToolButton(this);pa->setStyleSheet("font-weight: bold"); pa->setText(trUtf8("প")); pa->setFixedSize(30, 20);
+    QToolButton *pha = new QToolButton(this);pha->setStyleSheet("font-weight: bold"); pha->setText(trUtf8("ফ")); pha->setFixedSize(30, 20);
+    QToolButton *ba = new QToolButton(this);  ba->setStyleSheet("font-weight: bold"); ba->setText(trUtf8("ব")); ba->setFixedSize(30, 20);
+    QToolButton *bha = new QToolButton(this);bha->setStyleSheet("font-weight: bold"); bha->setText(trUtf8("ভ")); bha->setFixedSize(30, 20);
+    QToolButton *ma = new QToolButton(this);ma->setStyleSheet("font-weight: bold"); ma->setText(trUtf8("ম")); ma->setFixedSize(30, 20);
 
-    QToolButton *Ja = new QToolButton(this); Ja->setText(trUtf8("য")); Ja->setFixedSize(30, 20);
-    QToolButton *ra = new QToolButton(this); ra->setText(trUtf8("ৰ")); ra->setFixedSize(30, 20);
-    QToolButton *la = new QToolButton(this); la->setText(trUtf8("ল")); la->setFixedSize(30, 20);
-    QToolButton *wa = new QToolButton(this); wa->setText(trUtf8("ৱ")); wa->setFixedSize(30, 20);
+    QToolButton *Ja = new QToolButton(this); Ja->setStyleSheet("font-weight: bold");Ja->setText(trUtf8("য")); Ja->setFixedSize(30, 20);
+    QToolButton *ra = new QToolButton(this); ra->setStyleSheet("font-weight: bold");ra->setText(trUtf8("ৰ")); ra->setFixedSize(30, 20);
+    QToolButton *la = new QToolButton(this); la->setStyleSheet("font-weight: bold");la->setText(trUtf8("ল")); la->setFixedSize(30, 20);
+    QToolButton *wa = new QToolButton(this); wa->setStyleSheet("font-weight: bold");wa->setText(trUtf8("ৱ")); wa->setFixedSize(30, 20);
 
-    QToolButton *Sa = new QToolButton(this); Sa->setText(trUtf8("শ")); Sa->setFixedSize(30, 20);
-    QToolButton *sha = new QToolButton(this); sha->setText(trUtf8("ষ")); sha->setFixedSize(30, 20);
-    QToolButton *sa = new QToolButton(this); sa->setText(trUtf8("স")); sa->setFixedSize(30, 20);
-    QToolButton *ha = new QToolButton(this); ha->setText(trUtf8("হ")); ha->setFixedSize(30, 20);
+    QToolButton *Sa = new QToolButton(this); Sa->setStyleSheet("font-weight: bold");Sa->setText(trUtf8("শ")); Sa->setFixedSize(30, 20);
+    QToolButton *sha = new QToolButton(this);sha->setStyleSheet("font-weight: bold"); sha->setText(trUtf8("ষ")); sha->setFixedSize(30, 20);
+    QToolButton *sa = new QToolButton(this); sa->setStyleSheet("font-weight: bold"); sa->setText(trUtf8("স")); sa->setFixedSize(30, 20);
+    QToolButton *ha = new QToolButton(this);ha->setStyleSheet("font-weight: bold"); ha->setText(trUtf8("হ")); ha->setFixedSize(30, 20);
 
-    QToolButton *khya = new QToolButton(this); khya->setText(trUtf8("ক্ষ")); khya ->setFixedSize(30, 20);
-    QToolButton *drr = new QToolButton(this); drr->setText(trUtf8("ড়")); drr->setFixedSize(30, 20);
-    QToolButton *arr = new QToolButton(this); arr->setText(trUtf8("ঢ়")); arr->setFixedSize(30, 20);
-    QToolButton *ya = new QToolButton(this); ya->setText(trUtf8("য়")); ya->setFixedSize(30, 20);
+    QToolButton *khya = new QToolButton(this);khya->setStyleSheet("font-weight: bold"); khya->setText(trUtf8("ক্ষ")); khya ->setFixedSize(30, 20);
+    QToolButton *drr = new QToolButton(this); drr->setStyleSheet("font-weight: bold");drr->setText(trUtf8("ড়")); drr->setFixedSize(30, 20);
+    QToolButton *arr = new QToolButton(this); arr->setStyleSheet("font-weight: bold");arr->setText(trUtf8("ঢ়")); arr->setFixedSize(30, 20);
+    QToolButton *ya = new QToolButton(this); ya->setStyleSheet("font-weight: bold");ya->setText(trUtf8("য়")); ya->setFixedSize(30, 20);
 
-    QToolButton *cbindu = new QToolButton(this); cbindu->setText(trUtf8("ঁ")); cbindu->setFixedSize(30, 20);
-    QToolButton *bjnt = new QToolButton(this); bjnt->setText(QChar(0x9ce)); bjnt->setFixedSize(30, 20);
-    QToolButton *ansr = new QToolButton(this); ansr->setText(trUtf8("ং")); ansr->setFixedSize(30, 20);
-    QToolButton *bsrg = new QToolButton(this); bsrg->setText(trUtf8("ঃ"));bsrg->setFixedSize(30, 20);
+    QToolButton *cbindu = new QToolButton(this);cbindu->setStyleSheet("font-weight: bold"); cbindu->setText(trUtf8("ঁ")); cbindu->setFixedSize(30, 20);
+    QToolButton *bjnt = new QToolButton(this);bjnt->setStyleSheet("font-weight: bold"); bjnt->setText(QChar(0x9ce)); bjnt->setFixedSize(30, 20);
+    QToolButton *ansr = new QToolButton(this);ansr->setStyleSheet("font-weight: bold"); ansr->setText(trUtf8("ং")); ansr->setFixedSize(30, 20);
+    QToolButton *bsrg = new QToolButton(this);bsrg->setStyleSheet("font-weight: bold"); bsrg->setText(trUtf8("ঃ"));bsrg->setFixedSize(30, 20);
 
-    QToolButton *a = new QToolButton(this); a->setText(trUtf8("অ")); a->setFixedSize(30, 20);
-    QToolButton *aa = new QToolButton(this); aa->setText(trUtf8("আ")); aa->setFixedSize(30, 20);
-    QToolButton *i = new QToolButton(this); i->setText(trUtf8("ই")); i->setFixedSize(30, 20);
-    QToolButton *ii= new QToolButton(this); ii->setText(trUtf8("ঈ")); ii->setFixedSize(30, 20);
+    QToolButton *a = new QToolButton(this);a->setStyleSheet("font-weight: bold"); a->setText(trUtf8("অ")); a->setFixedSize(30, 20);
+    QToolButton *aa = new QToolButton(this);aa->setStyleSheet("font-weight: bold"); aa->setText(trUtf8("আ")); aa->setFixedSize(30, 20);
+    QToolButton *i = new QToolButton(this);i->setStyleSheet("font-weight: bold"); i->setText(trUtf8("ই")); i->setFixedSize(30, 20);
+    QToolButton *ii= new QToolButton(this); ii->setStyleSheet("font-weight: bold");ii->setText(trUtf8("ঈ")); ii->setFixedSize(30, 20);
 
-    QToolButton *u = new QToolButton(this); u->setText(trUtf8("উ")); u->setFixedSize(30, 20);
-    QToolButton *uu= new QToolButton(this); uu->setText(trUtf8("ঊ")); uu->setFixedSize(30, 20);
-    QToolButton *ri = new QToolButton(this); ri->setText(trUtf8("ঋ"));ri->setFixedSize(30, 20);
+    QToolButton *u = new QToolButton(this); u->setStyleSheet("font-weight: bold");u->setText(trUtf8("উ")); u->setFixedSize(30, 20);
+    QToolButton *uu= new QToolButton(this); uu->setStyleSheet("font-weight: bold"); uu->setText(trUtf8("ঊ")); uu->setFixedSize(30, 20);
+    QToolButton *ri = new QToolButton(this);ri->setStyleSheet("font-weight: bold"); ri->setText(trUtf8("ঋ"));ri->setFixedSize(30, 20);
 
-    QToolButton *e = new QToolButton(this); e->setText(QChar(0x98f)); e->setFixedSize(30, 20);
-    QToolButton *ei = new QToolButton(this); ei->setText(QChar(0x990)); ei->setFixedSize(30, 20);
-    QToolButton *o = new QToolButton(this); o->setText(QChar(0x993)); o->setFixedSize(30, 20);
-    QToolButton *ou= new QToolButton(this); ou->setText(QChar(0x994));ou ->setFixedSize(30, 20);
+    QToolButton *e = new QToolButton(this); e->setStyleSheet("font-weight: bold"); e->setText(QChar(0x98f)); e->setFixedSize(30, 20);
+    QToolButton *ei = new QToolButton(this);ei->setStyleSheet("font-weight: bold"); ei->setText(QChar(0x990)); ei->setFixedSize(30, 20);
+    QToolButton *o = new QToolButton(this); o->setStyleSheet("font-weight: bold");o->setText(QChar(0x993)); o->setFixedSize(30, 20);
+    QToolButton *ou= new QToolButton(this); ou->setStyleSheet("font-weight: bold");ou->setText(QChar(0x994));ou ->setFixedSize(30, 20);
 
-    QToolButton *dlink = new QToolButton(this); dlink->setText(trUtf8("্")); dlink->setFixedSize(30, 20);
+    QToolButton *dlink = new QToolButton(this); dlink->setStyleSheet("font-weight: bold"); dlink->setText(trUtf8("্")); dlink->setFixedSize(30, 20);
     QToolButton *aa_matra = new QToolButton(this); aa_matra->setText(trUtf8("া")); aa_matra->setFixedSize(30, 20);
     QToolButton *i_matra = new QToolButton(this); i_matra->setText(trUtf8("ি")); i_matra->setFixedSize(30, 20);
     QToolButton *ii_matra= new QToolButton(this); ii_matra->setText(trUtf8("ী")); ii_matra->setFixedSize(30, 20);
@@ -468,10 +465,15 @@ bool Profile::deleteProfile(){
 
 bool Profile::saveProfile(){
         //qDebug()<<"New edited text"<<profCombo->currentText();
-        if(!Utilities::YesNoDialog(QString("If you save previous mapping will be overwritten."), QString("Do you want to want save the new maps?"))) {
-           return false ;
+        if( profCombo->currentText().toUpper()==QString("DEFAULT") ) {
+            Utilities::warningBox("Profile DEFAULT cannot be changed. Pick another profile name.");
+            return false;
         }
 
+        if(!Utilities::YesNoDialog(QString("If you save previous mapping will be overwritten."),
+                                   QString("Do you want to want save the new maps?"))) {
+           return false ;
+        }
 
         QDir myDir("profile");
         if(!myDir.exists()){
@@ -480,6 +482,7 @@ bool Profile::saveProfile(){
 
 
         QString fn = QLatin1String("profile") + QDir::separator() + profCombo->currentText()+QLatin1String(".dat");
+        qDebug() << "profile path " << fn;
 
         QHash<QString, bool> uniqueText;
         for(int i = 1; i <=53; i++) {
@@ -619,6 +622,7 @@ bool Profile::saveProfile(){
         outFile.flush();
         outFile.close();
         auto_fill_profile_combo( profCombo->currentText());
+        Utilities::warningBox("Saved the profile " + profCombo->currentText().toUpper() + " in " + fn);
         return true;
         }
 
@@ -714,13 +718,14 @@ bool Profile::isValidProfile( const QString &profName) {
 
 bool Profile::fill_keyboard(const QString &profName)
     {
-
+   // SimpleCrypt *crypto = SimpleCrypt::getEncryptor(Q_UINT64_C(0x23bacf02473fdea0));
     if(profName.length() ==0 ) return false;
 
-    QString fName = QLatin1String("profile/")+ profName.toLower() + QLatin1String(".dat");
-
+    QString fName = QLatin1String("profile/")+ profName.toLower() + QLatin1String(".dat");    
+    if( profName==QString("DEFAULT")) {
+       fName= QString(":/files/DEFAULT.dat");
+    }
     QFile file(fName);
-    //qDebug()<<"Reading Profile :  "<<fName;
 
     QHash<QString, QString> charMap;
     QHash<QString, QString> profileWordMap;
@@ -732,13 +737,14 @@ bool Profile::fill_keyboard(const QString &profName)
 
     if (file.open(QIODevice::ReadOnly | QIODevice::Text))
     {
+
         currentProfile = profName;
         QTextStream in(&file);
         while (!in.atEnd()) {
             QString inStr = in.readLine().trimmed();
-            //qDebug() << inStr;
+           // qDebug() << inStr;
             QString str = inStr;
-
+            //QString str = crypto->decryptToString(inStr);
             if( str.length() > 0) {
                 //qDebug() << str;
                 list = str.split("\t");
@@ -762,10 +768,8 @@ bool Profile::fill_keyboard(const QString &profName)
                   if(profileWordMap.contains(list.at(1).trimmed().toLower())) {
                      profileWordMap.remove(list.at(1).trimmed().toLower());
                    //  qDebug() << "removing a word";
-
                   }
                 }
-
 
                 if( list.at(0).trimmed() == QString("<vowelmodifier_order>")) {
                     if( list.at(1).trimmed()=="true" ) {
@@ -780,29 +784,25 @@ bool Profile::fill_keyboard(const QString &profName)
          }
        // charMap.remove(QString("0x9cd"));
 
-
         WordsTrie *profileWords = WordsTrie::getProfileWordsTrie();
         profileWords->LoadProfileDictionaryWords(profileWordMap);
         QHash<QString, QString>::const_iterator it;
         QStringList wordList;
-       // qDebug() << "prof " << profileWordMap.size();
+
         for(it=profileWordMap.begin(); it!= profileWordMap.end(); it++) {
            wordList.append(it.key());
         //   qDebug() << it.key();
         }
-      //  qDebug() <<  wordList.size();
         Phonetic::createPhoneticTreeProfile(wordList);
      //   profileWords->printData();
         charTrie->LoadCharTreeFromProfile(charMap);
     }
 
     file.close();
-  //  qDebug() << "XXX" << charMap.key(QString("0x995"));
 
     if( kbd == NULL ) return false;
 
    // modifierOrderCheckbox->setChecked(matra_order);
-
     lbl[1]->setText(charMap.value(QString("0x995")));
     lbl[2]->setText(charMap.value(QString("0x996")));
     lbl[3] ->setText(charMap.value(QString("0x997")));

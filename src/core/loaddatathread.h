@@ -19,7 +19,7 @@ class LoadDataThread : public QThread
 {
     Q_OBJECT
     void run (){
-     //   qDebug() << "Loading data.....";
+        qDebug() << "Loading data.....";
 
         Romanization::InitializeMaps();
         QString dictionaryFile = ":/files/processed_dictionary.txt";
@@ -30,7 +30,7 @@ class LoadDataThread : public QThread
 
         Romanization::InitializeUnicodeToRomanOverrideMaps(unicodeToRomanOverrideFile);
 
-    //    qDebug() << " Initialized maps";
+
         WordsTrie *wordsMapTree = WordsTrie::getWordsTrie();
 
         wordsMapTree->LoadDictionaryWords(dictionaryFile);
@@ -60,9 +60,6 @@ class LoadDataThread : public QThread
         LoadDictionary(":files/dictionary-file.txt", ":files/poribhasha-file.txt");
 
         //inflexTree->printData();
-
-      //  qDebug() << "Finished loading data";
-
     }
 public:
     explicit LoadDataThread(QObject *parent = 0);
@@ -72,13 +69,8 @@ signals:
 public slots:
 
 private:
-    void LoadDictionary(QString dictionaryFile, QString poribhashaFile);
-
-    
+    void LoadDictionary(QString dictionaryFile, QString poribhashaFile);    
 };
-
-
-
 
 
 class ShowTutorialThread : public QRunnable

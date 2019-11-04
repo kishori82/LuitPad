@@ -38,6 +38,7 @@ HEADERS  = \
     src/characters/asciiTrie.h \
 \
     src/profile/profile.h \
+    src/profile/encryption.h \
 \
     src/utils/utilities.h \
 \
@@ -67,6 +68,7 @@ SOURCES  = main.cpp \
     src/characters/asciiTrie.cpp \
     \
     src/profile/profile.cpp \
+    src/profile/encryption.cpp \
     \
     src/utils/utilities.cpp \
     \
