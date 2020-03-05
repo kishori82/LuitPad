@@ -1045,8 +1045,6 @@ void MdiChild::characterToolTipText(QKeyEvent *event) {
        return;
     }
 
-    qDebug() << "Event" <<  event->key()   << " Tooltip on " << QToolTip::isVisible();
-
 
     if(event->key() == Qt::Key_Right && QToolTip::isVisible() ) {
        if(toolTipControl->state == 0 ) {
@@ -1096,7 +1094,6 @@ void MdiChild::characterToolTipText(QKeyEvent *event) {
             if(event->key() == Qt::Key_Return)
                insertVowelModSelection( Utilities::getUnicode(toolTipControl->getAtRowCol(), "0x"), toolTipControl->consonantPrefix(this)  );
             if(QToolTip::isVisible()) {
-                qDebug() << "hiding tooltip on return";
                 QToolTip::hideText();
              }
             toolTipControl->state = 0;
@@ -1110,7 +1107,6 @@ void MdiChild::characterToolTipText(QKeyEvent *event) {
       // qDebug() << "This is the " << Qt::Key_Return <<"   " << event->key();
        if(event->key() == Qt::Key_Backspace) {
           if(QToolTip::isVisible()) {
-              qDebug() << "hiding tooltip coz of backspace";
               QToolTip::hideText();
           }
        }
@@ -1165,8 +1161,9 @@ void MdiChild::wordToolTipText(QKeyEvent *e) {
     if( newWord.size() > 0 ) {
         if(  !toolTipControl->hasAssamesePrefix(this)) {
            QList<QWordUnicode> pairedWordList;
-           Phonetic::phoneticWordChoices(newWord, pairedWordList);
-           Phonetic::phoneticWordChoices(newWord, pairedWordList,true);
+           Phonetic::phoneticWordChoices(newWord, pairedWordList, false);
+         //   Phonetic::phoneticWordChoicesLengthBased(newWord, pairedWordList, false);
+         //  Phonetic::phoneticWordChoices(newWord, pairedWordList,true);
            Phonetic::arrangeWordChoices(pairedWordList,newWordList,Phonetic::processPhoneticInput( Phonetic::phoneticEquivString(newWord)));
         }
         else

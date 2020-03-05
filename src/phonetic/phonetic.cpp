@@ -200,9 +200,13 @@ void Phonetic::childrenOfTree( TreeNode *root, QStack<QString> & partword, QList
        while(it != root->links.constEnd() ) {
            QString key = it.key();
            partword.push(key);
-           if( ! (preWord.size() < 2 && depth < 2 )  )
-               childrenOfTree(root->links[key],partword, words, preWord, depth+ 1);
+//           if( ! (preWord.size() < 2 && depth < 2 )  )
+               if(preWord.size() >= 1 &&  depth <  preWord.size() + 5 ) {
+                 //  qDebug() << "preword 1" << preWord << "num words" << words.size();
 
+                  childrenOfTree(root->links[key],partword, words, preWord, depth+ 1);
+                //  qDebug() << "preword 2" << preWord << "num words" << words.size();
+               }
            if(root->links[key]->fullWord == true ) {
                pit=partword.constBegin();
                printRoman.clear();
@@ -223,72 +227,62 @@ void Phonetic::childrenOfTree( TreeNode *root, QStack<QString> & partword, QList
        }
 
    }
-void Phonetic::searchRoman2UnicodeTree( TreeNode *curNode, QStack <QString > & seen, QStack<QString> &notSeen, QStack<QString> &word, QList<QWordUnicode> &words, int depth, int traversal_depth) {
+void Phonetic::searchRoman2UnicodeTree(TreeNode *curNode, QStack <QString > & seen, QStack<QString> &notSeen,
+                                       QStack<QString> &word, QList<QWordUnicode> &words, int depth, int traversal_depth) {
     QStack<QString> partword;
     QHash<QString, TreeNode *>::const_iterator  it;
     int count;
-    QString w;
 
- //   qDebug() << "Seen " << seen.size() << " Not seen " <<  notSeen.size()   << "trav depth " << traversal_depth << " depth " << depth;
+  //   qDebug() << "Seen " << seen.size() << " Not seen " <<  notSeen.size()   << "trav depth " << traversal_depth << " depth " << depth;
     if(traversal_depth == depth) {
         QStack<QString>::const_iterator it;
         QString preWord;
         for(it = word.begin(); it != word.end() ; ++it) {
             preWord.append(it);
         }
-
         childrenOfTree(curNode, partword, words, preWord, depth);
-     //   qDebug() << "Candidates list size " << words.size();
+       // qDebug() << "Phonetic::searchroman2UnicodeTree preword" << preWord << "words" << words.size();
     }
 
     if( notSeen.isEmpty()) return;
     QString c = notSeen.pop();
     seen.push(c);
 
-  //  qDebug() << "----------------------------";
     count=0;
     for(it = curNode->links.begin(); it != curNode->links.end(); ++it) {
-
       //  if( it.key() == "h" ) {
       //      qDebug() <<  "Char = " << c << "  H = " <<   curNode->links.value( it.key())->used;
       //  }
         if( curNode->links.value( it.key())->used== true) {
-           // qDebug() << " Going into key " << it.key();
             word.push(it.key());
             searchRoman2UnicodeTree(curNode->links.value( it.key() ), seen, notSeen, word, words, depth, traversal_depth+1);
             word.pop();
         }
     }
 
-
     c = seen.pop();
     notSeen.push(c);
-
+ //   qDebug() << "words" << words.size();
     return;
 }
 void Phonetic::clearForNewWord(QString newWord, QList<TreeNode *> *visitedNodeList, TreeNode *roman2UnicodeTreeGeneric ) {
-  //  qDebug() << "Clearing ";
-
-
     foreach(TreeNode * node, *visitedNodeList) {
         node->used = false;
     }
 
     visitedNodeList->clear();
-     //   qDebug() << " after the foreach and after to set it true " << roman2UnicodeTree;
     roman2UnicodeTreeGeneric->used = true;
 
     QHash<QString, TreeNode *>::const_iterator  it;
     for(it = roman2UnicodeTreeGeneric->links.begin(); it != roman2UnicodeTreeGeneric->links.end(); ++it) {
         QString first = Phonetic::phoneticEquivString(QString(newWord.at(0)));
         QString second = Phonetic::phoneticEquivString(QString(it.key().at(0)));
-       // qDebug() << "setting keys " << it.key() << " " << roman2UnicodeTree->links.value(it.key())->used;
+
         if( first == second ) {
            roman2UnicodeTreeGeneric->links.value(it.key())->used = true;
            visitedNodeList->append(roman2UnicodeTreeGeneric->links.value(it.key()));
         }
     }
-
 }
 
 
@@ -305,18 +299,13 @@ bool Phonetic::markUsedWord(TreeNode * curNode, QStringList &charList, bool used
        else {
            curNode->links[newChar]->used = used;
        }
-
-
        return used;
  }
 
 
 void Phonetic::arrangeWordChoices(QList<QWordUnicode> &words, QStringList &wordList, QString newWord) {
 
-
     rankWords(words, newWord);
-
-
      int maxLenWord = 0;
      foreach(QWordUnicode word, words) {
          if( Utilities::getUnicode(word.unicode,"0x").length() > maxLenWord)
@@ -337,25 +326,69 @@ void Phonetic::arrangeWordChoices(QList<QWordUnicode> &words, QStringList &wordL
         wordList.clear();
         return;
     }
+}
+
+void Phonetic::phoneticWordChoicesLengthBased(QString rawnewWord, QList<QWordUnicode> &words, bool ProfileTree) {
+    QString newWord = Phonetic::phoneticEquivString(rawnewWord);
+
+    qDebug() << "Phonetic::phoneticWordChoicesLengthBased" << newWord;
+
+
+    int i = 0;
+    QHash<QString, QString>::const_iterator  it;
+    QWordUnicode wu;
+    QList<QWordUnicode> _words;
+    //it.value().size() - 2 <= newWord.size() && newWord.size() <= it.value().size() - 2 &&
+    for(it = allWords->begin(); it != allWords->end(); ++it   ) {
+        if(newWord.size() > 0 && it.value().size()>0 && it.value().at(0)==newWord.at(0)) {
+            wu.word = it.key();
+            wu.unicode = it.value();
+            _words.append( QWordUnicode(wu));
+            i++;
+        }
+    }
+
+    /*
+    qDebug() << "i" << i << words.size();
+
+    rankWords(_words, newWord);
+*/
+
+    foreach(QWordUnicode word, _words ) {
+        QStringList charList;
+        foreach( QChar c, word.word)
+            charList.append( Phonetic::phoneticEquivString(QString(c).toLower()));
+
+        if( ProfileTree == false)
+          markUsedWord(roman2UnicodeTree, charList,true, newWord.size() );
+        else
+          markUsedWord(roman2UnicodeTreeProfile, charList,true, newWord.size() );
+    }
+
+
+    foreach(QWordUnicode word, _words)
+        words.append(word);
+
 
 }
 
-void Phonetic::phoneticWordChoices(QString newWord, QList<QWordUnicode> &words, bool ProfileTree) {
+
+void Phonetic::phoneticWordChoices(QString rawnewWord, QList<QWordUnicode> &words, bool ProfileTree) {
 
     QStack<QString> seen;
     QStack<QString> notSeen;
     QStack<QString> word;
 
-//    qDebug() << " Before " << newWord;
-
-
-    newWord = Phonetic::phoneticEquivString(newWord);
+    QString newWord = Phonetic::phoneticEquivString(rawnewWord);
     Phonetic::processPhoneticInput(newWord);
-
 
     foreach(QChar s, newWord) {
           notSeen.prepend(s.toLower());
+//          notSeen.push(s.toLower());
+
     }
+  //  qDebug() << "Phonetic::phoneticWordChoices"  << newWord << " raw " << rawnewWord << "stack" << notSeen;
+   // qDebug() << "pop " << notSeen.pop();
 
  //   qDebug() << notSeen << "  " << newWord;
     QList<TreeNode *> *nodeList;
@@ -383,10 +416,12 @@ void Phonetic::phoneticWordChoices(QString newWord, QList<QWordUnicode> &words, 
 
     QList<QWordUnicode> localWords;
     if( notSeen.size() > 0 )
-        if( ProfileTree == false)
+        if( ProfileTree == false) {
           searchRoman2UnicodeTree(roman2UnicodeTree,  seen, notSeen, word, localWords, newWord.size(),1);
-        else
+        }
+        else {
           searchRoman2UnicodeTree(roman2UnicodeTreeProfile,  seen, notSeen, word, localWords, newWord.size(),1);
+        }
   // qDebug() << "Candidates list size before ranking" << words.size();
 
     rankWords(localWords, newWord);

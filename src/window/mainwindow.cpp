@@ -137,15 +137,13 @@ MainWindow::MainWindow() : completer(0)
     loadData->wait();
     waitScreen->hide();
 
-    setWindowTitle(tr("LuitPad"));
+    setWindowTitle(tr("LuitPad 1.2"));
     setUnifiedTitleAndToolBarOnMac(true);
 
     setCentralWidget(editor);
     setWindowIcon(QIcon(":/images/logo3.png"));
 
     newFile(NEW);
-
-
 }
 
 
@@ -172,8 +170,6 @@ void MainWindow::closeEvent(QCloseEvent *event)
 
 
 void loadWords(MdiChild *child) {
-
-
     QHash<QString, QString>::const_iterator it;
     QString output;
     QList<QKeyInt> outputList;
@@ -573,7 +569,6 @@ void MainWindow::updateMenus()
 
     comboFont->setEnabled(hasMdiChild);
     comboSize->setEnabled(hasMdiChild);
-
 
     //bool hasSelection = (activeMdiChild() && activeMdiChild()->textCursor().hasSelection());
  //   bool hasSelection= true;
@@ -1115,12 +1110,16 @@ void MainWindow::createToolBars()
         comboSize->addItem(QString::number(size));
 
     connect(comboSize, SIGNAL(activated(QString)),this, SLOT(textSize(QString)));
+
+    // set Qcompleter Font
+    connect(comboSize, SIGNAL(activated(QString)),this, SLOT(textQCompleterFont(QString)));
     //comboSize->setCurrentIndex(comboSize->findText(QString::number(QApplication::font().pointSize())));
     comboSize->setCurrentIndex(comboSize->findText(QString::number(16)));
 
     formatToolBar->addWidget(comboFont);
     formatToolBar->addWidget(comboSize);
     formatToolBar->addSeparator();
+
 
     formatToolBar->addAction(aboutAct);
 
@@ -1201,13 +1200,22 @@ void MainWindow::textFamily(const QString &f)
 void MainWindow::textSize(const QString &p)
 {
     qreal pointSize = p.toFloat();
-    qDebug() << "Format text size " << pointSize;
+   // qDebug() << "Format text size " << pointSize;
     if (p.toFloat() > 0) {
         QTextCharFormat fmt;
         fmt.setFontPointSize(pointSize);
         mergeFormatOnWordOrSelection(fmt);
     }
 }
+
+
+void MainWindow::textQCompleterFont(const QString &p) {
+
+   qreal pointSize = p.toFloat();
+   if( p.toInt())
+     completer->popup()->setFont(QFont("kalpurush",pointSize ,0,false));
+}
+
 
 void MainWindow::mergeFormatOnWordOrSelection(const QTextCharFormat &format)
 {

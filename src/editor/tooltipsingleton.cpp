@@ -316,6 +316,8 @@ QString ToolTipSingleton::createToolTipText() {
     text +=  "</tr>";
     text += "</table>";
     text += toolTipSuffix;
+  //  text += "<font size=\"30\">" + text + "</font>";
+
 
     return text;
 }
@@ -344,6 +346,7 @@ QString ToolTipSingleton::createVowelModToolTipText() {
 
     text += "</table>";
     text += toolTipSuffix;
+ //   text += "<font size=\"30\">" + text + "</font>";
 
     return text;
 }

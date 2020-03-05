@@ -72,6 +72,8 @@ public:
     static QString processPhoneticInput(QString orig);
    // static void initializePhoneticMap();
     static void phoneticWordChoices(QString newWord, QList<QWordUnicode> &wordList, bool ProfileTree = false);
+    static void phoneticWordChoicesLengthBased(QString newWord, QList<QWordUnicode> &wordList, bool ProfileTree = false);
+
     static void arrangeWordChoices(QList<QWordUnicode> &words, QStringList &wordList, QString newWord) ;
     static void phoneticInflexChoices(QString newWord, QStringList &wordList);
     static void searchRoman2UnicodeTree( TreeNode *root, QStack<QString> &seen, QStack<QString> &notSeen, QStack<QString> &word, QList<QWordUnicode> & words, int depth, int traversal_depth=0);

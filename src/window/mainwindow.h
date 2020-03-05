@@ -124,6 +124,7 @@ private slots:
 
     void textFamily(const QString &f);
     void textSize(const QString &p);
+    void textQCompleterFont(const QString &p);
     void mergeFormatOnWordOrSelection(const QTextCharFormat &format);
     //void colorChanged(const QColor &c);
 
