@@ -134,6 +134,19 @@ unsigned int ToolTipSingleton::getSize() {
 
  }
 
+ QList<QKeyValue> ToolTipSingleton::getKeyValueList() {
+     return this->keyvaluelist;
+ }
+
+
+ QString ToolTipSingleton::getAssamesePrefix(TextEdit *textDocument) {
+   if(!this->hasAssamesePrefix(textDocument))  return QString("");
+   QTextCursor tc= textDocument->textCursor();
+   tc.movePosition(QTextCursor::Left);
+   tc.select( QTextCursor::WordUnderCursor );
+   return tc.selectedText();
+ }
+
 
 bool ToolTipSingleton::hasAssamesePrefix(TextEdit *textDocument) {
      QTextCursor tc= textDocument->textCursor();
@@ -187,6 +200,7 @@ QString ToolTipSingleton::trimRomanSuffix(TextEdit *textDocument) {
      for(int i = 0;  i < word.size() && word.at(i).isLetter();  ++i) {
          keyChar.append(word.at(i));
      }
+
      return Utilities::reverse(keyChar);
  }
 
@@ -286,9 +300,7 @@ void ToolTipSingleton::resetRowCol() {
 
 QString ToolTipSingleton::createToolTipText() {
 
-    QString text;
-
-    text = toolTipPrefix;
+    QString text = toolTipPrefix;
     text += "<table border=\"0\" align=\"center\" bgcolor=\"#FFFFCa\"  >";
 
     text +=  "<tr>";
@@ -316,8 +328,6 @@ QString ToolTipSingleton::createToolTipText() {
     text +=  "</tr>";
     text += "</table>";
     text += toolTipSuffix;
-  //  text += "<font size=\"30\">" + text + "</font>";
-
 
     return text;
 }

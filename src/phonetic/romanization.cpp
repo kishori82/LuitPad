@@ -32,7 +32,7 @@ void Romanization::InitializeUnicodeToRomanOverrideMaps(QString fileName){
 
         list = line.split("\t");
         if( list.size() < 2 ) {
-            qDebug() << line;
+            continue;
         }
 
         if( list.size() == 2 ) {

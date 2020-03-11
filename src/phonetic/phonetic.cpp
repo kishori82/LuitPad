@@ -151,7 +151,7 @@ bool Phonetic::toAsendingInflex( QKeyDistance& s1 , QKeyDistance & s2 )
     }
 }
 
-void Phonetic::rankWords(QList<QWordUnicode> &words, QString word) {
+void Phonetic::rankWords(QList<QWordUnicode> &words, QString word, int max) {
 
     QList<QWordRank> wordRanks;
 
@@ -170,6 +170,8 @@ void Phonetic::rankWords(QList<QWordUnicode> &words, QString word) {
     qSort(wordRanks.begin(), wordRanks.end(),&Phonetic::toAsending);
     words.clear();
     QWordUnicode wu;
+
+    int i=0;
     foreach(QWordRank w, wordRanks) {
     //   qDebug() << " a= " << w.word << " unicode " << w.unicode << " b = " << word << "match =" <<  w.word.left(n) << " rank = " << w.rank;
        if( (double) w.rank/(double)word.size() < 0.5 ) {
@@ -177,6 +179,8 @@ void Phonetic::rankWords(QList<QWordUnicode> &words, QString word) {
           wu.word = w.word;
           wu.unicode = w.unicode;
           words.append(wu);
+          if( i++ > max) break;
+
        }
     }
 

@@ -150,11 +150,7 @@ void TextEdit::replaceNewWord( int i) {
      tc.movePosition( QTextCursor::PreviousCharacter, QTextCursor::MoveAnchor,moveBack );
     // qDebug() << "Set textcursor";
      setTextCursor(tc);
-
-
  }
-
-
 
  void TextEdit::insertMidCharSelection(const QString selectedChar)
  {
@@ -222,6 +218,7 @@ void TextEdit::replaceNewWord( int i) {
 
      if (c->widget() != this)
          return;
+
      QTextCursor tc = textCursor();
      tc.movePosition(QTextCursor::Left);
 
@@ -338,13 +335,14 @@ void TextEdit::replaceNewWord( int i) {
          return;
      } */
 
-
+    wordToolTip(e);
+    /*
      if( _state == F2) {
         charToolTip(e);
      }
      else {
         wordToolTip(e);
-     }
+     }*/
  }
 
  bool TextEdit::canInsertFromMimeData(const QMimeData* source) const

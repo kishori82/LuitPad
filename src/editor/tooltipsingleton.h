@@ -38,6 +38,7 @@ public:
     QString trimRomanSuffix(TextEdit *textDocument);
     QString consonantPrefix(TextEdit *);
     bool hasAssamesePrefix(TextEdit *textDocument);
+    QString getAssamesePrefix(TextEdit *textDocument);
 
     QString charMidPrefix(TextEdit *);
     void addChar(QString c);
@@ -54,6 +55,7 @@ public:
     void decrementIndex();
     bool isEmptyCharList();
     QString getAtIndex();
+    QList<QKeyValue>  getKeyValueList();
 
 
     QString createVowelModToolTipText();

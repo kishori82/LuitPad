@@ -216,6 +216,7 @@ QStringList MdiChild::getSpellingSuggestions(QHash<QString, QString> &candidateW
 }
 
 
+
 MdiChild::MdiChild()
 {
     setAttribute(Qt::WA_DeleteOnClose);
@@ -246,9 +247,6 @@ MdiChild::MdiChild()
 
 //	connect(editor,SIGNAL(addWord(QString)),highlighter,SLOT(slot_addWord(QString)));
     connect(this, SIGNAL(textChanged()), this, SLOT(updateCompleterModelOnTextChange()));
-
-
-
 
 }
 /*
@@ -904,7 +902,9 @@ void  MdiChild::showToolTip()
        QRect q = this->cursorRect();
        int x,y,z,w;
        q.getCoords(&x,&y,&z,&w);
+
        text=toolTipControl->createToolTipText();
+
        if( getConfigState()!=C4)
           QToolTip::showText(this->mapToGlobal(QPoint())+ QPoint(x + 20,y-50),  text);
    }
@@ -912,7 +912,6 @@ void  MdiChild::showToolTip()
 void MdiChild::computeToolTipTextOnSpace() {
     //qDebug() << "text before space " << toolTipControl->charMidPrefix(this);
     if( (getConfigState()==C3 || getConfigState()==C4) ) {
-           // qDebug() << " empty list";
          QString match="";
          QString prefix = toolTipControl->charMidPrefix(this);
          QString whatPrefix;
@@ -937,10 +936,13 @@ void MdiChild::computeToolTipTextOnSpace() {
 
 
 ///////////
+/// \brief MdiChild::computeToolTipText
+/* original
 void MdiChild::computeToolTipText() {
     QList<QKeyValue>  choices;
 
     charMapTree->get_choice( toolTipControl->charMidPrefix(this), 4,false, choices ) ;
+
 
     QList<QKeyValue>::iterator it;
     toolTipControl->clearKeyValueList();
@@ -1003,20 +1005,61 @@ void MdiChild::computeToolTipText() {
         }
     }
 }
+*/
 
+//new
+void MdiChild::computeToolTipText() {
+    QList<QKeyValue>  choices;
+    charMapTree->get_choice( toolTipControl->charMidPrefix(this), 4,false, choices ) ;
+
+
+    QList<QKeyValue>::iterator it;
+    toolTipControl->clearKeyValueList();
+    QKeyValue keyValue;
+    for (it = choices.begin(); it != choices.end(); it++) {
+        toolTipControl->addQKeyValue( *it);
+        if( Utilities::inverseVowelMap->contains(it->value) ) {
+            keyValue.key = it->key;
+            keyValue.value = Utilities::inverseVowelMap->value(it->value);
+            toolTipControl->addQKeyValue(keyValue);
+        }
+    }
+
+    toolTipControl->sortByUsage();
+    toolTipControl->resetIndex();
+    if( !toolTipControl->isEmptyCharList()) {
+
+        /*if( toolTipControl->getSize()==1 ){
+            qDebug() << " tooltip control";
+           if( QToolTip::isVisible() ) QToolTip::hideText();
+           insertMidCharSelection( Utilities::getUnicode(toolTipControl->getAtIndex(), "0x")  );
+        }
+        else {
+           showToolTipText();
+        }*/
+
+        showToolTipText();
+    }
+    else {
+        if( QToolTip::isVisible()) {
+            QToolTip::hideText();
+        }
+    }
+}
 
 
 void MdiChild::showToolTipText() {
     QRect q = this->cursorRect();
     int x,y,z,w;
     q.getCoords(&x,&y,&z,&w);
+
     QString text=toolTipControl->createToolTipText();
-    if(QToolTip::isVisible()) QToolTip::hideText();
-    if(  getConfigState()!=C4)
-       QToolTip::showText(this->mapToGlobal(QPoint())+ QPoint(x + 20,y-50),  text);
+
+    QToolTip::setFont(QFont("Kalpurush",  this->textCursor().charFormat().fontPointSize(), 0, false));
+
+    QToolTip::showText(this->mapToGlobal(QPoint())+ QPoint(x + 20,y-50),  text);
+
 }
-
-
 
 
 void MdiChild::showVowelModToolTipText() {
@@ -1032,20 +1075,18 @@ void MdiChild::showVowelModToolTipText() {
        QCursor::setPos(t.x() +15,t.y() + 200);
    // }
 
-
     QString text=toolTipControl->createVowelModToolTipText();
     if(QToolTip::isVisible()) QToolTip::hideText();
     QToolTip::showText(this->mapToGlobal(QPoint())+ QPoint(x + 20,y-50),  text);
 }
 
 
+/*
 void MdiChild::characterToolTipText(QKeyEvent *event) {
     if( event->key() == 124 ) {
        replaceDanda();
        return;
     }
-
-
     if(event->key() == Qt::Key_Right && QToolTip::isVisible() ) {
        if(toolTipControl->state == 0 ) {
           toolTipControl->incrementIndex();
@@ -1078,7 +1119,8 @@ void MdiChild::characterToolTipText(QKeyEvent *event) {
             showVowelModToolTipText();
         }
     }
-    else if( (  /* event->key() == Qt::Key_Space || */ event->key() ==  Qt::Key_Return)  && QToolTip::isVisible()) {
+    else if( (  // event->key() == Qt::Key_Space ||
+     event->key() ==  Qt::Key_Return)  && QToolTip::isVisible()) {
         if( toolTipControl->state == 0 ) {
             insertMidCharSelection( Utilities::getUnicode(toolTipControl->getAtIndex(), "0x")  );
             if(QToolTip::isVisible()) { QToolTip::hideText();}
@@ -1119,13 +1161,95 @@ void MdiChild::characterToolTipText(QKeyEvent *event) {
 
        toolTipControl->state = 0;
     }
-
-
 }
 
+*/
+
+void MdiChild::characterToolTipText(QKeyEvent *event) {
+    if( event->key() == 124 ) {
+       replaceDanda();
+       return;
+    }
+
+
+    if(event->key() == Qt::Key_Right && QToolTip::isVisible() ) {
+          toolTipControl->incrementIndex();
+          showToolTipText();
+    }
+    else if(event->key() == Qt::Key_Left && QToolTip::isVisible()) {
+
+           toolTipControl->decrementIndex();
+           showToolTipText();
+
+    }
+    else if( (  // event->key() == Qt::Key_Space ||
+       event->key() ==  Qt::Key_Return)  && QToolTip::isVisible()) {
+         insertMidCharSelection( Utilities::getUnicode(toolTipControl->getAtIndex(), "0x")  );
+      //   qDebug() << "Fecthing" << toolTipControl->getAtRowCol() << " " <<  toolTipControl->consonantPrefix(this) ;
+         if(QToolTip::isVisible()) {
+              QToolTip::hideText();
+          }
+    }
+    else if(event->key() == Qt::Key_Escape) {
+        insertCompositeLetter();
+        event->ignore();
+    }
+    else {
+    //   qDebug() << "This is the " << Qt::Key_Return <<"   " << event->key();
+       if(event->key() == Qt::Key_Backspace) {
+          if(QToolTip::isVisible()) {
+             QToolTip::hideText();
+          }
+       }
+       TextEdit::keyPressEvent(event);
+       if( event->key() != Qt::Key_Space &&  event->key() != Qt::Key_Backspace && event->key() != Qt::Key_Tab ) {
+           computeToolTipText() ;
+       }
+    }
+}
+
+void MdiChild::expandListonPrefix() {
+
+    QString newWord;
+
+    newWord= toolTipControl->getAssamesePrefix(this);
+
+    if( !toolTipControl->hasAssamesePrefix(this)) return;
+
+    WordsTrie * wordstrie = WordsTrie::getWordsTrie();
+
+
+    QStringList prefix;
+    foreach(QChar qchar, newWord) {
+        prefix.append(  Utilities::convertToHexString(qchar.unicode()).toLower() );
+    }
+    QList<QString> choices;
+    wordstrie->get_choice(prefix, 5, true,  choices );
+
+    QStringList newWordList;
+    foreach(QString word, choices) {
+        newWordList.append(Utilities::getUnicode(word, "0x"));
+    }
+
+    c->setModel(new QStringListModel(newWordList, c));
+
+
+    QRect cr = cursorRect();
+
+
+    if(newWord.size() > 0) {
+        c->setCompletionPrefix(newWord);
+        c->popup()->setCurrentIndex(c->completionModel()->index(0, 0));
+    }
+    cr.setWidth(c->popup()->sizeHintForColumn(0) + c->popup()->verticalScrollBar()->sizeHint().width());
+    QPoint q = this->viewport()->mapToGlobal(QPoint(TextEdit::cursorRect().x(),TextEdit::cursorRect().y()));
+    QCursor::setPos(q.x() - 2,q.y());
+    c->setCompletionPrefix(newWord);
+    c->complete(cr); // popup it up!
+}
+
+
 void MdiChild::wordToolTipText(QKeyEvent *e) {
-
-
     if( e->key() == 124 ) {
        replaceDanda();
        return;
@@ -1134,27 +1258,17 @@ void MdiChild::wordToolTipText(QKeyEvent *e) {
        switch (e->key()) {
            case Qt::Key_Enter:
            case Qt::Key_Return:
+           qDebug() << "pick";
+
               e->ignore();
               return; // let the completer do default behavior
        default:
            break;
        }
     }
+
     TextEdit::keyPressEvent(e);
-  /*  switch (e->key()) {
-        case Qt::Key_Backspace:
-           if(c->popup()->isVisible())
-              c->popup()->hide();
-           e->ignore();
-           return; // let the completer do default behavior
-    default:
-        break;
-    }
-*/
-  //  qDebug() <<"Prefix " <<  toolTipControl->hasAssamesePrefix(this);
-
     QString newWord;
-
 
     newWord= toolTipControl->charPrefix(this).toLower();
     QStringList newWordList;
@@ -1162,8 +1276,8 @@ void MdiChild::wordToolTipText(QKeyEvent *e) {
         if(  !toolTipControl->hasAssamesePrefix(this)) {
            QList<QWordUnicode> pairedWordList;
            Phonetic::phoneticWordChoices(newWord, pairedWordList, false);
-         //   Phonetic::phoneticWordChoicesLengthBased(newWord, pairedWordList, false);
-         //  Phonetic::phoneticWordChoices(newWord, pairedWordList,true);
+         // Phonetic::phoneticWordChoicesLengthBased(newWord, pairedWordList, false);
+         // Phonetic::phoneticWordChoices(newWord, pairedWordList,true);
            Phonetic::arrangeWordChoices(pairedWordList,newWordList,Phonetic::processPhoneticInput( Phonetic::phoneticEquivString(newWord)));
         }
         else
@@ -1171,7 +1285,6 @@ void MdiChild::wordToolTipText(QKeyEvent *e) {
     }
 
     c->setModel(new QStringListModel(newWordList, c));
-
     QString completionPrefix = newWord; //textUnderCursor();
     QRect cr = cursorRect();
 
@@ -1190,23 +1303,41 @@ void MdiChild::wordToolTipText(QKeyEvent *e) {
     if( e->key() == Qt::Key_Space  || e->key() == Qt::Key_Tab) {
         c->popup()->hide();
     }
-
    // qDebug() << "Tooltip word " << toolTipControl->charPrefix(this).toLower();
-
 }
 
 void MdiChild::keyPressEvent( QKeyEvent *event )
 {
     if(disable==true) return;
     if( _state == F2 ) {
+
+
+           if (c && c->popup()->isVisible()) {
+               switch (event->key()) {
+                   case Qt::Key_Enter:
+                   case Qt::Key_Return:
+                      event->ignore();
+                      return; // let the completer do default behavior
+               default:
+                   c->popup()->hide();
+                   break;
+               }
+            }
+
        characterToolTipText(event);
     }
     else if( _state == F3) {
-       // TextEdit::keyPressEvent(event);
         wordToolTipText(event);
     }
-
 }
+
+void MdiChild::keyReleaseEvent(QKeyEvent *event)
+{
+    if(event->key() == Qt::Key_Control) {
+        expandListonPrefix();
+    }
+}
+
 
 void MdiChild::replaceDanda() {
     QTextCursor tc = textCursor();

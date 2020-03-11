@@ -25,17 +25,14 @@ class LoadDataThread : public QThread
         QString dictionaryFile = ":/files/processed_dictionary.txt";
     //    dictionaryFile = ":/files/processed_dictionary_Sumu_corrected_Feb_2013.txt";
 
-
         QString unicodeToRomanOverrideFile = ":/files/unicode_to_roman_override.txt";
 
         Romanization::InitializeUnicodeToRomanOverrideMaps(unicodeToRomanOverrideFile);
-
 
         WordsTrie *wordsMapTree = WordsTrie::getWordsTrie();
 
         wordsMapTree->LoadDictionaryWords(dictionaryFile);
 
-     //   qDebug() << " Loaded words";
 
         Phonetic::setInflexTypes(":/files/inflexions_comb.txt");
         Phonetic::createSingleInflections();
@@ -43,7 +40,6 @@ class LoadDataThread : public QThread
 
         Phonetic::initializeCharPhoneticMap();
         Phonetic::loadAllWords(dictionaryFile );
-    //    qDebug() << " Loaded all words";
 
         Phonetic::createPhoneticTree(dictionaryFile);
         Phonetic::initializeDistances();

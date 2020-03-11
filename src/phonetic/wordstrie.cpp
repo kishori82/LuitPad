@@ -156,23 +156,25 @@ void WordsTrie::get_choice( QStringList prefix, int choicesize, bool autoselect,
            return;
        }
 
-       get_choice_words( charTree, choices,  prefix_list, choicesize, autoselect);
+       get_choice_words(charTree, choices,  prefix_list, choicesize, autoselect);
        return;
    }
 
    // the second function to be called.
  void WordsTrie::get_choice_words(TreeNode *root,  QList<QString> & choices, QList<QString> & words, int choicesize, bool autoselect)
    {
-       if( words.size() ==0 ) {
+       if( words.size()==0 ) {
            QStack<QString> wordstack;
            get_choices_from_subtree(root, choices, wordstack, choicesize);
        }
        else {
          QString key = words.at(0);
+
          words.removeFirst();
 
-         if( root->links.contains(key))
+         if( root->links.contains(key)) {
             get_choice_words(root->links[key],  choices, words, choicesize, autoselect);
+         }
          else if( autoselect ) {
              words.clear();
              if( root->fullWord ) {

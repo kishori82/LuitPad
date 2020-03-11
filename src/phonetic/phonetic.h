@@ -59,7 +59,7 @@ public:
     static void clearForNewWord(QString newWord,QList<TreeNode *> *visitedNodeList, TreeNode *roman2UnicodeTreeGeneric);
     static bool toAsending( QWordRank & s1 , QWordRank & s2 );
     static bool toAsendingInflex( QKeyDistance& s1 , QKeyDistance & s2 );
-    static void rankWords(QList<QWordUnicode> &words, QString word);
+    static void rankWords(QList<QWordUnicode> &words, QString word, int max=15);
     static bool markUsedWord(TreeNode * curNode, QStringList &charList, bool used, unsigned int depth);
 
     static void createPhoneticTree(QString fileName);

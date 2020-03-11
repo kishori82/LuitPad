@@ -46,6 +46,7 @@
 #include <QTextOption>
 #include <QTextStream>
 #include <QResizeEvent>
+#include <QList>
 
 #include "src/editor/textedit.h"
 #include "src/editor/tooltipsingleton.h"
@@ -117,6 +118,7 @@ protected:
 private:
     void wordToolTipText(QKeyEvent *e) ;
     void characterToolTipText(QKeyEvent *event);
+    void expandListonPrefix();
     void vowelModToolTipText();
     CONFIG_STATES getConfigState();
 
@@ -126,11 +128,14 @@ private slots:
 private:
     //bool event(QEvent *event);
     void keyPressEvent( QKeyEvent *event );
+    void keyReleaseEvent(QKeyEvent *event);
+
     bool maybeSave();
     void setCurrentFile(const QString &fileName);
     QString strippedName(const QString &fullFileName);
     void insertCompositeLetter();
     void replaceDanda();
+
 
     QString curFile;
     bool isUntitled;
