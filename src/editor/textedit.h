@@ -16,10 +16,14 @@
 #include <QTextCursor>
 #include <QPair>
 #include <QLabel>
-#include "src/phonetic/translator.h"
+
 #include <QDebug>
 #include <QClipboard>
 #include <QHash>
+
+#include "src/phonetic/translator.h"
+#include "src/core/constants.h"
+
 //#include "highlighter.h"
 
  class QCompleter;

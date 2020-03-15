@@ -895,10 +895,11 @@ void MainWindow::createActions()
    // f2Act->setShortcut(QKeySequence::QKeySequence(Qt::Key_F2));
 
 
-    QShortcut* del = new QShortcut(Qt::Key_F2, this);
+    //QShortcut* del = new QShortcut(Qt:: , this);
+    QShortcut *del = new QShortcut(Qt::Key_F2, this);
     connect(del, SIGNAL(activated()), f2Act, SLOT(trigger()));
-    QShortcut* bak = new QShortcut(Qt::Key_F3, this);
-    connect(bak, SIGNAL(activated()), f2Act, SLOT(trigger()));
+ //   QShortcut* bak = new QShortcut(Qt::Key_F3, this);
+//    connect(bak, SIGNAL(activated()), f2Act, SLOT(trigger()));
 
     /*
     f4Act = new QAction(QIcon(":/images/f4.png"), tr("Yet to set"), this);
@@ -1116,13 +1117,11 @@ void MainWindow::createToolBars()
     //comboSize->setCurrentIndex(comboSize->findText(QString::number(QApplication::font().pointSize())));
     comboSize->setCurrentIndex(comboSize->findText(QString::number(16)));
 
-    formatToolBar->addWidget(comboFont);
     formatToolBar->addWidget(comboSize);
+    formatToolBar->addWidget(comboFont);
     formatToolBar->addSeparator();
 
-
     formatToolBar->addAction(aboutAct);
-
 }
 
 void MainWindow::createStatusBar()
@@ -1313,8 +1312,11 @@ void MainWindow::printInternalDictionarySlot() {
 
     foreach(QString s, wordList) {
      //   output.append(s +"\n");
+
+       if(s.contains("0x2d0")) continue;
        i++;
-       output.append(QString::number(i) + "\t"+  Utilities::getUnicode(s,"0x") +"\n");
+
+       output.append(QString::number(i) + "\t"  + s + "\t"+  Utilities::getUnicode(s,"0x") +"\n");
     }
     child->setText(output);
 
@@ -1382,7 +1384,6 @@ void MainWindow::f2Action(){
 
      //   f2Act->setChecked(true);
       //  f3Act->setChecked(false);
-
 }
 
 

@@ -28,10 +28,13 @@ private:
 
 public:
 
-    unsigned short int state;
+    APP_STATES state;
     static ToolTipSingleton *object;
 
     static ToolTipSingleton * GetToolTipSingleton(QString char_freq = "");
+
+    APP_STATES getState();
+    void setState(APP_STATES state);
 
     int SetCharacterList(QList<QString> list);
     QString charPrefix(TextEdit *);
@@ -48,6 +51,10 @@ public:
     void sortByUsage();
 
     QString createToolTipText();
+
+    void setSelectCharacters(const QList<QKeyValue> &choices, QKeyValue & keyvalue);
+
+    QStringList createQcompleterList();
 
     unsigned int getSize();
     void resetIndex();

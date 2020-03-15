@@ -5,7 +5,7 @@ QHash<QString, int> *ToolTipSingleton::charUsageFrequency = NULL;
 
 ToolTipSingleton::ToolTipSingleton()
 {
-    state = 0;
+    state = F2;
 
     this->resetRowCol();
     rowSizes[0] = 3;
@@ -25,9 +25,17 @@ ToolTipSingleton::ToolTipSingleton()
     vowelList[2].append(QString("0x9c8"));
     vowelList[2].append(QString("0x9cb"));
     vowelList[2].append(QString("0x9cc"));
-
-
 }
+
+void ToolTipSingleton::setState(APP_STATES _state) {
+    this->state = _state;
+}
+
+
+APP_STATES ToolTipSingleton::getState() {
+    return this->state;
+}
+
 
 int ToolTipSingleton::SetCharacterList(QList<QString> list) {
 
@@ -296,6 +304,29 @@ void ToolTipSingleton::resetIndex() {
 void ToolTipSingleton::resetRowCol() {
     row=1;
     col=1;
+}
+
+
+
+QStringList ToolTipSingleton::createQcompleterList() {
+
+
+    QStringList charList;
+    for(int i=0; i < keyvaluelist.size(); i++) {
+         charList.append(Utilities::getUnicode( keyvaluelist.at(i).value, "0x") + "\t" + keyvaluelist.at(i).key );
+    }
+    return charList;
+}
+
+void ToolTipSingleton::setSelectCharacters(const QList<QKeyValue> &choices, QKeyValue &keyValue){
+    for (QList<QKeyValue>::const_iterator it = choices.begin(); it != choices.end(); it++) {
+         this->addQKeyValue( *it);
+         if( Utilities::inverseVowelMap->contains(it->value) ) {
+               keyValue.key = it->key;
+               keyValue.value = Utilities::inverseVowelMap->value(it->value);
+               this->addQKeyValue(keyValue);
+         }
+    }
 }
 
 QString ToolTipSingleton::createToolTipText() {

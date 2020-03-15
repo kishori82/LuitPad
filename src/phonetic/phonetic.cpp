@@ -112,7 +112,15 @@ void Phonetic::createPhoneticTree(QString fileName){
     rom->Romanize( fileName, roman2UnicodeMap);
     QHash<QString, QStringList>::const_iterator it;
     roman2UnicodeTree = new TreeNode();
+
+    int i = 0;
     for(it=roman2UnicodeMap.begin(); it!=roman2UnicodeMap.end() ; ++it) {
+
+        if( i++ < 2 )
+            qDebug() << "phoneticload" << it.value()[0];
+            // qDebug() << charList << "  " << unicodeWord;
+        if(it.value()[0].contains("0x2d0")) continue;
+
         foreach(QString unicodeWord, it.value() ) {
 
             charList.clear();

@@ -460,11 +460,18 @@ float WordsTrie::wordDistance(QString s, QString t) {
      while(!in.atEnd()) {
          line = in.readLine();
          list = line.split("\t");
+
+         if( list.at(0).contains("0x2d")) continue;
+
          //qDebug() << list;
          if( list.size() >= 1 ) {
-             if( list.at(0).trimmed().size() !=0 )
+
+
+          if( list.at(0).trimmed().size() !=0 )
                 charMap[list.at(0).trimmed()] = list.at(0).trimmed();
-              // qDebug() << i << "   " << list.at(0).trimmed();
+
+
+          //   qDebug() << i << "   " << list.at(0).trimmed();
           //  i++;
          }
      }
@@ -488,6 +495,7 @@ float WordsTrie::wordDistance(QString s, QString t) {
 
            while(it != charMap.constEnd() ) {
             //  qDebug() << it.key() <<"++" << it.value();
+
               list = it.key().split("0x");
               for(it_list = list.constBegin(); it_list != list.constEnd(); ++it_list ) {
                   if( QString::compare(QString(""), *it_list)!=0) {

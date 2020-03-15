@@ -177,8 +177,6 @@ void TextEdit::replaceNewWord( int i) {
              && ( (word.at(i) >= 'A' && word.at(i) <= 'Z') || (word.at(i) >= 'a' && word.at(i) <= 'z') )
              )
            ) {
-
-
              if( suffix.size() == 0 ) {
                 suffix.append(selectedChar);
                 prefixstr.append(suffix);
@@ -190,53 +188,48 @@ void TextEdit::replaceNewWord( int i) {
              prefixstr.append(word.at(i));
          //    qDebug() << Utilities::getUnicodeString(word.at(i));
            //  qDebug() << Utilities::zeroLengthChar->contains( Utilities::getUnicodeString(word.at(i)));
-
-
              if(! Utilities::zeroLengthChar->contains( Utilities::getUnicodeString(word.at(i))) ) {
                  moveBack++;
-
              }
              else if(  Utilities::getUnicodeString(word.at(i))==QString("0x9cd") ) {
                  moveBack--;
              }
          }
      }
-
-
      tc.insertText(prefixstr);
      tc.movePosition( QTextCursor::PreviousCharacter, QTextCursor::MoveAnchor,moveBack );
-    // qDebug() << "Set textcursor";
      setTextCursor(tc);
-
-
  }
 
 
  void TextEdit::insertCompletion(const QString& completion)
  {
-
-
      if (c->widget() != this)
          return;
-
      QTextCursor tc = textCursor();
      tc.movePosition(QTextCursor::Left);
 
      int extra;
      QString newWord;
      ToolTipSingleton *toolTipControl=ToolTipSingleton::GetToolTipSingleton("" );
-
-
+/*
      if( _state ==F2) {
        tc.movePosition(QTextCursor::EndOfWord);
        extra =  completion.length() - c->completionPrefix().length();
        tc.insertText(completion.right(extra));
      }
-     else {
+     else
+  */
+     {
        tc.movePosition(QTextCursor::EndOfWord);
        tc.select( QTextCursor::WordUnderCursor );
        if(  toolTipControl->hasAssamesePrefix(this)) {
-           newWord= toolTipControl->trimRomanSuffix(this);
+           if(toolTipControl->getState()==F4) {
+               newWord= "";
+               toolTipControl->setState(F2);
+           } else{
+               newWord= toolTipControl->trimRomanSuffix(this);
+           }
            tc.insertText(newWord + Utilities::getField(completion,"\t",0));
         }
        else {
@@ -277,8 +270,6 @@ void TextEdit::replaceNewWord( int i) {
          c->setWidget(this);
      QTextEdit::focusInEvent(e);
  }
-
-
 
 
  void TextEdit::charToolTip(QKeyEvent *e) {
@@ -324,26 +315,12 @@ void TextEdit::replaceNewWord( int i) {
      QTextEdit::keyPressEvent(e);
  }
 
+
  void TextEdit::keyPressEvent(QKeyEvent *e)
  {
-     /*
-     if( e->key()!= Qt::Key_Backspace  &&  this->toPlainText().length() > 250 ) {
-         if( this->toPlainText().length() < 270) {
-             this->setText( this->toPlainText() + QString(" Maimum limit exceeded! Please try the full version"));
-         }
-         Utilities::warningBox("You have exceeded the 250 characters limit per window for the trial version\n For full version please see text in the 2nd window.");
-         return;
-     } */
-
-    wordToolTip(e);
-    /*
-     if( _state == F2) {
-        charToolTip(e);
-     }
-     else {
-        wordToolTip(e);
-     }*/
+    QTextEdit::keyPressEvent(e);
  }
+
 
  bool TextEdit::canInsertFromMimeData(const QMimeData* source) const
  {
