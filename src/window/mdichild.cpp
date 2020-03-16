@@ -1174,19 +1174,19 @@ void MdiChild::characterToolTipText(QKeyEvent *event) {
 
         QList<QKeyValue>  choices;
         charMapTree->get_choice( toolTipControl->charPrefix(this), 4,false, choices );
+        std::reverse(choices.begin(), choices.end());
         toolTipControl->clearKeyValueList();
-        QKeyValue keyValue;
-        toolTipControl->setSelectCharacters(choices, keyValue);
+
+        toolTipControl->setSelectCharacters(choices);
 
         QStringList newWordList = toolTipControl->createQcompleterList();
 
-        QString newWord= toolTipControl->charPrefix(this).toLower();
         c->setModel(new QStringListModel(newWordList, c));
-        QString completionPrefix = newWord; //textUnderCursor();
+
 
         QRect cr = cursorRect();
 
-        if(completionPrefix.size() > 0) {
+        if( toolTipControl->charPrefix(this).toLower().size() > 0) {
             c->setCompletionPrefix("");
             c->popup()->setCurrentIndex(c->completionModel()->index(0, 0));
         }

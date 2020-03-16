@@ -318,7 +318,8 @@ QStringList ToolTipSingleton::createQcompleterList() {
     return charList;
 }
 
-void ToolTipSingleton::setSelectCharacters(const QList<QKeyValue> &choices, QKeyValue &keyValue){
+void ToolTipSingleton::setSelectCharacters(const QList<QKeyValue> &choices){
+    QKeyValue keyValue;
     for (QList<QKeyValue>::const_iterator it = choices.begin(); it != choices.end(); it++) {
          this->addQKeyValue( *it);
          if( Utilities::inverseVowelMap->contains(it->value) ) {
@@ -328,6 +329,8 @@ void ToolTipSingleton::setSelectCharacters(const QList<QKeyValue> &choices, QKey
          }
     }
 }
+
+
 
 QString ToolTipSingleton::createToolTipText() {
 
