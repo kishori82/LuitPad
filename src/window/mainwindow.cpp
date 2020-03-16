@@ -894,10 +894,17 @@ void MainWindow::createActions()
     f2Act->setCheckable(true);
    // f2Act->setShortcut(QKeySequence::QKeySequence(Qt::Key_F2));
 
-
     //QShortcut* del = new QShortcut(Qt:: , this);
-    QShortcut *del = new QShortcut(Qt::Key_F1, this);
+    QShortcut *del;
+
+#if defined(Q_OS_MAC64) || defined(Q_OS_MAC) || defined(Q_OS_DARWIN) || defined(Q_OS_DARWIN64)
+    del = new QShortcut(Qt::Key_F1, this);
+#else
+    del = new QShortcut(Qt::Key_F1, this);
+#endif
     connect(del, SIGNAL(activated()), f2Act, SLOT(trigger()));
+
+
  //   QShortcut* bak = new QShortcut(Qt::Key_F3, this);
 //    connect(bak, SIGNAL(activated()), f2Act, SLOT(trigger()));
 
