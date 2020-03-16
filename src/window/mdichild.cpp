@@ -1269,7 +1269,13 @@ void MdiChild::keyPressEvent( QKeyEvent *event )
 
 void MdiChild::keyReleaseEvent(QKeyEvent *event)
 {
-    if(event->key() == Qt::Key_Control) {
+
+#if defined(Q_OS_MAC64) || defined(Q_OS_MAC) || defined(Q_OS_DARWIN) || defined(Q_OS_DARWIN64)
+     if(event->key() == Qt::Key_Meta)
+#else
+    if(event->key() == Qt::Key_Control)
+#endif
+    {
         expandListonPrefix();
         ToolTipSingleton *tooltip = ToolTipSingleton::GetToolTipSingleton();
         tooltip->setState(F4);
