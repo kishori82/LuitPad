@@ -896,7 +896,7 @@ void MainWindow::createActions()
 
 
     //QShortcut* del = new QShortcut(Qt:: , this);
-    QShortcut *del = new QShortcut(Qt::Key_F2, this);
+    QShortcut *del = new QShortcut(Qt::Key_F1, this);
     connect(del, SIGNAL(activated()), f2Act, SLOT(trigger()));
  //   QShortcut* bak = new QShortcut(Qt::Key_F3, this);
 //    connect(bak, SIGNAL(activated()), f2Act, SLOT(trigger()));
@@ -1369,14 +1369,14 @@ void MainWindow::f2Action(){
 
     if( _state == F3 ) {
         f2Act->setIcon(QIcon(":/images/mode2.png"));
-        f2Act->setText( tr("Change Character->Phonetic mode (F2)"));
+        f2Act->setText( tr("Change Character->Phonetic mode (F1)"));
         f2Act->setStatusTip(tr("Character mode"));
       //  f3Act->setIcon(QIcon::QIcon(":/images/_mode3.png"));
          _state = F2;
     }
     else {
         f2Act->setIcon(QIcon(":/images/_mode2.png"));
-        f2Act->setText(tr("Change Phonetic->Character mode  (R2)"));
+        f2Act->setText(tr("Change Phonetic->Character mode  (F1)"));
         f2Act->setStatusTip(tr("Phonetic mode"));
     //    f3Act->setIcon(QIcon::QIcon(":/images/mode3.png"));
         _state = F3;

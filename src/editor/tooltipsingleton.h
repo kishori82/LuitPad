@@ -52,7 +52,7 @@ public:
 
     QString createToolTipText();
 
-    void setSelectCharacters(const QList<QKeyValue> &choices, QKeyValue & keyvalue);
+    void setSelectCharacters(const QList<QKeyValue> &choices);
 
     QStringList createQcompleterList();
 
