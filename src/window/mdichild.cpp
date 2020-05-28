@@ -221,7 +221,7 @@ MdiChild::MdiChild()
 {
     setAttribute(Qt::WA_DeleteOnClose);
     isUntitled = true;
-    c = NULL;
+    autocompleter  = NULL;
     disable = false;
     //this->setSizeIncrement(200,150);
     //this->setLineWidth(300);
@@ -809,16 +809,16 @@ QString MdiChild::strippedName(const QString &fullFileName)
 void MdiChild::setCompleter(QCompleter *compltr)
 {
 
-    if (c) QObject::disconnect(c, 0, this, 0);
+    if (autocompleter) QObject::disconnect(autocompleter, 0, this, 0);
 
-    c = compltr;
+    autocompleter = compltr;
 
-    if (!c) return;
+    if (! autocompleter ) return;
 
-    c->setWidget(this);
-    c->setCompletionMode(QCompleter::PopupCompletion);
-    c->setCaseSensitivity(Qt::CaseInsensitive);
-    QObject::connect(c, SIGNAL(activated(QString)), this, SLOT(insertCompletion(QString)));
+    autocompleter->setWidget(this);
+    autocompleter->setCompletionMode(QCompleter::PopupCompletion);
+    autocompleter->setCaseSensitivity(Qt::CaseInsensitive);
+    QObject::connect(autocompleter, SIGNAL(activated(QString)), this, SLOT(insertCompletion(QString)));
 
     //this->setCaseSensitivity(Qt::CaseInsensitive);
 
@@ -1136,20 +1136,20 @@ void MdiChild::expandListonPrefix() {
         newWordList.append(Utilities::getUnicode(word, "0x"));
     }
 
-    c->setModel(new QStringListModel(newWordList, c));
+    autocompleter->setModel(new QStringListModel(newWordList,  autocompleter));
 
 
     QRect cr = cursorRect();
 
 
     if(newWord.size() > 0) {
-        c->setCompletionPrefix(newWord);
-        c->popup()->setCurrentIndex(c->completionModel()->index(0, 0));
+        autocompleter->setCompletionPrefix(newWord);
+        autocompleter->popup()->setCurrentIndex( autocompleter->completionModel()->index(0, 0));
     }
-    cr.setWidth(c->popup()->sizeHintForColumn(0) + c->popup()->verticalScrollBar()->sizeHint().width());
+    cr.setWidth( autocompleter->popup()->sizeHintForColumn(0) +  autocompleter->popup()->verticalScrollBar()->sizeHint().width());
     QPoint q = this->viewport()->mapToGlobal(QPoint(TextEdit::cursorRect().x(),TextEdit::cursorRect().y()));
     QCursor::setPos(q.x() - 2,q.y());
-    c->complete(cr); // popup it up!
+    autocompleter->complete(cr); // popup it up!
 }
 
 
@@ -1168,12 +1168,13 @@ void MdiChild::characterToolTipText(QKeyEvent *event) {
         event->ignore();
     }
     else {
-    //   qDebug() << "This is the " << Qt::Key_Return <<"   " << event->key();
 
         TextEdit::keyPressEvent(event);
 
         QList<QKeyValue>  choices;
         charMapTree->get_choice( toolTipControl->charPrefix(this), 4,false, choices );
+
+
         std::reverse(choices.begin(), choices.end());
         toolTipControl->clearKeyValueList();
 
@@ -1181,19 +1182,19 @@ void MdiChild::characterToolTipText(QKeyEvent *event) {
 
         QStringList newWordList = toolTipControl->createQcompleterList();
 
-        c->setModel(new QStringListModel(newWordList, c));
+        autocompleter->setModel(new QStringListModel(newWordList,  autocompleter));
 
 
         QRect cr = cursorRect();
 
         if( toolTipControl->charPrefix(this).toLower().size() > 0) {
-            c->setCompletionPrefix("");
-            c->popup()->setCurrentIndex(c->completionModel()->index(0, 0));
+            autocompleter->setCompletionPrefix("");
+            autocompleter->popup()->setCurrentIndex( autocompleter->completionModel()->index(0, 0));
         }
-        cr.setWidth(c->popup()->sizeHintForColumn(0) + c->popup()->verticalScrollBar()->sizeHint().width());
+        cr.setWidth( autocompleter->popup()->sizeHintForColumn(0) +  autocompleter->popup()->verticalScrollBar()->sizeHint().width());
         QPoint q = this->viewport()->mapToGlobal(QPoint(TextEdit::cursorRect().x(), TextEdit::cursorRect().y()));
         QCursor::setPos(q.x() - 2, q.y());
-        c->complete(cr); // popup it up
+        autocompleter->complete(cr); // popup it up
     }
 }
 
@@ -1221,22 +1222,22 @@ void MdiChild::wordToolTipText(QKeyEvent *e) {
            Phonetic::phoneticInflexChoices(newWord, newWordList);
     }
 
-    c->setModel(new QStringListModel(newWordList, c));
+    autocompleter->setModel(new QStringListModel(newWordList, autocompleter));
     QString completionPrefix = newWord; //textUnderCursor();
     QRect cr = cursorRect();
 
     if(completionPrefix.size() > 0) {
-        c->setCompletionPrefix("");
-        c->popup()->setCurrentIndex(c->completionModel()->index(0, 0));
+        autocompleter->setCompletionPrefix("");
+        autocompleter->popup()->setCurrentIndex(autocompleter->completionModel()->index(0, 0));
     }
 
-    cr.setWidth(c->popup()->sizeHintForColumn(0) + c->popup()->verticalScrollBar()->sizeHint().width());
+    cr.setWidth( autocompleter->popup()->sizeHintForColumn(0) + autocompleter->popup()->verticalScrollBar()->sizeHint().width());
     QPoint q = this->viewport()->mapToGlobal(QPoint(TextEdit::cursorRect().x(),TextEdit::cursorRect().y()));
     QCursor::setPos(q.x() - 2,q.y());
-    c->complete(cr); // popup it up!
+    autocompleter->complete(cr); // popup it up!
 
     if( e->key() == Qt::Key_Space  || e->key() == Qt::Key_Tab) {
-        c->popup()->hide();
+        autocompleter->popup()->hide();
     }
    // qDebug() << "Tooltip word " << toolTipControl->charPrefix(this).toLower();
 }
@@ -1245,20 +1246,22 @@ void MdiChild::keyPressEvent( QKeyEvent *event )
 {
     if(disable==true) return;
 
-    if (c && c->popup()->isVisible()) {
+    if (autocompleter && autocompleter->popup()->isVisible()) {
          switch (event->key()) {
            case Qt::Key_Enter:
            case Qt::Key_Return:
                 event->ignore();
                 return; // let the completer do default behavior
          default:
-           c->popup()->hide();
+            autocompleter->popup()->hide();
            break;
          }
      }
 
     if( _state == F2 ) {
+
        characterToolTipText(event);
+
 //       wordToolTipText(event);
 
     }
@@ -1293,7 +1296,7 @@ void MdiChild::replaceDanda() {
 
 void MdiChild::insertCompositeLetter()
 {
-    if (c->widget() != this) {
+    if (autocompleter->widget() != this) {
         qDebug() << "Not the rigth widget";
         return;
 
@@ -1431,7 +1434,7 @@ void MdiChild::updateCompleterModelOnTextChange(){
 
   //  QList<QString> keys = dictionaryWords->charTree->links.keys();
 
-    c->setModel(new QStringListModel(words, c));
+   autocompleter->setModel(new QStringListModel(words, autocompleter));
   //  qDebug() << "Completer model update " << words.size() ;
 }
 

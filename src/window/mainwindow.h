@@ -140,6 +140,7 @@ private slots:
     void toggleHideToolTipMode();
 
     QStringList pickRootWords(QStringList &wordList);
+//    void openLuitBrowserSlot();
     void printInternalDictionarySlot();
     void writeNewDictionarySlot();
     void loadUndefinedWords();
@@ -150,7 +151,7 @@ private:
     QString myToolTip;
     QTimer *timer;
 
-
+ //   void createLuitBrowserTab();
     void createDevelopmentMenus() ;
     void createActions();
     void createMenus();
@@ -170,6 +171,10 @@ private:
     void initCompleter();
     void docState();
     QString generateSignature();
+
+    QMenu *luitbrowserMenu;
+    QAction *luitbrowserAct;
+
 
     QMenu *developmentMenu;
     QAction *printInternalDictionaryAct;

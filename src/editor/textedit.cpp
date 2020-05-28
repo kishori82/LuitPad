@@ -18,6 +18,10 @@
 #include "src/utils/utilities.h"
 
 
+#include <QMimeData>
+
+
+
 //extern int validSoftware;
 
 void TextEdit::deleteOldWord( int i) {
@@ -54,7 +58,7 @@ void TextEdit::replaceNewWord( int i) {
 }
 
 
- TextEdit::TextEdit(QWidget *parent) : QTextEdit(parent), c(0)
+ TextEdit::TextEdit(QWidget *parent) : QTextEdit(parent), autocompleter(0)
      {
          setPlainText(trUtf8("")) ;
          /*
@@ -71,36 +75,36 @@ void TextEdit::replaceNewWord( int i) {
 
  void TextEdit::setCompleter(QCompleter *completer)
  {
-     if (c)
-         QObject::disconnect(c, 0, this, 0);
+     if (autocompleter)
+         QObject::disconnect(autocompleter, 0, this, 0);
 
-     c = completer;
+     autocompleter = completer;
 
-     if (!c)
+     if (!autocompleter)
          return;
 
-     c->setWidget(this);
-     c->setCompletionMode(QCompleter::PopupCompletion);
-     c->setCompletionRole(2);
-     c->setModelSorting(QCompleter::CaseInsensitivelySortedModel);
+     autocompleter->setWidget(this);
+     autocompleter->setCompletionMode(QCompleter::PopupCompletion);
+     autocompleter->setCompletionRole(2);
+     autocompleter->setModelSorting(QCompleter::CaseInsensitivelySortedModel);
  //    qDebug()<<"Total Number of words in completer: "<<c->completionCount();
  //    qDebug()<<"Index: "<<c->currentCompletion();
 
      //c->setCaseSensitivity(Qt::CaseInsensitive);
      //c->setMaxVisibleItems(10);
 
-     QObject::connect(c, SIGNAL(activated(QString)), this, SLOT(insertCompletion(QString)));
+     QObject::connect(autocompleter, SIGNAL(activated(QString)), this, SLOT(insertCompletion(QString)));
  }
 
  QCompleter *TextEdit::completer() const
  {
-     return c;
+     return autocompleter;
  }
 
 
  void TextEdit::insertCharSelection(const QString selectedChar, const QString prefix)
  {
-     if (c->widget() != this)
+     if (autocompleter->widget() != this)
          return;
      QTextCursor tc = textCursor();
 
@@ -118,7 +122,6 @@ void TextEdit::replaceNewWord( int i) {
          else
              prefixstr.append(word.at(i));
      }
-
      tc.insertText(prefixstr + selectedChar);
     // setTextCursor(tc);
  }
@@ -126,7 +129,7 @@ void TextEdit::replaceNewWord( int i) {
 
  void TextEdit::insertVowelModSelection(const QString selectedChar, const QString prefix)
  {
-     if (c->widget() != this)
+     if (autocompleter->widget() != this)
          return;
      QTextCursor tc = textCursor();
 
@@ -154,7 +157,7 @@ void TextEdit::replaceNewWord( int i) {
 
  void TextEdit::insertMidCharSelection(const QString selectedChar)
  {
-     if (c->widget() != this)
+     if (autocompleter->widget() != this)
          return;
      QTextCursor tc = textCursor();
 
@@ -204,7 +207,7 @@ void TextEdit::replaceNewWord( int i) {
 
  void TextEdit::insertCompletion(const QString& completion)
  {
-     if (c->widget() != this)
+     if (autocompleter->widget() != this)
          return;
      QTextCursor tc = textCursor();
      tc.movePosition(QTextCursor::Left);
@@ -228,7 +231,7 @@ void TextEdit::replaceNewWord( int i) {
                newWord= "";
                toolTipControl->setState(F2);
            } else{
-               newWord= toolTipControl->trimRomanSuffix(this);
+               newWord= toolTipControl->trimRomanDigitSuffix(this);
            }
            tc.insertText(newWord + Utilities::getField(completion,"\t",0));
         }
@@ -240,6 +243,7 @@ void TextEdit::replaceNewWord( int i) {
      //  qDebug() << "<<" << Utilities::getField(completion,"\t",0) <<">>";
      }
      setTextCursor(tc);
+
  }
 
  QString TextEdit::textUnderCursor() const
@@ -266,14 +270,14 @@ void TextEdit::replaceNewWord( int i) {
 
  void TextEdit::focusInEvent(QFocusEvent *e)
  {
-     if (c)
-         c->setWidget(this);
+     if (autocompleter)
+         autocompleter->setWidget(this);
      QTextEdit::focusInEvent(e);
  }
 
 
  void TextEdit::charToolTip(QKeyEvent *e) {
-     if (c && c->popup()->isVisible()) {
+     if (autocompleter && autocompleter->popup()->isVisible()) {
          // The following keys are forwarded by the completer to the widget
         switch (e->key()) {
             case Qt::Key_Enter:
@@ -294,19 +298,19 @@ void TextEdit::replaceNewWord( int i) {
      QRect cr = cursorRect();
 
      if( e->key()!=Qt::Key_Enter) {
-          if (completionPrefix != c->completionPrefix() && completionPrefix.size() > 0) {
+          if (completionPrefix != autocompleter->completionPrefix() && completionPrefix.size() > 0) {
       //   qDebug() << "Completion prefix  " << "\"" << completionPrefix << "\"";
-             c->setCompletionPrefix(completionPrefix);
-             c->popup()->setCurrentIndex(c->completionModel()->index(0, 0));
+             autocompleter->setCompletionPrefix(completionPrefix);
+             autocompleter->popup()->setCurrentIndex(autocompleter->completionModel()->index(0, 0));
           }
-          cr.setWidth(c->popup()->sizeHintForColumn(0) + c->popup()->verticalScrollBar()->sizeHint().width());
+          cr.setWidth(autocompleter->popup()->sizeHintForColumn(0) + autocompleter->popup()->verticalScrollBar()->sizeHint().width());
           QPoint q = this->viewport()->mapToGlobal(QPoint(TextEdit::cursorRect().x(),TextEdit::cursorRect().y()));
           QCursor::setPos(q.x() - 2,q.y());
-          c->complete(cr); // popup it up!
+          autocompleter->complete(cr); // popup it up!
      }
 
      if( e->key() == Qt::Key_Space  || e->key() == Qt::Key_Tab) {
-         c->popup()->hide();
+         autocompleter->popup()->hide();
      }
 
  }
@@ -327,6 +331,32 @@ void TextEdit::replaceNewWord( int i) {
      return source->hasImage() || source->hasUrls() ||
          QTextEdit::canInsertFromMimeData(source);
  }
+
+
+ void TextEdit::insertFromMimeDataPlain(const QMimeData * source)
+ {
+     if (source->hasText())
+     {
+         QString text = source->text();
+         QTextCursor cursor = textCursor();
+
+         for (int x = 0, pos = cursor.positionInBlock(); x < text.size(); x++, pos++)
+         {
+             if (text[x] == '\t')
+             {
+                 text[x] = ' ';
+                 for (int spaces = TAB_SPACES - (pos % TAB_SPACES) - 1; spaces > 0; spaces--)
+                     text.insert(x, ' ');
+             }
+             else if (text[x] == '\n')
+             {
+                 pos = -1;
+             }
+         }
+         cursor.insertText(text);
+     }
+ }
+
 
  void TextEdit::insertFromMimeData(const QMimeData* source)
  {
@@ -350,9 +380,10 @@ void TextEdit::replaceNewWord( int i) {
      }
      else
      {
-         QTextEdit::insertFromMimeData(source);
+         TextEdit::insertFromMimeDataPlain(source);
      }
  }
+
 
 
  void TextEdit::dropImage(const QUrl& url, const QImage& image)

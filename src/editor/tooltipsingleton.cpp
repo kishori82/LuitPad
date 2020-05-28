@@ -170,7 +170,7 @@ bool ToolTipSingleton::hasAssamesePrefix(TextEdit *textDocument) {
  }
 
 
-QString ToolTipSingleton::trimRomanSuffix(TextEdit *textDocument) {
+QString ToolTipSingleton::trimRomanDigitSuffix(TextEdit *textDocument) {
 
     QTextCursor tc= textDocument->textCursor();
 
@@ -183,7 +183,7 @@ QString ToolTipSingleton::trimRomanSuffix(TextEdit *textDocument) {
 
 
     unsigned int j = 0;
-    for(int i = word.size() - 1;  (i >=0  && Utilities::isRomanAlphabet(word.at(i))) ; i--) {
+    for(int i = word.size() - 1;  (i >=0  && Utilities::isRomanAlphabetDigit(word.at(i))) ; i--) {
       //  qDebug() << QChar(word.at(i)).unicode();
         j++;
     }
@@ -205,7 +205,7 @@ QString ToolTipSingleton::trimRomanSuffix(TextEdit *textDocument) {
 
      QString keyChar = "";
 
-     for(int i = 0;  i < word.size() && word.at(i).isLetter();  ++i) {
+     for(int i = 0;  i < word.size() &&  word.at(i).isLetterOrNumber() ;  ++i) {
          keyChar.append(word.at(i));
      }
 
@@ -307,11 +307,21 @@ void ToolTipSingleton::resetRowCol() {
 }
 
 
+bool toAsendingLength( QKeyValue& s1 , QKeyValue & s2 )
+{
+    return s1.key.size() < s2.key.size();
+}
+
+
 
 QStringList ToolTipSingleton::createQcompleterList() {
 
 
     QStringList charList;
+
+    qSort(keyvaluelist.begin(), keyvaluelist.end(), &toAsendingLength);
+
+
     for(int i=0; i < keyvaluelist.size(); i++) {
          charList.append(Utilities::getUnicode( keyvaluelist.at(i).value, "0x") + "\t" + keyvaluelist.at(i).key );
     }

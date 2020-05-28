@@ -29,6 +29,7 @@
 
 #undef PRINT_DICTIONARY
 
+#undef LUIT_BROWSER
 
 #undef  EDITOR_LAYOUT
 #undef PRINT_OPTION
@@ -122,6 +123,10 @@ MainWindow::MainWindow() : completer(0)
 #endif
 
 
+#ifdef LUIT_BROWSER
+    createLuitBrowserTab();
+#endif
+
   //  ShowTutorialThread *showtutorial = new ShowTutorialThread;
     //showtutorial->start();
    // QThreadPool::start(showtutorial);
@@ -137,7 +142,7 @@ MainWindow::MainWindow() : completer(0)
     loadData->wait();
     waitScreen->hide();
 
-    setWindowTitle(tr("LuitPad 2.0.0"));
+    setWindowTitle(tr("LuitPad 2.0.5"));
     setUnifiedTitleAndToolBarOnMac(true);
 
     setCentralWidget(editor);
@@ -962,6 +967,27 @@ void MainWindow::createDevelopmentMenus() {
     developmentMenu->addAction(loadUndefinedWordsAct);
 }
 
+
+#ifdef LUIT_BROWSER
+
+void MainWindow::createLuitBrowserTab() {
+    luitbrowserMenu  = menuBar()->addMenu(tr("&LuitBrowser"));
+   // connect(settingsMenu, SIGNAL(aboutToShow()), this, SLOT(updateSettingsMenu()));
+
+    luitbrowserAct = new QAction(tr("&LuitBrowser"), this);
+
+    //menuBar()->addAction(luitbrowserAct);
+
+    connect(luitbrowserAct, SIGNAL(triggered()), this, SLOT(openLuitBrowserSlot()) );
+    luitbrowserMenu->addAction(luitbrowserAct);
+
+
+   // luitbrowserMenu->addAction(luitbrowserAct );
+
+}
+#endif
+
+
 void MainWindow::createMenus()
 {
     fileMenu = menuBar()->addMenu(tr("&File"));
@@ -1294,6 +1320,28 @@ QStringList MainWindow::pickRootWords(QStringList &wordList) {
     qDebug() << "Number of words picked " << QString::number(newList.size());
     return newList;
 }
+
+
+#ifdef LUIT_BROWSER
+void MainWindow::openLuitBrowserSlot() {
+
+    QUrl url;
+    url = QUrl("www.xukhdukh.com");
+    LuitBrowser *browser = new LuitBrowser(url);
+
+
+/*
+#if defined Q_OS_SYMBIAN || defined Q_WS_HILDON || defined Q_WS_MAEMO_5 || defined Q_WS_SIMULATOR
+    browser->showMaximized();
+#else
+    browser->show();
+#endif
+*/
+
+}
+
+#endif
+
 
 void MainWindow::printInternalDictionarySlot() {
 

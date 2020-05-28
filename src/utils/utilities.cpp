@@ -476,6 +476,16 @@ bool  Utilities::isRomanAlphabet(QChar c) {
         return false;
 }
 
+
+bool  Utilities::isRomanAlphabetDigit(QChar c) {
+   // qDebug() << "in is " << c.unicode();
+    if(  (c.unicode() >= 0x30 && c.unicode()<= 0x39) ||
+         (c.unicode() >= 0x61 && c.unicode()<= 0x7a)  ||  (c.unicode() >= 0x41 && c.unicode()<= 0x5a) )
+        return true;
+    else
+        return false;
+}
+
 QString Utilities::getUnicodeForWebPage(QString str, QString delim){
 
   //  qDebug() << "Getting unicode";
@@ -754,9 +764,9 @@ bool Utilities::toDesending( QKeyFloat &s1 , QKeyFloat &s2 )
 
 void Utilities::sortQKeyFloatList(QList<QKeyFloat> &list, bool Ascending) {
     if(Ascending )
-      qSort(list.begin(), list.end(),&Utilities::toAsending);
+      qSort(list.begin(), list.end(), &Utilities::toAsending);
     else
-      qSort(list.begin(), list.end(),&Utilities::toDesending);
+      qSort(list.begin(), list.end(), &Utilities::toDesending);
 }
 
 

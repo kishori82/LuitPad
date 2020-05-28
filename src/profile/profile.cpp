@@ -743,6 +743,7 @@ bool Profile::fill_keyboard(const QString &profName)
     CharTrie *charTrie = CharTrie::getCharTrie();
     bool matra_order = false;
 
+
     if (file.open(QIODevice::ReadOnly | QIODevice::Text))
     {
 

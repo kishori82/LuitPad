@@ -1,6 +1,5 @@
 
 QT += core gui
-
 #unix|win32: LIBS += -lQtCore4
 
 win64 {
@@ -92,4 +91,4 @@ RC_FILE = luitpad.rc
 
 
 
-FORMS +=
+FORMS += luitbrowser.ui

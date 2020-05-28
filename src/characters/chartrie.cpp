@@ -176,6 +176,7 @@ bool CharTrie::foundPrefixMatch(TreeNode *root,  QList<QString> &prefix_chars_li
        choices.clear();
 
        QList<QString> prefix_list;
+
        QStack<QString> wordstack;
        for(int i = 0; i < prefix.length(); i++ )
            prefix_list.append( prefix.data()[i]);
@@ -308,12 +309,13 @@ void CharTrie::printTree( TreeNode *root, QStack<QString> & partword)
        QHash<QString, QString>::const_iterator it= charMap.constBegin();
        while(it != charMap.constEnd() ) {
           for(int i =0; i < it.value().length(); i++ ) {
-         //   qDebug() << it.value().data()[i] <<"++" << it.key();
+           // qDebug() << it.value().data()[i] <<"++" << it.key();
               char_list.append(it.value().data()[i]);
           }
 
         //  System.out.println(mapkey +  "  -----");
           ///String unicode = charMap.get(mapkey);
+        //   qDebug() << char_list <<"++" << it.key();
 
           insertWord(charTree, char_list, it.key());
           ++it;

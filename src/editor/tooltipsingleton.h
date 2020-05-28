@@ -38,7 +38,7 @@ public:
 
     int SetCharacterList(QList<QString> list);
     QString charPrefix(TextEdit *);
-    QString trimRomanSuffix(TextEdit *textDocument);
+    QString trimRomanDigitSuffix(TextEdit *textDocument);
     QString consonantPrefix(TextEdit *);
     bool hasAssamesePrefix(TextEdit *textDocument);
     QString getAssamesePrefix(TextEdit *textDocument);

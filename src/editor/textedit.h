@@ -46,6 +46,7 @@
  private:
      void charToolTip(QKeyEvent *e);
      void wordToolTip(QKeyEvent *e);
+     static const int TAB_SPACES = 4;
 
 
  private slots:
@@ -59,7 +60,7 @@
      QString charUnderCursor() const;
 
  public:
-     QCompleter *c;
+     QCompleter *autocompleter;
      void insertCharSelection(const QString selectedChar, const QString prefix);
      void insertMidCharSelection(const QString selectedChar);
      void insertVowelModSelection(const QString selectedChar, const QString prefix);
@@ -99,6 +100,8 @@ protected:
      QHash<QString, bool> ignoreDictionary;
 
  private:
+     void insertFromMimeDataPlain(const QMimeData * source);
+
      bool canInsertFromMimeData(const QMimeData* source) const;
      void insertFromMimeData(const QMimeData* source);
      void dropImage(const QUrl& url, const QImage& image);
