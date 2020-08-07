@@ -47,6 +47,13 @@
 #include <QTextStream>
 #include <QResizeEvent>
 #include <QList>
+#include <QMenu>
+#include <QPrinter>
+#include <QApplication>
+#include <QAbstractItemView>
+#include <QScrollBar>
+#include <QFileDialog>
+#include <QToolTip>
 
 #include "src/editor/textedit.h"
 #include "src/editor/tooltipsingleton.h"
@@ -144,7 +151,7 @@ private:
 
 public slots:
     void Ignore();
-    void getMeanings();
+    void getWordInfo();
 
 
 public:
@@ -171,5 +178,6 @@ private:
 
 
 };
+
 
 #endif

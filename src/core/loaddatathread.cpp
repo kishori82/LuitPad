@@ -5,14 +5,31 @@ LoadDataThread::LoadDataThread(QObject *parent) :
 }
 
 
-void LoadDataThread::LoadDictionary(QString  dictionaryFile, QString poribhashaFile) {
+void LoadDataThread::LoadDictionary(
+        QString IdeasFile,
+        QString engWrdIdFile,
+        QString asmWrdWrdId,
+        QString examplesFile,
+        QString idiomsFile,
+        QString poribhashaFile) {
+
+
     Dictionaries *dictionaries = Dictionaries::getDictionaries();
 
-    dictionaries->setAssameseEnglishDictionaries(dictionaryFile);
+    dictionaries->loadAssameseEnglishDictionaries(
+                IdeasFile,
+                engWrdIdFile,
+                asmWrdWrdId,
+                examplesFile,
+                idiomsFile,
+                poribhashaFile
+             );
 
-    dictionaries->setPoriBhashaDictionaries(poribhashaFile);
 
 
+
+    //dictionaries->setAssameseEnglishDictionaries(dictionaryFile);
+    //dictionaries->setPoriBhashaDictionaries(poribhashaFile);
 }
 
 

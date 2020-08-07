@@ -28,6 +28,8 @@ private:
 
     // methods
     void load_dictionary(QString, QHash<QString,QString> &);
+    void load_dictionary_asm(QString, QHash<QString,QString> &);
+
     bool insertWord(TreeNode * , QList<QString> & , QString );
     void getWordsFromTree( TreeNode *, QStack<QString> &, QStringList & wordList);
     void initializeDistances();

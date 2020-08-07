@@ -78,13 +78,16 @@ int main(int argc, char *argv[])
 
 }
 
+
+
+
 void process_arguments() {
 
     QString fingerPrint;
 
     for(int i=0; i < sysIds.size() -1 ; i++) {
         if( sysIds.at(i)=="--cpuid" ||  sysIds.at(i)=="--biosid" ||  sysIds.at(i)=="--mboardid" ) {
-            fingerPrint = QCryptographicHash::hash(sysIds.at(++i).toAscii().constData()  ,QCryptographicHash::Sha1 ).toBase64();
+            fingerPrint = QCryptographicHash::hash(sysIds.at(++i).toLatin1().constData()  ,QCryptographicHash::Sha1 ).toBase64();
             if( fingerPrint.size()>0)
                inputIds.append(fingerPrint);
         }

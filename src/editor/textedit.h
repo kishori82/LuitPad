@@ -21,10 +21,35 @@
 #include <QClipboard>
 #include <QHash>
 
+#include <QMenu>
+#include <QToolTip>
+
 #include "src/phonetic/translator.h"
 #include "src/core/constants.h"
 
 //#include "highlighter.h"
+
+
+
+class Menu : public QMenu
+{
+    Q_OBJECT
+public:
+    Menu(){}
+    bool event (QEvent * e)
+    {
+        const QHelpEvent *helpEvent = static_cast <QHelpEvent *>(e);
+         if (helpEvent->type() == QEvent::ToolTip && activeAction() != 0)
+         {
+              QToolTip::showText(helpEvent->globalPos(), activeAction()->toolTip());
+         } else
+         {
+              QToolTip::hideText();
+         }
+         return QMenu::event(e);
+    }
+};
+
 
  class QCompleter;
 
@@ -88,7 +113,8 @@ protected:
      QAction *ignoreWord;
      QMenu *meaning;
      QAction *meaningText;
-
+     QMenu *synonyms, *examples, *officialwords, *idioms;
+     QAction *synonymsText, *examplesText, *officialwordsText, *idiomsText;
 
      QAction *newWords[10], *oldWords[10], *replaceWords[10];
      QSignalMapper *deletesignalMapper, *addsignalMapper, *signalMapperReplaceWords;

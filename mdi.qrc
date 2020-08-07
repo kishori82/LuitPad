@@ -29,23 +29,19 @@
         <file>images/save_pdf.png</file>
         <file>files/char_usage.txt</file>
         <file>files/inflexions_comb.txt</file>
-        <file>files/processed_dictionary.txt</file>
         <file>files/unicode_to_roman_override.txt</file>
         <file>files/Siyamrupali_1_01.ttf</file>
         <file>files/Nabaprabhat.ttf</file>
         <file>files/kalpurush.ttf</file>
         <file>files/Lohit-Assamese.ttf</file>
         <file>files/DEFAULT.dat</file>
-        <file>files/poribhasha-file.txt</file>
-        <file>files/dictionary-file.txt</file>
         <file>images/welcome1.png</file>
         <file>images/wait.png</file>
-      <!--    <file>videos/1-LuitPad_installation.m4v</file>
-
-        <file>files/SHREE0550-B.ttf</file>
-        <file>files/SHREE0550-BI.ttf</file>
-        <file>files/SHREE0550-I.ttf</file>
-        <file>files/SHREE0550.ttf</file>
-        -->
+        <file>files/T_IdeaBase.csv</file>
+        <file>files/T_Idioms.tsv</file>
+        <file>files/T_Poribhasha.tsv</file>
+        <file>files/T_WrdASMIdea.csv</file>
+        <file>files/T_WrdENGIdea.csv</file>
+        <file>files/T_WrdExamples.tsv</file>
     </qresource>
 </RCC>

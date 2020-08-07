@@ -69,8 +69,8 @@ public:
     static void initializeVowelMap( );
     static void initializeConsonantMap( );
     static void initializeZeroLengthChars();
-    static bool  isRomanAlphabet(QChar c) ;
-    static bool  isRomanAlphabetDigit(QChar c) ;
+    static bool isRomanAlphabet(QChar c) ;
+    static bool isRomanAlphabetDigit(QChar c) ;
 
 
     static bool isValidForComposition(QChar qchar);

@@ -445,7 +445,7 @@ float WordsTrie::wordDistance(QString s, QString t) {
 
    /* the main function */
 
-   void WordsTrie::load_dictionary(QString fileName, QHash<QString,QString> & charMap) {
+void WordsTrie::load_dictionary(QString fileName, QHash<QString,QString> & charMap) {
 
      QFile file(fileName);
      if(!file.open(QIODevice::ReadOnly)) {
@@ -461,31 +461,78 @@ float WordsTrie::wordDistance(QString s, QString t) {
          line = in.readLine();
          list = line.split("\t");
 
-         if( list.at(0).contains("0x2d")) continue;
+         QString unicodeString = list.at(0).trimmed();
+
+         if( unicodeString.contains("0x2d")) continue;
 
          //qDebug() << list;
-         if( list.size() >= 1 ) {
+         if( list.size() >= 1 )
+             if( unicodeString.size() !=0 ) {
+                 charMap[unicodeString] = unicodeString;
+               //  if( i > 1555 && i < 1563)   qDebug() << i << "   "<< line << unicodeString;
+         }
 
+         i++;
 
-          if( list.at(0).trimmed().size() !=0 )
-                charMap[list.at(0).trimmed()] = list.at(0).trimmed();
+     }
+}
 
+void WordsTrie::load_dictionary_asm(QString fileName, QHash<QString,QString> & charMap) {
 
-          //   qDebug() << i << "   " << list.at(0).trimmed();
+     QFile file(fileName);
+     if(!file.open(QIODevice::ReadOnly)) {
+             QMessageBox::information(0, "error", file.errorString());
+     }
+
+     QTextStream in(&file);
+     QStringList list ;
+
+      //  QString outLine;
+     int i =0;
+     QString line;
+     while(!in.atEnd()) {
+         line = in.readLine();
+         if(i==0) { i++; continue; }
+         list = line.split("\t");
+
+        // if( list.at(0).contains("0x2d")) continue;
+
+         //qDebug() << list;
+         if( list.size() >= 2 ) {
+             // qDebug() << list.at(1) << Utilities::getUnicodeString(list.at(1));
+
+              //if(i > 100) return;
+              QString unicodeString = Utilities::getUnicodeString(list.at(1).trimmed());
+              if( unicodeString.contains("0x2d")) continue;
+              if( unicodeString.size() !=0 ) {
+                  charMap[unicodeString] = unicodeString;
+              //    outLine.append(unicodeString +"\n") ;
+                  //if( i > 1555 && i < 1563)  qDebug() << i << "   "<< line << unicodeString;
+              }
           //  i++;
          }
+
+         i++;
      }
-   }
+
+     /*
+     QFile outfile("/tmp/processed_temp.txt");
+     if (outfile.open(QIODevice::WriteOnly | QIODevice::Text)) {
+         QTextStream out(&outfile);
+         out << outLine;
+     }*/
+
+}
 
 // loads a mapping from the file
-   void WordsTrie::LoadDictionaryWords(QString  fileName) {
+void WordsTrie::LoadDictionaryWords(QString  fileName) {
            QHash<QString,QString> charMap;
 
       //     charTree = new TreeNode();
 
            //load the map from a file
 
-           load_dictionary(fileName, charMap);
+           load_dictionary_asm(fileName, charMap);
 
            QList<QString> char_list;
            QStringList list ;
@@ -494,8 +541,6 @@ float WordsTrie::wordDistance(QString s, QString t) {
            QStringList::const_iterator it_list;
 
            while(it != charMap.constEnd() ) {
-            //  qDebug() << it.key() <<"++" << it.value();
-
               list = it.key().split("0x");
               for(it_list = list.constBegin(); it_list != list.constEnd(); ++it_list ) {
                   if( QString::compare(QString(""), *it_list)!=0) {
@@ -506,6 +551,9 @@ float WordsTrie::wordDistance(QString s, QString t) {
               insertWord(charTree, char_list, it.value());
               ++it;
            }
+
+
+
 
            qDebug()<< "Loaded dictionary of size " << charMap.size();
    }

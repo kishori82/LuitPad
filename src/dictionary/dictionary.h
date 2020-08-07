@@ -6,6 +6,9 @@
 #include <QMessageBox>
 #include <QTextStream>
 #include <QDebug>
+#include "src/utils/utilities.h"
+
+
 
 class Dictionary;
 
@@ -23,6 +26,13 @@ public:
     void setPoriBhashaDictionaries(QString poribhashaFile) ;
     Dictionary *getDictionary(unsigned int i);
 
+    void loadAssameseEnglishDictionaries(
+            QString IdeasFile,
+            QString engWrdIdFile,
+            QString asmWrdWrdId,
+            QString examplesFile,
+            QString idiomsFile,
+            QString poribhashaFile);
 };
 
 
@@ -34,16 +44,29 @@ public:
     Dictionary(QString dictionaryFile, QString poribhashaFile);
     void set_New_Entry(const QString str);
     void set_New_Entry_Reversed(const QString str);
-    QStringList getMeanings(const QString str);
+
     QStringList getWords();
     bool hasWord(QString word);
 
+    QStringList getMeanings(const QString str);
+    QStringList getIdioms(const QString str);
+    QStringList getExamples(const QString str);
+    QStringList getOfficialUse(const QString str);
+    QStringList getSynonyms(const QString str);
+
+    QHash<QString, QString> asmWrdIdIdeaId, engWrdIdIdeaId;
+    QHash<QString, QString> asmWrdWrdId, asmWrdIdWrd;
+    QHash<QString, QString> engWrdWrdId, engWrdIdWrd;
+    QHash<QString, QString> asmIdeaIdIdea, engIdeaIdIdea;
+    QHash<QString, QVector<QString> > idioms, examples;
+    QList<QPair<QString, QString> > officialWrd;
 
 private:
     QHash<QString, unsigned int> tempHash, localTempHash;
 
     QHash<QString, QHash<QString, unsigned int> > words;
     QVector<QString> meanings;
+
 
 
 };

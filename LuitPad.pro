@@ -2,13 +2,20 @@
 QT += core gui
 #unix|win32: LIBS += -lQtCore4
 
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets printsupport
+greaterThan(QT_MAJOR_VERSION, 4): DEFINES = QT_VERSION_5
+
+
+
+
+
 win64 {
      CONFIG+= static
      DEFINES +=  _WIN32_DCOM
      DEFINES +=  _WINDOWS
 }
 
- DEFINES -=_WIN32_DCOM
+DEFINES -=_WIN32_DCOM
 
 TEMPLATE = app
 
@@ -37,7 +44,7 @@ HEADERS  = \
     src/characters/asciiTrie.h \
 \
     src/profile/profile.h \
-    src/profile/encryption.h \
+#    src/profile/encryption.h \
 \
     src/utils/utilities.h \
 \
@@ -67,13 +74,14 @@ SOURCES  = main.cpp \
     src/characters/asciiTrie.cpp \
     \
     src/profile/profile.cpp \
-    src/profile/encryption.cpp \
+#    src/profile/encryption.cpp \
     \
     src/utils/utilities.cpp \
     \
     src/dictionary/dictionary.cpp
 
-RESOURCES     = mdi.qrc
+RESOURCES     = \
+    mdi.qrc
 
 TARGET = LuitPad
 # install
@@ -91,4 +99,42 @@ RC_FILE = luitpad.rc
 
 
 
-FORMS += luitbrowser.ui
+#FORMS += luitbrowser.ui
+
+DISTFILES += \
+    files/DEFAULT.dat \
+    files/Lohit-Assamese.pfb \
+    files/Lohit-Assamese.sfd \
+    files/Lohit-Assamese.ttf \
+    files/Nabaprabhat.ttf \
+    files/Siyam Rupali ANSI.ttf \
+    files/Siyamrupali.ttf \
+    files/Siyamrupali_1_01.ttf \
+    files/SolaimanLipi.ttf \
+    files/T_IdeaBase.csv \
+    files/T_Idioms.tsv \
+    files/T_Poribhasha.tsv \
+    files/T_WrdASM.csv \
+    files/T_WrdASMIdea.csv \
+    files/T_WrdENG.csv \
+    files/T_WrdENGIdea.csv \
+    files/T_WrdExamples.tsv \
+    files/ambiguous.txt \
+    files/ambiguous1.txt \
+    files/char_usage.txt \
+    files/dictionary-file.txt \
+    files/inflexions_comb.txt \
+    files/kalpurush ANSI.ttf \
+    files/kalpurush.ttf \
+    files/poribhasha-file-1.txt \
+    files/poribhasha-file.txt \
+    files/processed_dictionary.prefix_len_5.txt \
+    files/processed_dictionary.txt \
+    files/processed_dictionary_1.txt \
+    files/processed_dictionary_6.txt \
+    files/processed_dictionary_Sumu_corrected_Feb_2013.txt \
+    files/processed_dictionary_old.txt \
+    files/processed_temp.txt \
+    files/romanized.txt \
+    files/unicode_to_roman_override.txt \
+    files/user_keymap.txt

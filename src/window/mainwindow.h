@@ -42,6 +42,15 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QFileDialog>
+#include <QStatusBar>
+#include <QToolBar>
+#include <QMdiSubWindow>
+#include <QFontComboBox>
+#include <QMenuBar>
+#include <QPrintDialog>
+#include <QShortcut>
+
 #include "src/editor/highlighter.h"
 #include "src/characters/chartrie.h"
 #include "src/phonetic/wordstrie.h"

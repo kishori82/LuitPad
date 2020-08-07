@@ -323,25 +323,38 @@ void Romanization::Romanize(QString inputFile, QHash<QString, QStringList> &roma
 
      QList<QWordUnicode> webPrintableWords;
      QWordUnicode k;
-     QString  str = inStream.readLine();
+     QStringList list;
+
+     QString line = inStream.readLine();
+
+     list = inStream.readLine().split("\t");
+
+
+
+     QString str = Utilities::getUnicodeString(list.at(1).trimmed());
+
      QString roman="";
-     while (str.length() > 0) {
+     int i = 0;
+     while (!inStream.atEnd()) {
         out_str.clear();
-        if( !UnicodeToRomanOverrideMap.contains(str))
+        if( !UnicodeToRomanOverrideMap.contains(str)) {
             roman = convert2Roman(str);
+        }
 
-      //   qDebug() << "str " << str;
-      //  exit(0);
-
-        if( roman.size() > 0 ) {
+        i = i + 1;
+        if( str.size() > 0 && roman.size() > 0 ) {
             roman2UnicodeMap[roman].append(str);
             k.word = roman;
             k.unicode = Utilities::getUnicodeForWebPage(str,"0x");
             webPrintableWords.append(k);
         }
 
-        str = inStream.readLine();
+        //str = inStream.readLine();
+        list = inStream.readLine().split("\t");
+        str = Utilities::getUnicodeString(list.at(1).trimmed());
      }
+    // qDebug() << "total words " << i;
+     return;
 
      QHash<QString, QStringList>::const_iterator hit;
 

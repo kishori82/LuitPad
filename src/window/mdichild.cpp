@@ -19,7 +19,6 @@ void MdiChild::addContextMenu(QMenu *childMenu) {
 void MdiChild::contextMenuEvent(QContextMenuEvent *event) {
     //QMenu *menu = new QMenu();
     try {
-
         QStringList candidateWordsList; //,
         QHash<QString, QString> candidateWordInflexPairs;
 
@@ -46,10 +45,9 @@ void MdiChild::contextMenuEvent(QContextMenuEvent *event) {
                }
             }
             else {
-                 ignoreReplaceTest = true;
+                ignoreReplaceTest = true;
             }
         }
-
 
         candidateWordInflexPairs = Phonetic::getInflectionalFormsPairs(newWord);
         suggestedWordList = getSpellingSuggestions(candidateWordInflexPairs,10);
@@ -58,7 +56,6 @@ void MdiChild::contextMenuEvent(QContextMenuEvent *event) {
         // if for the first time
         if( rightClickCount==0 ) {
           //  menu = TextEdit::createStandardContextMenu();
-
             resizeImage=new QAction(tr("Resize Image"),this);
             connect(resizeImage, SIGNAL(triggered()), this, SLOT(resizeImageSize()));
             menu->addAction(resizeImage);
@@ -106,21 +103,53 @@ void MdiChild::contextMenuEvent(QContextMenuEvent *event) {
             connect(deletesignalMapper, SIGNAL(mapped(int)), this, SLOT(deleteOldWord( int )));
 
             menu->addSeparator();
-            ignoreWord=new QAction(tr("Ignore"),this);
-            connect(ignoreWord, SIGNAL(triggered()), this, SLOT(Ignore()));
-            menu->addAction(ignoreWord);
-
 
             meaning = menu->addMenu("Meanings");
-            meaningText = new QAction(tr("No meanings found!"), this);
+            meaningText = new QAction(tr(""), this);
+            meaning->setToolTip(tr("<p></p>") );
             meaningText->setFont(contextMenuFont);
             meaning->addAction(meaningText);
             meaning->setFont(contextMenuFont);
             menu->addMenu(meaning);
 
+            synonyms = menu->addMenu("Synonyms");
+            synonymsText = new QAction(tr(""), this);
+            synonyms->setToolTip(tr("<p></p>") );
+            synonymsText->setFont(contextMenuFont);
+            synonyms->addAction(synonymsText);
+            synonyms->setFont(contextMenuFont);
+            menu->addMenu(synonyms);
+
+            examples = menu->addMenu("Examples");
+            examplesText = new QAction(tr(""), this);
+            examples->setToolTip(tr("<p></p>") );
+            examplesText->setFont(contextMenuFont);
+            examples->addAction(examplesText);
+            examples->setFont(contextMenuFont);
+            menu->addMenu(examples);
+
+            officialwords = menu->addMenu("Official Words");
+            officialwordsText = new QAction(tr(""), this);
+            officialwords->setToolTip(tr("<p></p>") );
+            officialwordsText->setFont(contextMenuFont);
+            officialwords->addAction(officialwordsText);
+            officialwords->setFont(contextMenuFont);
+            menu->addMenu(officialwords);
+
+            idioms = menu->addMenu("Idioms");
+            idiomsText = new QAction(tr(""), this);
+            idioms->setToolTip(tr("<p></p>") );
+            idiomsText->setFont(contextMenuFont);
+            idioms->addAction(idiomsText);
+            idioms->setFont(contextMenuFont);
+            menu->addMenu(idioms);
+
+            menu->addSeparator();
+            ignoreWord=new QAction(tr("Ignore"),this);
+            connect(ignoreWord, SIGNAL(triggered()), this, SLOT(Ignore()));
+            menu->addAction(ignoreWord);
 
             replaceWord = menu->addMenu("Replace...");
-
             signalMapperReplaceWords = new QSignalMapper(this);
             for(int j =0 ; j < 10; j++) {
                replaceWords[j] = new QAction(tr("New"), this);
@@ -161,9 +190,8 @@ void MdiChild::contextMenuEvent(QContextMenuEvent *event) {
            }
         }
 
-
+        // add the possible correct spellings
         for(int j =0 ; j < 10; j++) {
-
            if( j <  suggestedWordList.size() ) {
                replaceWords[j]->setVisible(true);
                replaceWords[j]->setText(suggestedWordList.at(j));
@@ -173,7 +201,7 @@ void MdiChild::contextMenuEvent(QContextMenuEvent *event) {
            }
         }
 
-           getMeanings();
+        getWordInfo();
 
         lastPosition = event->pos();
 
@@ -189,7 +217,6 @@ void MdiChild::contextMenuEvent(QContextMenuEvent *event) {
 
 QStringList MdiChild::getSpellingSuggestions(QHash<QString, QString> &candidateWordsInflectionPairs, unsigned int nMax) {
     QStringList suggestionList;
-    WordsTrie *profileWords = WordsTrie::getProfileWordsTrie();
     WordsTrie *dictionaryWords = WordsTrie::getWordsTrie();
     QList<QKeyFloat> possibleList;
     QHash<QString, QString>::const_iterator it;
@@ -343,7 +370,8 @@ void MdiChild::readAsLuitPadFormat( QTextStream &in){
     QImage image;
     QUrl url;
     for(it = imageDataHash.begin(); it != imageDataHash.end(); ++it) {
-        image.loadFromData( QByteArray::fromBase64(it.value().toAscii()), "PNG");
+        image.loadFromData( QByteArray::fromBase64(it.value().toLatin1()), "PNG");
+//            image.loadFromData( QByteArray::fromBase64(it.value().toAscii()), "PNG");
         url.setUrl(it.key());
         document()->addResource(QTextDocument::ImageResource, url, image);
     }
@@ -454,7 +482,8 @@ bool MdiChild::saveAsPDF()
     printer.setOutputFileName(fileName);
 
     highlighter->setDocument(0);
-    printer.setOutputFormat(fileName.endsWith(".pdf") ? QPrinter::PdfFormat : QPrinter::PostScriptFormat);
+    printer.setOutputFormat(fileName.endsWith(".pdf") ? QPrinter::PdfFormat : QPrinter::PdfFormat);
+// printer.setOutputFormat(fileName.endsWith(".pdf") ? QPrinter::PdfFormat : QPrinter::PostScriptFormat);
     this->document()->print(&printer);
     highlighter->setDocument(this->document());   
     // test end
@@ -1111,8 +1140,6 @@ void MdiChild::characterToolTipText(QKeyEvent *event) {
 
 */
 
-
-
 void MdiChild::expandListonPrefix() {
 
     QString newWord;
@@ -1135,13 +1162,9 @@ void MdiChild::expandListonPrefix() {
     foreach(QString word, choices) {
         newWordList.append(Utilities::getUnicode(word, "0x"));
     }
-
     autocompleter->setModel(new QStringListModel(newWordList,  autocompleter));
 
-
     QRect cr = cursorRect();
-
-
     if(newWord.size() > 0) {
         autocompleter->setCompletionPrefix(newWord);
         autocompleter->popup()->setCurrentIndex( autocompleter->completionModel()->index(0, 0));
@@ -1151,9 +1174,6 @@ void MdiChild::expandListonPrefix() {
     QCursor::setPos(q.x() - 2,q.y());
     autocompleter->complete(cr); // popup it up!
 }
-
-
-
 
 void MdiChild::characterToolTipText(QKeyEvent *event) {
     if( event->key() == 124 ) {
@@ -1168,12 +1188,10 @@ void MdiChild::characterToolTipText(QKeyEvent *event) {
         event->ignore();
     }
     else {
-
         TextEdit::keyPressEvent(event);
 
         QList<QKeyValue>  choices;
         charMapTree->get_choice( toolTipControl->charPrefix(this), 4,false, choices );
-
 
         std::reverse(choices.begin(), choices.end());
         toolTipControl->clearKeyValueList();
@@ -1257,7 +1275,6 @@ void MdiChild::keyPressEvent( QKeyEvent *event )
            break;
          }
      }
-
     if( _state == F2 ) {
 
        characterToolTipText(event);
@@ -1285,14 +1302,12 @@ void MdiChild::keyReleaseEvent(QKeyEvent *event)
     }
 }
 
-
 void MdiChild::replaceDanda() {
     QTextCursor tc = textCursor();
     QString prefixstr;
     prefixstr.append(QString(QChar(0x964)));
     tc.insertText(prefixstr);
 }
-
 
 void MdiChild::insertCompositeLetter()
 {
@@ -1388,19 +1403,14 @@ void MdiChild::insertCompositeLetter()
 
 void MdiChild::updateCompleterModelOnTextChange(){
     QStringList words;
-
-
  //   if( _state == F3 ) { c->setModel(new QStringListModel(words, c));return; }
 
     if( _state== F3 ) {
       // wordToolTipText() ;
        return;
     }else {
-
         return;
     }
-
-
 
     QList<QString>  choices;
     QStringList stringlist;
@@ -1498,7 +1508,8 @@ void MdiChild::Ignore() {
 }
 
 
-void MdiChild::getMeanings() {
+/* old code when synonyms acted as meanings
+ * void MdiChild::getMeanings() {
     QTextCursor cursor = cursorForPosition(lastPosition);
     cursor.select(QTextCursor::WordUnderCursor);
     QString word = textUnderCursor();
@@ -1506,7 +1517,6 @@ void MdiChild::getMeanings() {
 
     Dictionaries *dicts = Dictionaries::getDictionaries();
     Dictionary *dictionary;
-
 
     QString out;
 
@@ -1519,7 +1529,7 @@ void MdiChild::getMeanings() {
            if( dictionary->hasWord(candWord)) {
               i = 0;
               foreach( QString a, dictionary->getMeanings(candWord)) {
-                  out.append( a + "; ");
+                  out.append( a + ";");
                   i++;
                   if(i>5) break;
               }
@@ -1535,11 +1545,121 @@ void MdiChild::getMeanings() {
 
 
     if( out.size()>0 )
-        meaningText->setText(out);
+        meaningText->setText(out + "\n");
     else
         meaningText->setText("No meanings found");
 
-\
+}*/
+
+
+void MdiChild::getWordInfo() {
+    QTextCursor cursor = cursorForPosition(lastPosition);
+    cursor.select(QTextCursor::WordUnderCursor);
+    QString word = textUnderCursor();
+
+
+    Dictionaries *dicts = Dictionaries::getDictionaries();
+    Dictionary *dictionary;
+
+    QString out;
+
+    unsigned int i=0;
+    out.clear();
+
+    QStringList meanings, examples, idioms, officialphrases, synonyms;
+
+
+    if( Utilities::isAssamese(word)) {
+        dictionary= dicts->getDictionary(0);
+
+        i = 0;
+        foreach(QString assmWord, Phonetic::getInflectionalFormsX(word)) {
+           QString candWord = Utilities::getUnicodeString(assmWord);
+           //qDebug() << "   candword " << candWord;
+           if( dictionary->hasWord(candWord)) {
+              //get meanings;
+
+              if(meanings.size() == 0) meanings  = dictionary->getMeanings(candWord);
+              if(examples.size() == 0) examples = dictionary->getExamples(candWord);
+              if(idioms.size() == 0)  idioms = dictionary->getIdioms(candWord);
+              if(officialphrases.size() == 0) officialphrases = dictionary->getOfficialUse(assmWord);
+              if(synonyms.size() == 0) synonyms = dictionary->getSynonyms(candWord);
+              i++;
+              if(i>5) break;
+            }
+        }
+    } else  {
+        dictionary = dicts->getDictionary(0);
+        if( dictionary->hasWord(word)) {
+            if(meanings.size() == 0) meanings = dictionary->getMeanings(word);
+            if(officialphrases.size() == 0) officialphrases = dictionary->getOfficialUse(word);
+            if(synonyms.size() == 0) synonyms = dictionary->getSynonyms(word);
+        }
+    }
+
+    /*
+    qDebug() << " meanings " << meanings;
+    qDebug() << "examples " << examples;
+    qDebug() << "idioms " << idioms;
+    qDebug() << "official phrases " << officialphrases;
+    qDebug() << "synonyms " << synonyms;
+*/
+
+    QString prefix = "<p style=\"font-size:14px\"> <table>";
+    QString suffix = "</table></p>";
+
+    QString htmlString= prefix;
+    foreach(QString item, meanings) {
+        htmlString += "<tr><td>" + item + "</td></tr>";
+    }
+    if( meanings.size() == 0 )
+        htmlString += "<tr><td>No meanings found</td></tr>";
+    htmlString += suffix;
+    this->meaning->setToolTip(htmlString);
+
+    htmlString= prefix;
+    foreach(QString item, synonyms) {
+        htmlString += "<tr><td>" + item + "</td></tr>";
+    }
+    if( synonyms.size() == 0 )
+        htmlString += "<tr><td>No synonyms found</td></tr>";
+    htmlString += suffix;
+    this->synonyms->setToolTip(htmlString);
+
+    htmlString= prefix;
+    i = 1;
+    foreach(QString item, examples) {
+        htmlString += "<tr><td>" + QString::number(i) + "</td><td>" + item + "</td></tr>";
+        i = i + 1;
+    }
+    if( examples.size() == 0 )
+        htmlString += "<tr><td>No examples found</td></tr>";
+    htmlString += suffix;
+    this->examples->setToolTip(htmlString );
+
+    htmlString= prefix;
+    i = 0;
+    foreach(QString item, idioms) {
+        QString num = "";
+        if(i%3==0) num = QString::number(i/3 + 1);
+        htmlString += "<tr><td>"+ num + "</td><td>"  + item + "</td></tr>";
+        i = i + 1;
+    }
+    if( idioms.size() == 0 )
+        htmlString += "<tr><td>No idioms found</td></tr>";
+    htmlString += suffix;
+    this->idioms->setToolTip(htmlString);
+
+    htmlString= prefix;
+    i = 1;
+    foreach(QString item, officialphrases) {
+        htmlString += "<tr><td>" + QString::number(i) + "</td><td>" + item + "</td></tr>";
+        i = i + 1;
+    }
+    if( officialphrases.size() == 0 )
+        htmlString += "<tr><td>No official phrases found</td></tr>";
+    htmlString += suffix;
+    this->officialwords->setToolTip(htmlString);
 }
 
 void MdiChild::setDisable(bool value) {

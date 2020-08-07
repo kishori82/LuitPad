@@ -7,7 +7,13 @@
 
 #include <QApplication>
 #include <QDesktopWidget>
+
+#ifdef QT_VERSION_5
+#include <QApplication>
+#else
 #include <QtGui/QApplication>
+#endif
+
 
 #include "src/phonetic/phonetic.h"
 #include "src/phonetic/wordstrie.h"
@@ -22,7 +28,13 @@ class LoadDataThread : public QThread
         qDebug() << "Loading data.....";
 
         Romanization::InitializeMaps();
-        QString dictionaryFile = ":/files/processed_dictionary.txt";
+        //QString dictionaryFile = ":/files/processed_dictionary.txt";
+        QString dictionaryFile = ":/files/T_WrdASMIdea.csv";
+
+        // dictionaryFile = ":/files/processed_temp.txt";
+        //dictionaryFile = ":/files/processed_dictionary.txt";
+      //  dictionaryFile  = ":/files/processed_dictionary.prefix_len_5.txt";
+
     //    dictionaryFile = ":/files/processed_dictionary_Sumu_corrected_Feb_2013.txt";
 
         QString unicodeToRomanOverrideFile = ":/files/unicode_to_roman_override.txt";
@@ -46,14 +58,29 @@ class LoadDataThread : public QThread
 
         Phonetic::initializeDeleteCharMap();
 
-
         InflexTrie *inflexTree = InflexTrie::getInflexTrie();
 
-        inflexTree->LoadInflections( Phonetic::singleInflexionsReverse);
+        inflexTree->LoadInflections(Phonetic::singleInflexionsReverse);
 
         Utilities::initializeAlphabetOrder();
 
-        LoadDictionary(":files/dictionary-file.txt", ":files/poribhasha-file.txt");
+        QString IdeasFile = ":/files/T_IdeaBase.csv";
+        QString engWrdIdFile = ":/files/T_WrdENGIdea.csv";
+        QString asmWrdWrdId = ":/files/T_WrdASMIdea.csv";
+        QString examplesFile = ":/files/T_WrdExamples.tsv";
+        QString idiomsFile = ":/files/T_Idioms.tsv";
+        QString poribhashaFile = ":/files/T_Poribhasha.tsv";
+
+        LoadDictionary(
+                    IdeasFile,
+                    engWrdIdFile,
+                    asmWrdWrdId,
+                    examplesFile,
+                    idiomsFile,
+                    poribhashaFile
+                  );
+
+
 
         //inflexTree->printData();
     }
@@ -65,7 +92,14 @@ signals:
 public slots:
 
 private:
-    void LoadDictionary(QString dictionaryFile, QString poribhashaFile);    
+    void LoadDictionary(
+            QString IdeasFile,
+            QString engWrdIdFile,
+            QString asmWrdWrdId,
+            QString examplesFile,
+            QString idiomsFile,
+            QString poribhashaFile
+         );
 };
 
 

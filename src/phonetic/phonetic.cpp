@@ -109,19 +109,29 @@ void Phonetic::createPhoneticTree(QString fileName){
     QStringList charList;
 
     Romanization *rom = new Romanization();
-    rom->Romanize( fileName, roman2UnicodeMap);
+    rom->Romanize(fileName, roman2UnicodeMap);
+
+
+
     QHash<QString, QStringList>::const_iterator it;
     roman2UnicodeTree = new TreeNode();
+
+    QHash<QString, bool> already_inserted;
 
     int i = 0;
     for(it=roman2UnicodeMap.begin(); it!=roman2UnicodeMap.end() ; ++it) {
 
      //   if( i++ < 2 )
-       //     qDebug() << "phoneticload" << it.value()[0];
-            // qDebug() << charList << "  " << unicodeWord;
+       //  qDebug() << "phoneticload" << it.value()[0] << "  "<< it.value().size();
+      //  qDebug() << charList << "  " << unicodeWord;
+
+        if(already_inserted.contains(it.value()[0])) continue;
+        already_inserted.insert(it.value()[0], true);
+
         if(it.value()[0].contains("0x2d0")) continue;
 
         foreach(QString unicodeWord, it.value() ) {
+
 
             charList.clear();
             foreach(QChar c, it.key())charList.append( Phonetic::phoneticEquivString(QString(c).toLower()));
@@ -841,9 +851,11 @@ void Phonetic::loadAllWords(QString fileName) {
           line = in.readLine();
           //binary.append(line);
           list = line.split("\t");
-          if( list.size() ==1 ) {
-              allWords->insert(list.at(0).trimmed(), Romanization::convert2Roman(list.at(0).trimmed()));
+          QString unicodeString = Utilities::getUnicodeString(list.at(1).trimmed());
 
+          if( list.size() >=2 ) {
+             //  qDebug() << unicodeString <<  Romanization::convert2Roman(unicodeString);
+              allWords->insert(unicodeString, Romanization::convert2Roman(unicodeString));
           }
       }
 

@@ -34,9 +34,9 @@ void TextEdit::deleteOldWord( int i) {
 void TextEdit::addNewWord( int i) {
    // qDebug() << "connected through  word no " << i;
     Profile *currProfile = Profile::getkeyBoard();
-    currProfile->addWord( Utilities::getUnicodeString( newWords[i]->text()));
-   // qDebug()  << "Romanized " << Romanization::convert2Roman(  Utilities::getUnicodeString( newWords[i]->text())  );
-    //Phonetic::insertWordFromOutside(  newWords[i]->text());
+    currProfile->addWord(Utilities::getUnicodeString( newWords[i]->text()));
+    qDebug()  << "Romanized " << Romanization::convert2Roman(  Utilities::getUnicodeString( newWords[i]->text())  );
+    Phonetic::insertWordFromOutside(  newWords[i]->text());
     /*foreach(QString unicodeWord, it.value() ) {
 
         charList.clear();

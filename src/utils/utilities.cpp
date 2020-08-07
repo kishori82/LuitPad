@@ -338,7 +338,7 @@ QString Utilities::reverse(QString str) {
 
     if( str.size() <= 0) { return (QString("")); }
 
-    QByteArray ba = str.toAscii();
+    QByteArray ba = str.toLatin1();  //str.toAscii();
     char *d = ba.data();
     std::reverse(d, d+str.length());
     str = QString(d);

@@ -3,6 +3,7 @@
 #include <QString>
 #include <QVector>
 #include <QFlags>
+#include <QIODevice>
 
 
 class SimpleCrypt

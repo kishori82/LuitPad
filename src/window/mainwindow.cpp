@@ -1,4 +1,5 @@
 #include <QtGui>
+#include <QMdiArea>
 
 #include "QPixmap"
 #include "QSplashScreen"
@@ -142,7 +143,7 @@ MainWindow::MainWindow() : completer(0)
     loadData->wait();
     waitScreen->hide();
 
-    setWindowTitle(tr("LuitPad 2.0.5"));
+    setWindowTitle(tr("LuitPad 3.0.0"));
     setUnifiedTitleAndToolBarOnMac(true);
 
     setCentralWidget(editor);
@@ -329,8 +330,6 @@ void MainWindow::newFile(FILETYPE type)
 
 void MainWindow::open()
 {
-
-
     QString fileName = QFileDialog::getOpenFileName(this);
     if (!fileName.isEmpty()) {
         QMdiSubWindow *existing = findMdiChild(fileName);
@@ -1361,8 +1360,10 @@ void MainWindow::printInternalDictionarySlot() {
     unsigned int i = 0;
 #ifdef ROOT_WORDS_ONLY
     wordList.sort();
-    qDebug() << "Debug before sort;";
+    qDebug() << "Printing only root words";
     wordList = pickRootWords(wordList);
+#else
+    qDebug() << "Printing all words";
 #endif
 
     foreach(QString s, wordList) {
