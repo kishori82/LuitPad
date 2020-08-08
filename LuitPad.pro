@@ -118,7 +118,7 @@ DISTFILES += \
     files/T_WrdASMIdea.csv \
     files/T_WrdENG.csv \
     files/T_WrdENGIdea.csv \
-    files/T_WrdExamples.tsv \
+    files/T_WrdExamples.tsv.compressed \
     files/ambiguous.txt \
     files/ambiguous1.txt \
     files/char_usage.txt \

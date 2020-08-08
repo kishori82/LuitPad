@@ -96,15 +96,31 @@ void Dictionaries::loadAssameseEnglishDictionaries(
     file.close();
 
     /// examplesFile
+/*
     file.setFileName(examplesFile);
     if(!file.open(QIODevice::ReadOnly)) {
             QMessageBox::information(0, "error", file.errorString());
     }
     QTextStream in3(&file);
 
+    QFile filex("T_WrdExamples.tsv.compressed");
+    if(!filex.open(QIODevice::WriteOnly)) {
+            QMessageBox::information(0, "error", file.errorString());
+    }
+    filex.write(qCompress(file.readAll(), 9));
+    filex.close();
+    file.close();
+*/
+    file.setFileName(examplesFile);
+    QByteArray  examples;
     i =0;
-    while(!in3.atEnd()) {
-        fields = in3.readLine().split('\t');
+    if(!file.open(QIODevice::ReadOnly)) {
+            QMessageBox::information(0, "error", file.errorString());
+    }
+    QStringList lines = QString(qUncompress(file.readAll())).split('\n');
+    foreach(QString line, lines) {
+        examples.append(line);
+        fields = line.split('\t');
         if(fields.size() >= 2) {
            QString unicodefield0 = Utilities::getUnicodeString(fields[0]);
            if( assamese->asmWrdWrdId.contains(unicodefield0)) {
@@ -119,6 +135,12 @@ void Dictionaries::loadAssameseEnglishDictionaries(
 
     qDebug() << "Number of lines inserted from " << examplesFile << " : " << QString::number(i);
     file.close();
+
+
+    QByteArray compressed = qCompress(examples);
+    qDebug() << "uncompressed" << examples.length() << "  " << compressed.length() << " " << qUncompress(compressed).length();
+    file.close();
+
 
     //idiomsFile
     file.setFileName(idiomsFile);
