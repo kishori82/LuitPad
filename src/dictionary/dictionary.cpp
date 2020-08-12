@@ -96,7 +96,8 @@ void Dictionaries::loadAssameseEnglishDictionaries(
     file.close();
 
     /// examplesFile
-/*
+
+    /*
     file.setFileName(examplesFile);
     if(!file.open(QIODevice::ReadOnly)) {
             QMessageBox::information(0, "error", file.errorString());
@@ -110,7 +111,8 @@ void Dictionaries::loadAssameseEnglishDictionaries(
     filex.write(qCompress(file.readAll(), 9));
     filex.close();
     file.close();
-*/
+    */
+
     file.setFileName(examplesFile);
     QByteArray  examples;
     i =0;
@@ -136,11 +138,11 @@ void Dictionaries::loadAssameseEnglishDictionaries(
     qDebug() << "Number of lines inserted from " << examplesFile << " : " << QString::number(i);
     file.close();
 
-
+/*
     QByteArray compressed = qCompress(examples);
     qDebug() << "uncompressed" << examples.length() << "  " << compressed.length() << " " << qUncompress(compressed).length();
     file.close();
-
+*/
 
     //idiomsFile
     file.setFileName(idiomsFile);
