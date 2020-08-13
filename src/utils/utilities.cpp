@@ -424,7 +424,32 @@ QString Utilities::createStringFromCodeList( QList<QString> list) {
 };
 */
 
+QString  Utilities::getHTMLStringFromMixedHexString(QString text) {
+
+    QRegExp rx("0x([0-9afbcdef]{3})");
+    QString res;
+    int pos = 0, prevpos = 0;
+
+    while ((pos = rx.indexIn(text, pos)) != -1) {
+        while( prevpos < pos) {
+           res.append(text.at(prevpos));
+           //qDebug() << text.at(prevpos);
+           prevpos++;
+        }
+        res.append(QString("&#x") + rx.cap(1) + QString(";"));
+        pos += rx.matchedLength();
+        prevpos = pos;
+    }
+    while( prevpos < text.size()) {
+       res.append(text.at(prevpos));
+       prevpos++;
+    }
+
+    return res;
+}
+
 QStringList  Utilities::getStringListFromHexString(QString word, QString delim, int len) {
+
     QStringList firstList = word.split(delim);
     QStringList resultList ;
 
@@ -484,6 +509,16 @@ bool  Utilities::isRomanAlphabetDigit(QChar c) {
         return true;
     else
         return false;
+}
+
+
+QString Utilities::getExamplesForToolTip(QString str){
+
+    QString output = "";
+    foreach(QString word, str.split(" ")) {
+         output += QString(" ") + Utilities::getUnicodeForWebPage(word, "0x");
+    }
+    return output;
 }
 
 QString Utilities::getUnicodeForWebPage(QString str, QString delim){

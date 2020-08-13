@@ -43,6 +43,10 @@ public:
     static QString getField(QString str, QString delim, unsigned int i);
     static QString  createStringFromCodeList(QList<QString> list);
     static QStringList  getStringListFromUnicodeString(QString unicodeString);
+
+    static QString getCharacterUnicodeForHTML(QString string);
+    static QString getHTMLStringFromMixedHexString(QString text);
+    static QString getExamplesForToolTip(QString str);
     static QString getUnicode(QString str, QString delim);
     static QString getUnicodeForWebPage(QString str, QString delim);
 

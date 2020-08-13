@@ -502,7 +502,7 @@ void WordsTrie::load_dictionary_asm(QString fileName, QHash<QString,QString> & c
              // qDebug() << list.at(1) << Utilities::getUnicodeString(list.at(1));
 
               //if(i > 100) return;
-              QString unicodeString = Utilities::getUnicodeString(list.at(1).trimmed());
+              QString unicodeString = list.at(1).trimmed(); //Utilities::getUnicodeString(list.at(1).trimmed());
               if( unicodeString.contains("0x2d")) continue;
               if( unicodeString.size() !=0 ) {
                   charMap[unicodeString] = unicodeString;

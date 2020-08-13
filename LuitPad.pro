@@ -137,4 +137,5 @@ DISTFILES += \
     files/processed_temp.txt \
     files/romanized.txt \
     files/unicode_to_roman_override.txt \
-    files/user_keymap.txt
+    files/user_keymap.txt \
+    files/y.txt

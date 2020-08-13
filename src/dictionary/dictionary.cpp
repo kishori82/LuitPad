@@ -66,7 +66,7 @@ void Dictionaries::loadAssameseEnglishDictionaries(
             assamese->engWrdIdWrd.insert(fields[0], fields[1]);
             assamese->engWrdWrdId.insert(fields[1], fields[0]);
             assamese->engWrdIdIdeaId.insert(fields[0], fields[2]);
-                i++;
+            i++;
         }
 
     }
@@ -85,8 +85,19 @@ void Dictionaries::loadAssameseEnglishDictionaries(
     while(!in2.atEnd()) {
         fields = in2.readLine().split('\t');
         if(fields.size() >= 3) {
+
+            /*
+           if(i < 10 ) {
+                qDebug() << fields;
+                for(int j=0; j < fields[1].size(); j++) {
+                    QChar chr = fields[1].at(j);
+                    qDebug() << chr.unicode();
+                }
+           }*/
+
            assamese->asmWrdIdWrd.insert(fields[0], fields[1]);
-           assamese->asmWrdWrdId.insert( Utilities::getUnicodeString(fields[1]), fields[0]);
+           //qDebug() <<fields[1];
+           assamese->asmWrdWrdId.insert(fields[1], fields[0]);
            assamese->asmWrdIdIdeaId.insert(fields[0], fields[2]);
            i++;
         }
@@ -114,17 +125,24 @@ void Dictionaries::loadAssameseEnglishDictionaries(
     */
 
     file.setFileName(examplesFile);
-    QByteArray  examples;
+//    QByteArray  examples;
     i =0;
     if(!file.open(QIODevice::ReadOnly)) {
             QMessageBox::information(0, "error", file.errorString());
     }
-    QStringList lines = QString(qUncompress(file.readAll())).split('\n');
-    foreach(QString line, lines) {
-        examples.append(line);
+    QTextStream in3(&file);
+
+    //QStringList lines = QString(qUncompress(file.readAll())).split('\n');
+    //QStringList lines =  file.readAll()  // QString(file.readAll()).split('\n');
+    //qDebug() << lines;
+
+    qDebug() << " Reading " << examplesFile;
+    while( !in3.atEnd()) {
+        //examples.append(line)
+        QString line = in3.readLine();
         fields = line.split('\t');
         if(fields.size() >= 2) {
-           QString unicodefield0 = Utilities::getUnicodeString(fields[0]);
+           QString unicodefield0 = fields[0];
            if( assamese->asmWrdWrdId.contains(unicodefield0)) {
                QString wordId = assamese->asmWrdWrdId.value(unicodefield0);
                if( !assamese->examples.contains(wordId) )
@@ -429,7 +447,7 @@ QStringList Dictionary::getExamples(const QString str) {
         wrdId = asmWrdWrdId[str];
         if(examples.contains(wrdId) ) {
              foreach(const QString a, examples[wrdId])
-                results.append(a);
+                results.append(Utilities::getHTMLStringFromMixedHexString(a));
         }
     }
     return results;

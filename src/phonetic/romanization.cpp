@@ -326,12 +326,9 @@ void Romanization::Romanize(QString inputFile, QHash<QString, QStringList> &roma
      QStringList list;
 
      QString line = inStream.readLine();
-
      list = inStream.readLine().split("\t");
 
-
-
-     QString str = Utilities::getUnicodeString(list.at(1).trimmed());
+     QString str = list.at(1).trimmed(); //Utilities::getUnicodeString(list.at(1).trimmed());
 
      QString roman="";
      int i = 0;
@@ -351,7 +348,7 @@ void Romanization::Romanize(QString inputFile, QHash<QString, QStringList> &roma
 
         //str = inStream.readLine();
         list = inStream.readLine().split("\t");
-        str = Utilities::getUnicodeString(list.at(1).trimmed());
+        str = list.at(1).trimmed(); //Utilities::getUnicodeString(list.at(1).trimmed());
      }
     // qDebug() << "total words " << i;
      return;

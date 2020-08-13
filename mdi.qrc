@@ -43,5 +43,6 @@
         <file>files/T_WrdASMIdea.csv</file>
         <file>files/T_WrdENGIdea.csv</file>
         <file>files/T_WrdExamples.tsv.compressed</file>
+        <file>files/y.txt</file>
     </qresource>
 </RCC>

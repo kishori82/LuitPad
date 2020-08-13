@@ -851,10 +851,10 @@ void Phonetic::loadAllWords(QString fileName) {
           line = in.readLine();
           //binary.append(line);
           list = line.split("\t");
-          QString unicodeString = Utilities::getUnicodeString(list.at(1).trimmed());
+          QString unicodeString = list.at(1).trimmed(); //Utilities::getUnicodeString(list.at(1).trimmed());
 
           if( list.size() >=2 ) {
-             //  qDebug() << unicodeString <<  Romanization::convert2Roman(unicodeString);
+               //qDebug() << unicodeString <<  Romanization::convert2Roman(unicodeString);
               allWords->insert(unicodeString, Romanization::convert2Roman(unicodeString));
           }
       }
