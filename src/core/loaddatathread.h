@@ -64,11 +64,10 @@ class LoadDataThread : public QThread
 
         Utilities::initializeAlphabetOrder();
 
-        QString IdeasFile = ":/files/T_IdeaBase.csv";
+        QString IdeasFile = ":/files/T_IdeaBase.tsv";
         QString engWrdIdFile = ":/files/T_WrdENGIdea.csv";
         QString asmWrdWrdId = ":/files/T_WrdASMIdea.csv";
-//        QString examplesFile = ":/files/T_WrdExamples.tsv.compressed";
-        QString examplesFile = ":/files/y.txt";
+        QString examplesFile = ":/files/T_WrdExamples.tsv";
         QString idiomsFile = ":/files/T_Idioms.tsv";
         QString poribhashaFile = ":/files/T_Poribhasha.tsv";
 

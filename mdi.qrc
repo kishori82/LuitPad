@@ -37,12 +37,12 @@
         <file>files/DEFAULT.dat</file>
         <file>images/welcome1.png</file>
         <file>images/wait.png</file>
-        <file>files/T_IdeaBase.csv</file>
         <file>files/T_Idioms.tsv</file>
         <file>files/T_Poribhasha.tsv</file>
         <file>files/T_WrdASMIdea.csv</file>
         <file>files/T_WrdENGIdea.csv</file>
         <file>files/T_WrdExamples.tsv.compressed</file>
-        <file>files/y.txt</file>
+        <file>files/T_WrdExamples.tsv</file>
+        <file>files/T_IdeaBase.tsv</file>
     </qresource>
 </RCC>

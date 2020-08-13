@@ -40,13 +40,11 @@ void Dictionaries::loadAssameseEnglishDictionaries(
     QStringList fields;
     while(!in.atEnd()) {
         fields = in.readLine().split('\t');
-
-        if(fields.size() >= 2) {
+        if(fields.size() >= 3) {
            assamese->asmIdeaIdIdea.insert(fields[0], fields[2]);
            assamese->engIdeaIdIdea.insert(fields[0].toLower(), fields[1]);
             i++;
         }
-
     }
     qDebug() << "Number of lines inserted from " << IdeasFile << " : " << QString::number(i);
     file.close();
@@ -172,20 +170,16 @@ void Dictionaries::loadAssameseEnglishDictionaries(
     i =0;
     while(!in4.atEnd()) {
         fields = in4.readLine().split('\t');
-        if(fields.size() >= 4) {
-            QString unicodefield0 = Utilities::getUnicodeString(fields[0]);
-           if( assamese->asmWrdWrdId.contains(unicodefield0)) {
-               // wordid
-               QString wordId = assamese->asmWrdWrdId.value(unicodefield0);
+        if(fields.size() >= 3) {
+            QString unicodefield0 = fields[0];
 
-               if( !assamese->idioms.contains(wordId) )
-                   assamese->idioms.insert(wordId, QVector<QString>());
+           if( !assamese->idioms.contains(unicodefield0) )
+               assamese->idioms.insert(unicodefield0, QVector<QString>());
+            assamese->idioms[unicodefield0].append(fields[1]);
+            assamese->idioms[unicodefield0].append(fields[2]);
+            i++;
 
-               assamese->idioms[wordId].append(fields[1]);
-               assamese->idioms[wordId].append(fields[2]);
-               assamese->idioms[wordId].append(fields[3]);
-               i++;
-           }
+
         }
     }
     qDebug() << "Number of lines inserted from " << idiomsFile<< " : " << QString::number(i);
@@ -408,7 +402,7 @@ QStringList Dictionary::getMeanings(const QString str) {
     if( asmIdeaIdIdea.contains(IdeaId)) {
         //if so get the string
         QString asmMeaning = asmIdeaIdIdea[IdeaId];
-        results.append(asmMeaning);
+        results.append( Utilities::getHTMLStringFromMixedHexString(asmMeaning));
     }
     //is this ideaid in the idea table
     if( engIdeaIdIdea.contains(IdeaId)) {
@@ -426,12 +420,12 @@ QStringList Dictionary::getIdioms(const QString str) {
    //qDebug() << "idioms in " << str;
    if( str.trimmed().size() ==0 ) return results;
 
-   if( asmWrdWrdId.contains(str) ) {
-       QString wordId = asmWrdWrdId.value(str);
-       //qDebug() << "wordID idioms " << wordId;
-       if(idioms.contains(wordId) )
-          foreach(const QString a, idioms[wordId])
-             results.append(a);
+   foreach(QString idiom, idioms.keys()) {
+      if( idiom.contains(str) ) {
+          results.append(Utilities::getHTMLStringFromMixedHexString(idiom));
+          foreach(const QString a, idioms[idiom])
+             results.append(Utilities::getHTMLStringFromMixedHexString(a));
+      }
    }
    return results;
 
@@ -461,7 +455,7 @@ QStringList Dictionary::getOfficialUse(const QString str) {
     foreach(pair, officialWrd ) {
         if( pair.first.contains(str, Qt::CaseInsensitive) ||
             pair.second.contains(str, Qt::CaseInsensitive) ) {
-            results.append(pair.first + " " + pair.second);
+            results.append(pair.first + " " + Utilities::getHTMLStringFromMixedHexString(pair.second));
            // results.append(pair.second);
         }
     }
@@ -493,7 +487,7 @@ QStringList Dictionary::getSynonyms(const QString str){
         if( ideaId== asmWrdIdIdeaId[asmID] ) {
             if(asmID!=wrdId &&  asmWrdIdWrd.contains(asmID))
                 if(! added_already.contains(asmWrdIdWrd[asmID]) ) {
-                    resultsasm.append(asmWrdIdWrd[asmID]);
+                    resultsasm.append(Utilities::getHTMLStringFromMixedHexString(asmWrdIdWrd[asmID]));
                     added_already[asmWrdIdWrd[asmID]]= true;
                 }
         }

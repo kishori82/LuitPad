@@ -1,6 +1,9 @@
 
 #include <QtGui>
 #include <QGraphicsWidget>
+#include <QListView>
+#include <QMainWindow>
+#include <QPlainTextEdit>
 
 
 #include "src/window/mdichild.h"
@@ -202,6 +205,15 @@ void MdiChild::contextMenuEvent(QContextMenuEvent *event) {
         }
 
         getWordInfo();
+
+
+        QTextEdit *tooltip = new QTextEdit;
+       // tooltip->setWindowFlags(Qt::ToolTip);
+        tooltip->setFont( QFont("Kalpurush",10,0,false));
+        tooltip->setHtml(idioms->toolTip() );
+        tooltip->setReadOnly(true);
+        tooltip->anchorAt(event->pos());
+        tooltip->show();
 
         lastPosition = event->pos();
 
@@ -1569,7 +1581,7 @@ void MdiChild::getWordInfo() {
     QStringList meanings, examples, idioms, officialphrases, synonyms;
 
 
-    if( Utilities::isAssamese(word)) {
+    if( Utilities::isAssamese(word)) { //for assamese words
         dictionary= dicts->getDictionary(0);
 
         i = 0;
@@ -1582,13 +1594,13 @@ void MdiChild::getWordInfo() {
               if(meanings.size() == 0) meanings  = dictionary->getMeanings(candWord);
               if(examples.size() == 0) examples = dictionary->getExamples(candWord);
               if(idioms.size() == 0)  idioms = dictionary->getIdioms(candWord);
-              if(officialphrases.size() == 0) officialphrases = dictionary->getOfficialUse(assmWord);
+              if(officialphrases.size() == 0) officialphrases = dictionary->getOfficialUse(candWord);
               if(synonyms.size() == 0) synonyms = dictionary->getSynonyms(candWord);
               i++;
               if(i>5) break;
             }
         }
-    } else  {
+    } else  { // for english words
         dictionary = dicts->getDictionary(0);
         if( dictionary->hasWord(word)) {
             if(meanings.size() == 0) meanings = dictionary->getMeanings(word);
@@ -1650,6 +1662,8 @@ void MdiChild::getWordInfo() {
     htmlString += suffix;
     this->idioms->setToolTip(htmlString);
 
+
+
     htmlString= prefix;
     i = 1;
     foreach(QString item, officialphrases) {
@@ -1660,6 +1674,7 @@ void MdiChild::getWordInfo() {
         htmlString += "<tr><td>No official phrases found</td></tr>";
     htmlString += suffix;
     this->officialwords->setToolTip(htmlString);
+
 }
 
 void MdiChild::setDisable(bool value) {
