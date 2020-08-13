@@ -20,6 +20,7 @@ DEFINES -=_WIN32_DCOM
 TEMPLATE = app
 
 HEADERS  = \
+    src/editor/qtextedittooltip.h \
     src/window/mainwindow.h \
     src/window/mdichild.h \
 \
@@ -51,6 +52,7 @@ HEADERS  = \
     src/dictionary/dictionary.h
 
 SOURCES  = main.cpp \
+    src/editor/qtextedittooltip.cpp \
     src/window/mainwindow.cpp \
     src/window/mdichild.cpp \
     \

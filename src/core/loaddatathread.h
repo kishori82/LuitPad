@@ -67,7 +67,7 @@ class LoadDataThread : public QThread
         QString IdeasFile = ":/files/T_IdeaBase.tsv";
         QString engWrdIdFile = ":/files/T_WrdENGIdea.csv";
         QString asmWrdWrdId = ":/files/T_WrdASMIdea.csv";
-        QString examplesFile = ":/files/T_WrdExamples.tsv";
+        QString examplesFile = ":/files/T_WrdExamples.tsv.compressed";
         QString idiomsFile = ":/files/T_Idioms.tsv";
         QString poribhashaFile = ":/files/T_Poribhasha.tsv";
 

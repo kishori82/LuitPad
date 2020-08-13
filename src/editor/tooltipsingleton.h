@@ -24,8 +24,6 @@ private:
     int rowSizes[3];
     QList<QString> vowelList[3];
 
-
-
 public:
 
     APP_STATES state;

@@ -106,12 +106,14 @@ void Dictionaries::loadAssameseEnglishDictionaries(
 
     /// examplesFile
 
+    ////////// CREATE COMPRESSED FILE ////////////
+
     /*
     file.setFileName(examplesFile);
     if(!file.open(QIODevice::ReadOnly)) {
             QMessageBox::information(0, "error", file.errorString());
     }
-    QTextStream in3(&file);
+
 
     QFile filex("T_WrdExamples.tsv.compressed");
     if(!filex.open(QIODevice::WriteOnly)) {
@@ -120,7 +122,9 @@ void Dictionaries::loadAssameseEnglishDictionaries(
     filex.write(qCompress(file.readAll(), 9));
     filex.close();
     file.close();
-    */
+*/
+    //////////// END /////////
+
 
     file.setFileName(examplesFile);
 //    QByteArray  examples;
@@ -128,16 +132,17 @@ void Dictionaries::loadAssameseEnglishDictionaries(
     if(!file.open(QIODevice::ReadOnly)) {
             QMessageBox::information(0, "error", file.errorString());
     }
-    QTextStream in3(&file);
+   // QTextStream in3(&file);
 
-    //QStringList lines = QString(qUncompress(file.readAll())).split('\n');
+    QStringList lines = QString(qUncompress(file.readAll())).split('\n');
     //QStringList lines =  file.readAll()  // QString(file.readAll()).split('\n');
     //qDebug() << lines;
 
     qDebug() << " Reading " << examplesFile;
-    while( !in3.atEnd()) {
+    //while( !in3.atEnd()) {
+    foreach(QString line, lines) {
         //examples.append(line)
-        QString line = in3.readLine();
+        //QString line = in3.readLine();
         fields = line.split('\t');
         if(fields.size() >= 2) {
            QString unicodefield0 = fields[0];

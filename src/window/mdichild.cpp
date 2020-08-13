@@ -4,6 +4,7 @@
 #include <QListView>
 #include <QMainWindow>
 #include <QPlainTextEdit>
+#include "src/editor/qtextedittooltip.h"
 
 
 #include "src/window/mdichild.h"
@@ -206,14 +207,9 @@ void MdiChild::contextMenuEvent(QContextMenuEvent *event) {
 
         getWordInfo();
 
+        //QTextEditToolTip *tooltip = QTextEditToolTip::getQTextEditToolTip();
+        //tooltip->showTextEditToolTip(this->idioms->toolTip());
 
-        QTextEdit *tooltip = new QTextEdit;
-       // tooltip->setWindowFlags(Qt::ToolTip);
-        tooltip->setFont( QFont("Kalpurush",10,0,false));
-        tooltip->setHtml(idioms->toolTip() );
-        tooltip->setReadOnly(true);
-        tooltip->anchorAt(event->pos());
-        tooltip->show();
 
         lastPosition = event->pos();
 
