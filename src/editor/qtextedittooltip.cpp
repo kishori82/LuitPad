@@ -15,9 +15,11 @@ QTextEditToolTip * QTextEditToolTip::getQTextEditToolTip() {
    return object;
 }
 
-void QTextEditToolTip::showTextEditToolTip(QString html) {
+void QTextEditToolTip::showTextEditToolTip(QString html, const QPoint pos) {
     this->setHtml(html);
     this->setReadOnly(true);
+
+    this->move(pos);
     this->show();
 }
 

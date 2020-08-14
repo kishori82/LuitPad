@@ -113,8 +113,9 @@ protected:
      QAction *ignoreWord;
      QMenu *meaning;
      QAction *meaningText;
-     QMenu *synonyms, *examples, *officialwords, *idioms;
-     QAction *synonymsText, *examplesText, *officialwordsText, *idiomsText;
+     QMenu *synonyms, *officialwords;
+     QAction *idioms, *examples;
+     QAction *synonymsText, *officialwordsText; // *examplesText, *idiomsText;
 
      QAction *newWords[10], *oldWords[10], *replaceWords[10];
      QSignalMapper *deletesignalMapper, *addsignalMapper, *signalMapperReplaceWords;

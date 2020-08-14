@@ -11,7 +11,7 @@ private:
     static QTextEditToolTip *object;
 public:
     static QTextEditToolTip *getQTextEditToolTip();
-    void showTextEditToolTip(QString html);
+    void showTextEditToolTip(QString html, const QPoint pos);
 
 };
 

@@ -148,10 +148,12 @@ private:
     bool isUntitled;
     void contextMenuEvent(QContextMenuEvent *event);
     QStringList getSpellingSuggestions(QHash<QString, QString> &candidateWordsInflectionPairs, unsigned int nMax);
+    void getWordInfo();
 
 public slots:
     void Ignore();
-    void getWordInfo();
+    void showIdioms();
+    void showExamples();
 
 
 public:

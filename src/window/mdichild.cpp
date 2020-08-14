@@ -124,6 +124,7 @@ void MdiChild::contextMenuEvent(QContextMenuEvent *event) {
             synonyms->setFont(contextMenuFont);
             menu->addMenu(synonyms);
 
+            /*
             examples = menu->addMenu("Examples");
             examplesText = new QAction(tr(""), this);
             examples->setToolTip(tr("<p></p>") );
@@ -131,6 +132,12 @@ void MdiChild::contextMenuEvent(QContextMenuEvent *event) {
             examples->addAction(examplesText);
             examples->setFont(contextMenuFont);
             menu->addMenu(examples);
+            */
+
+            examples=new QAction(tr("Examples"),this);
+            connect(examples, SIGNAL(triggered()), this, SLOT(showExamples()));
+            menu->addAction(examples);
+
 
             officialwords = menu->addMenu("Official Words");
             officialwordsText = new QAction(tr(""), this);
@@ -140,13 +147,18 @@ void MdiChild::contextMenuEvent(QContextMenuEvent *event) {
             officialwords->setFont(contextMenuFont);
             menu->addMenu(officialwords);
 
-            idioms = menu->addMenu("Idioms");
-            idiomsText = new QAction(tr(""), this);
-            idioms->setToolTip(tr("<p></p>") );
-            idiomsText->setFont(contextMenuFont);
-            idioms->addAction(idiomsText);
-            idioms->setFont(contextMenuFont);
-            menu->addMenu(idioms);
+           // idioms = menu->addMenu("Idioms");
+           // idiomsText = new QAction(tr(""), this);
+           // idioms->setToolTip(tr("<p></p>") );
+           // idiomsText->setFont(contextMenuFont);
+           // idioms->addAction(idiomsText);
+            //idioms->setFont(contextMenuFont);
+           // menu->addMenu(idioms);
+
+
+            idioms=new QAction(tr("Idioms"),this);
+            connect(idioms, SIGNAL(triggered()), this, SLOT(showIdioms()));
+            menu->addAction(idioms);
 
             menu->addSeparator();
             ignoreWord=new QAction(tr("Ignore"),this);
@@ -206,11 +218,6 @@ void MdiChild::contextMenuEvent(QContextMenuEvent *event) {
         }
 
         getWordInfo();
-
-        //QTextEditToolTip *tooltip = QTextEditToolTip::getQTextEditToolTip();
-        //tooltip->showTextEditToolTip(this->idioms->toolTip());
-
-
         lastPosition = event->pos();
 
         rightClickCount++;
@@ -222,6 +229,18 @@ void MdiChild::contextMenuEvent(QContextMenuEvent *event) {
 
     }
 }
+
+
+void MdiChild::showIdioms() {
+    QTextEditToolTip *tooltip = QTextEditToolTip::getQTextEditToolTip();
+    tooltip->showTextEditToolTip(this->idioms->toolTip(), this->mapToGlobal(this->pos()) );
+}
+
+void MdiChild::showExamples() {
+    QTextEditToolTip *tooltip = QTextEditToolTip::getQTextEditToolTip();
+    tooltip->showTextEditToolTip(this->examples->toolTip(), this->mapToGlobal(this->pos()) );
+}
+
 
 QStringList MdiChild::getSpellingSuggestions(QHash<QString, QString> &candidateWordsInflectionPairs, unsigned int nMax) {
     QStringList suggestionList;
@@ -1613,8 +1632,8 @@ void MdiChild::getWordInfo() {
     qDebug() << "synonyms " << synonyms;
 */
 
-    QString prefix = "<p style=\"font-size:14px\"> <table>";
-    QString suffix = "</table></p>";
+    QString prefix = "<div style=\"font-size:12px;\"> <table>";
+    QString suffix = "</table></div>";
 
     QString htmlString= prefix;
     foreach(QString item, meanings) {
@@ -1657,7 +1676,6 @@ void MdiChild::getWordInfo() {
         htmlString += "<tr><td>No idioms found</td></tr>";
     htmlString += suffix;
     this->idioms->setToolTip(htmlString);
-
 
 
     htmlString= prefix;
