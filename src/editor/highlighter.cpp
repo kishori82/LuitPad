@@ -1,5 +1,3 @@
-
-
 #include <QtGui>
 #include <iostream>
 
@@ -7,13 +5,12 @@
 #include "src/utils/utilities.h"
 #include "src/phonetic/romanization.h"
 
-WordsTrie *Highlighter::profileWords =NULL ;
+WordsTrie *Highlighter::profileWords = NULL;
 WordsTrie *Highlighter::dictionaryWords = NULL;
 
-Highlighter::Highlighter(QTextDocument *parent, bool spellCheckState) :
+Highlighter::Highlighter(QTextDocument *parent, bool spellCheckState):
 	QSyntaxHighlighter(parent) {
 	HighlightingRule rule;
-
 
 	spellCheckFormat.setUnderlineColor(QColor(Qt::red));
 	spellCheckFormat.setUnderlineStyle(QTextCharFormat::SpellCheckUnderline);
@@ -32,17 +29,15 @@ void Highlighter::highlightBlock(const QString &text) {
      spellCheck(text);
 }
 
-void Highlighter::enableSpellChecking(const bool state)
-{
-	bool old=spellCheckActive;
-	if(!spellerError) spellCheckActive=state;
-	if(old!=spellCheckActive) rehighlight();
+void Highlighter::enableSpellChecking(const bool state) {
+    bool old = spellCheckActive;
+    if (!spellerError) spellCheckActive = state;
+    if (old != spellCheckActive) rehighlight();
 }
 
 
 
-void Highlighter::spellCheck(const QString &text)
-{
+void Highlighter::spellCheck(const QString &text) {
 	if (spellCheckActive) {
 		// split text into words
 		QString str = text.simplified();
@@ -52,27 +47,23 @@ void Highlighter::spellCheck(const QString &text)
 			int l,number;
          //   qDebug() << "number of words " << Checkliste.size();
 			// check all words
-			for (int i=0; i<Checkliste.size(); ++i) {
+            for (int i = 0; i < Checkliste.size(); ++i) {
 				str = Checkliste.at(i);
 
-				if (str.length()>1 &&!str.startsWith('\\'))
+                if (str.length() > 1 && !str.startsWith('\\'))
 				{
                   //  qDebug() << "> " << i << " " << str;
 
-                    if( checkWord(str)) {
+                    if (checkWord(str)) {
 						number = text.count(QRegExp("\\b" + str + "\\b"));
 						l=-1;
 						// underline all incorrect occurences of misspelled word
-                        for (int j=0;j <number; ++j)
-						{
+                        for (int j = 0; j < number; ++j) {
 							l = text.indexOf(QRegExp("\\b" + str + "\\b"),l+1);
-							if (l>=0)
+                            if (l >= 0)
 								setFormat(l, str.length(), spellCheckFormat);
 						} // for j
 					} // if spell chek error
-
-
-
 				} // if str.length > 1
 			} // for
 		} // if str.isEmpty
@@ -81,23 +72,21 @@ void Highlighter::spellCheck(const QString &text)
  //   qDebug() << "Done spell check " << text;
 }
 
-bool Highlighter::checkWord(QString word)
-{
+bool Highlighter::checkWord(QString word) {
 
 //    qDebug() << Utilities::getUnicodeString(word);
 //	check = pChecker->spell(encodedString.data());
-    if( !Utilities::isAssamese(word)) {
+    if (!Utilities::isAssamese(word)) {
         return false;
     }
     //qDebug() << word;
 
     //if( Romanization::UnicodeToRomanOverrideMap.contains( Utilities::getUnicodeString(word)) ) return false;
    // qDebug() << " ignore list size " << ignoreDictionary->size();
-    if( ignoreDictionary != NULL && ignoreDictionary->contains(word)) return false;
+    if (ignoreDictionary != NULL && ignoreDictionary->contains(word)) return false;
 
-
-    if(profileWords == NULL) profileWords = WordsTrie::getProfileWordsTrie();
-    if(dictionaryWords==NULL) dictionaryWords = WordsTrie::getWordsTrie();
+    if (profileWords == NULL) profileWords = WordsTrie::getProfileWordsTrie();
+    if (dictionaryWords == NULL) dictionaryWords = WordsTrie::getWordsTrie();
 
     QStringList candidateWordsList= Phonetic::getInflectionalFormsX(word);
 
@@ -109,21 +98,16 @@ bool Highlighter::checkWord(QString word)
            return false;
         }
     }
-
     return true;
 }
 
-
 void Highlighter::setIgnoreWords( QHash<QString, bool> *ignoreDictionaryRef) {
-
     ignoreDictionary = ignoreDictionaryRef;
-
 }
 
-bool Highlighter::setDict(const QString SpellDic)
-{
+bool Highlighter::setDict(const QString SpellDic) {
     bool spell;
-	if(SpellDic!=""){
+    if (SpellDic != ""){
 		//mWords.clear();
 		spell_dic=SpellDic.left(SpellDic.length()-4);
 //		delete pChecker;
@@ -158,8 +142,7 @@ bool Highlighter::setDict(const QString SpellDic)
 	return spell;
 }
 
-void Highlighter::slot_addWord(QString word)
-{
+void Highlighter::slot_addWord(QString word) {
     std::cout << qPrintable(word) << std::endl;
     QByteArray encodedString;
 //    QString spell_encoding=QString(pChecker->get_dic_encoding());

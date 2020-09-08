@@ -324,15 +324,20 @@ void Romanization::Romanize(QString inputFile, QHash<QString, QStringList> &roma
      QList<QWordUnicode> webPrintableWords;
      QWordUnicode k;
      QStringList list;
+     QHash<QString, bool>  already_seen;
 
-     QString line = inStream.readLine();
-     list = inStream.readLine().split("\t");
-
-     QString str = list.at(1).trimmed(); //Utilities::getUnicodeString(list.at(1).trimmed());
+     QString str; //Utilities::getUnicodeString(list.at(1).trimmed());
 
      QString roman="";
      int i = 0;
      while (!inStream.atEnd()) {
+         list = inStream.readLine().split("\t");
+         str = list.at(1).trimmed(); //Utilities::getUnicodeString(list.at(1).trimmed());
+
+         if( already_seen.contains(str)) continue;
+         already_seen.insert(str, true);
+
+
         out_str.clear();
         if( !UnicodeToRomanOverrideMap.contains(str)) {
             roman = convert2Roman(str);
@@ -345,10 +350,6 @@ void Romanization::Romanize(QString inputFile, QHash<QString, QStringList> &roma
             k.unicode = Utilities::getUnicodeForWebPage(str,"0x");
             webPrintableWords.append(k);
         }
-
-        //str = inStream.readLine();
-        list = inStream.readLine().split("\t");
-        str = list.at(1).trimmed(); //Utilities::getUnicodeString(list.at(1).trimmed());
      }
     // qDebug() << "total words " << i;
      return;
