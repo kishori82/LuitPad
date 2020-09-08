@@ -1,3 +1,27 @@
+/************************************************************************
+# MIT License
+
+Copyright (c) 2020 Kishori M. Konwar
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+******************************************************************************/
+
 #include <QStringList>
 #include <QSignalMapper>
 #include "textedit.h"
@@ -11,7 +35,6 @@
 #include <QScrollBar>
 #include <QDebug>
 #include <QMenu>
-
 
 #include "src/phonetic/phonetic.h"
 #include "src/profile/profile.h"
@@ -31,14 +54,14 @@ void TextEdit::deleteOldWord( int i) {
 }
 
 
-void TextEdit::addNewWord( int i) {
+void TextEdit::addNewWord(int i) {
    // qDebug() << "connected through  word no " << i;
     Profile *currProfile = Profile::getkeyBoard();
     currProfile->addWord(Utilities::getUnicodeString( newWords[i]->text()));
-    qDebug()  << "Romanized " << Romanization::convert2Roman(  Utilities::getUnicodeString( newWords[i]->text())  );
-    Phonetic::insertWordFromOutside(  newWords[i]->text());
+    QString romanized = Romanization::convert2Roman(  Utilities::getUnicodeString( newWords[i]->text()));
+    Phonetic::insertWordFromOutside(newWords[i]->text());
+    QMessageBox::information(0, "Added word & phonetic spelling", newWords[i]->text() + "\t" + romanized );
     /*foreach(QString unicodeWord, it.value() ) {
-
         charList.clear();
         foreach(QChar c, it.key())charList.append( Phonetic::phoneticEquivString(QString(c).toLower()));
 
@@ -46,7 +69,6 @@ void TextEdit::addNewWord( int i) {
        insertWord(roman2UnicodeTree, charList, unicodeWord);
     }
     */
-
 }
 
 void TextEdit::replaceNewWord( int i) {
