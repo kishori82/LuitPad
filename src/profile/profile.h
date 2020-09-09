@@ -26,119 +26,113 @@ SOFTWARE.
 #define PROFILE_H
 
 #include "QAction"
-#include "QGridLayout"
-#include "QLabel"
-#include "QToolButton"
 #include "QActionGroup"
-#include "QComboBox"
-#include "QGroupBox"
-#include "QPushButton"
 #include "QButtonGroup"
 #include "QCheckBox"
-#include "QMessageBox"
-#include "QToolTip"
-#include "QPushButton"
-#include "QButtonGroup"
-#include <QDebug>
-#include "QLineEdit"
-#include <sstream>
+#include "QComboBox"
 #include "QDir"
 #include "QDirIterator"
+#include "QGridLayout"
+#include "QGroupBox"
+#include "QLabel"
+#include "QLineEdit"
+#include "QMessageBox"
+#include "QPushButton"
+#include "QToolButton"
+#include "QToolTip"
+#include <QDebug>
+#include <sstream>
 
 #include "QAction"
-#include "QGridLayout"
-#include "QLabel"
-#include "QToolButton"
 #include "QActionGroup"
 #include "QComboBox"
+#include "QGridLayout"
 #include "QGroupBox"
+#include "QLabel"
 #include "QPushButton"
-#include <QScrollArea>
+#include "QToolButton"
 #include <QDockWidget>
+#include <QScrollArea>
 
 #include "src/characters/chartrie.h"
-#include "src/window/mdichild.h"
 #include "src/core/constants.h"
+#include "src/window/mdichild.h"
 
-class Profile: public QWidget
-{
-    Q_OBJECT
+class Profile : public QWidget {
+  Q_OBJECT
 
 private:
-     Profile(QWidget *parent=0);
+  Profile(QWidget *parent = 0);
+
 public:
-    //keyboard(QWidget *parent=0);
-    static Profile *getkeyBoard();
+  // keyboard(QWidget *parent=0);
+  static Profile *getkeyBoard();
 
-    void display();
-    bool addWord(const QString &newWord);
-    bool deleteWord(const QString &word);
+  void display();
+  bool addWord(const QString &newWord);
+  bool deleteWord(const QString &word);
 
-   // static QWidget *kbd;
+  // static QWidget *kbd;
 
-    static QWidget * kbd;
-    QGridLayout *grid;
-    QLabel *label;
-    QComboBox *profCombo;
-    QGroupBox *gbox ;
+  static QWidget *kbd;
+  QGridLayout *grid;
+  QLabel *label;
+  QComboBox *profCombo;
+  QGroupBox *gbox;
 
-    QActionGroup *keyAct;
-    QButtonGroup *qbg;
+  QActionGroup *keyAct;
+  QButtonGroup *qbg;
 
-    static Profile *keyBoard;
-    static QString currentProfile;
+  static Profile *keyBoard;
+  static QString currentProfile;
 
-
-    void newProfile();
-    void auto_fill_profile_combo(QString profilename ="");
+  void newProfile();
+  void auto_fill_profile_combo(QString profilename = "");
 
 public slots:
-       bool fill_keyboard(const  QString  & profName);
+  bool fill_keyboard(const QString &profName);
 
 private slots:
-    bool changeProfile();
-    bool saveProfile();
-    bool deleteProfile();
-    void changeModifierOrder(int state);
+  bool changeProfile();
+  bool saveProfile();
+  bool deleteProfile();
+  void changeModifierOrder(int state);
 
 private:
-    void deSign();
-    void textEnable();
-    void textDisable();
+  void deSign();
+  void textEnable();
+  void textDisable();
 
-    void setChangeEnable();
-    void setChangeDisable();
-    bool isChangeEnable();
-    bool changeEnDisableFlag;
+  void setChangeEnable();
+  void setChangeDisable();
+  bool isChangeEnable();
+  bool changeEnDisableFlag;
 
-    bool modifierOrder;
-    void setModifierOrder(bool flag);
-    bool isValidProfile( const QString &profName);
-    QPushButton *save_profile, *change_profile, *delButton;
-    QCheckBox *modifierOrderCheckbox;
+  bool modifierOrder;
+  void setModifierOrder(bool flag);
+  bool isValidProfile(const QString &profName);
+  QPushButton *save_profile, *change_profile, *delButton;
+  QCheckBox *modifierOrderCheckbox;
 
-    QLineEdit *lbl[54] ;
+  QLineEdit *lbl[54];
 
-    /*
-    QLineEdit *lbl_54;
-    QLineEdit *lbl_55 ;
+  /*
+  QLineEdit *lbl_54;
+  QLineEdit *lbl_55 ;
 
-    QLineEdit *lbl_56 ;
-    QLineEdit *lbl_57 ;
-    QLineEdit *lbl_58;
-    QLineEdit *lbl_59 ;
-    QLineEdit *lbl_60 ;
-    QLineEdit *lbl_61;
-    QLineEdit *lbl_62 ;
-    QLineEdit *lbl_63 ;
-    */
+  QLineEdit *lbl_56 ;
+  QLineEdit *lbl_57 ;
+  QLineEdit *lbl_58;
+  QLineEdit *lbl_59 ;
+  QLineEdit *lbl_60 ;
+  QLineEdit *lbl_61;
+  QLineEdit *lbl_62 ;
+  QLineEdit *lbl_63 ;
+  */
 
 private slots:
-        //void triggeredChar(QAction * a);
+  // void triggeredChar(QAction * a);
 
-        void buttonClick(QAbstractButton* button);
-
-
+  void buttonClick(QAbstractButton *button);
 };
 #endif // KEYBOARD_H
-

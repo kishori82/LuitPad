@@ -26,49 +26,44 @@ SOFTWARE.
 #define INFLEXTRIE_H
 
 #include "TreeNode.h"
+#include "src/utils/utilities.h"
+#include <QDebug>
+#include <QFile>
 #include <QHash>
 #include <QList>
-#include <QTextStream>
-#include <QStringList>
 #include <QMessageBox>
-#include <QFile>
-#include <QDebug>
 #include <QStack>
 #include <QStringList>
-#include "src/utils/utilities.h"
+#include <QTextStream>
 #include <QThread>
 
-
-class InflexTrie
-{
+class InflexTrie {
 public:
-     TreeNode *inflexTreeNode;
+  TreeNode *inflexTreeNode;
+
 private:
+  // methods
+  bool insertWord(TreeNode *, QList<QString> &, QString);
+  void printTree(TreeNode *, QStack<QString> &);
 
-    // methods
-    bool insertWord(TreeNode * , QList<QString> & , QString );
-    void printTree( TreeNode *, QStack<QString> &);
-
-    QString _hasInflection(TreeNode *root,  QStringList &chars);
-    bool _deleteWord(TreeNode *root,  QStringList & chars);
+  QString _hasInflection(TreeNode *root, QStringList &chars);
+  bool _deleteWord(TreeNode *root, QStringList &chars);
 
 public:
-    InflexTrie();
-    void LoadInflections( QHash<QString, QString> *charMa);
-    static InflexTrie *getInflexTrie();
-    static InflexTrie *inflexMapTree;
+  InflexTrie();
+  void LoadInflections(QHash<QString, QString> *charMa);
+  static InflexTrie *getInflexTrie();
+  static InflexTrie *inflexMapTree;
 
+  void printData();
 
-    void printData();
+  void addWords(QHash<QString, QString> charMap);
 
-    void addWords(QHash<QString,QString> charMap);
+  QString hasInflection(QString word);
 
-    QString hasInflection(QString word);
+  bool deleteWord(const QString &word);
 
-    bool deleteWord(const QString &word);
-
-    void delete_Tree(TreeNode *tree );
-
+  void delete_Tree(TreeNode *tree);
 };
 
 #endif // WORDSTRIE_H

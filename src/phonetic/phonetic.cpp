@@ -122,33 +122,33 @@ void Phonetic::createPhoneticTreeProfile(QStringList &wordList) {
 }
 
 void Phonetic::addUserWordsToPhoneticTree(const QString fileName) {
-    QStringList charList;
+  QStringList charList;
 
-    QFile file(fileName);
-    if (!file.open(QIODevice::ReadOnly)) {
-          QMessageBox::information(0, "error", file.errorString());
+  QFile file(fileName);
+  if (!file.open(QIODevice::ReadOnly)) {
+    QMessageBox::information(0, "error", file.errorString());
+  }
+  QTextStream in(&file);
+
+  QHash<QString, bool> already_inserted;
+  QStringList fields;
+  Romanization rom;
+
+  while (!in.atEnd()) {
+    fields = in.readLine().trimmed().split('\t');
+
+    if (fields.size() >= 1 && !already_inserted.contains(fields.at(1))) {
+      // add a word on <word>
+      if (fields.at(0).trimmed() == QString("<word>")) {
+        charList.clear();
+        foreach (QChar c, rom.convert2Roman(fields.at(1))) {
+          charList.append(Phonetic::phoneticEquivString(QString(c).toLower()));
+        }
+        insertWord(roman2UnicodeTree, charList, fields.at(1));
+        already_inserted.insert(fields.at(1), true);
+      }
     }
-    QTextStream in(&file);
-
-    QHash<QString, bool> already_inserted;
-    QStringList fields;
-    Romanization rom;
-
-    while (!in.atEnd()) {
-       fields = in.readLine().trimmed().split('\t');
-
-       if (fields.size() >= 1 &&  !already_inserted.contains(fields.at(1))) {
-           // add a word on <word>
-           if (fields.at(0).trimmed() == QString("<word>")) {
-              charList.clear();
-              foreach (QChar c, rom.convert2Roman(fields.at(1))) {
-                 charList.append(Phonetic::phoneticEquivString(QString(c).toLower()));
-              }
-              insertWord(roman2UnicodeTree, charList, fields.at(1));
-              already_inserted.insert(fields.at(1), true);
-           }
-       }
-   }
+  }
 }
 
 void Phonetic::createPhoneticTree(QString fileName) {
@@ -165,7 +165,8 @@ void Phonetic::createPhoneticTree(QString fileName) {
 
   for (it = roman2UnicodeMap.begin(); it != roman2UnicodeMap.end(); ++it) {
     //   if( i++ < 2 )
-     // qDebug() << "phoneticload" << it.key() << "  "<< it.value()  <<" " << it.value().size();
+    // qDebug() << "phoneticload" << it.key() << "  "<< it.value()  <<" " <<
+    // it.value().size();
     //  qDebug() << charList << "  " << unicodeWord;
     if (already_inserted.contains(it.value()[0]))
       continue;
@@ -175,11 +176,11 @@ void Phonetic::createPhoneticTree(QString fileName) {
       continue;
 
     foreach (QString unicodeWord, it.value()) {
-       charList.clear();
-       foreach (QChar c, it.key())
-         charList.append(Phonetic::phoneticEquivString(QString(c).toLower()));
+      charList.clear();
+      foreach (QChar c, it.key())
+        charList.append(Phonetic::phoneticEquivString(QString(c).toLower()));
       // qDebug() <<  it.key() << " " << charList << "  " << unicodeWord;
-       insertWord(roman2UnicodeTree, charList, unicodeWord);
+      insertWord(roman2UnicodeTree, charList, unicodeWord);
     }
   }
 

@@ -27,70 +27,65 @@ SOFTWARE.
 
 #include <QSyntaxHighlighter>
 
+#include "src/phonetic/phonetic.h"
+#include "src/phonetic/wordstrie.h"
 #include <QHash>
 #include <QTextCharFormat>
-#include "src/phonetic/wordstrie.h"
-#include "src/phonetic/phonetic.h"
-
 
 class QTextDocument;
 
-class Highlighter : public QSyntaxHighlighter
-{
-    Q_OBJECT
+class Highlighter : public QSyntaxHighlighter {
+  Q_OBJECT
 
 public:
-    Highlighter(QTextDocument *parent = 0,bool spellCheckState=false);
-    ~Highlighter();
-    void clearCheck();
-    QStringList misspelled();
-    QStringList correct();
-    void enableSpellChecking(const bool state);
-    void setSpellCheck(const bool state);
-    bool setDict(const QString SpellDic);
-    void setIgnoreWords( QHash<QString, bool> *ignoreDictionaryRef);
+  Highlighter(QTextDocument *parent = 0, bool spellCheckState = false);
+  ~Highlighter();
+  void clearCheck();
+  QStringList misspelled();
+  QStringList correct();
+  void enableSpellChecking(const bool state);
+  void setSpellCheck(const bool state);
+  bool setDict(const QString SpellDic);
+  void setIgnoreWords(QHash<QString, bool> *ignoreDictionaryRef);
   //  void undoSpellChecking();
 
 public slots:
-	void slot_addWord(QString word);
+  void slot_addWord(QString word);
 
 protected:
-    void highlightBlock(const QString &text);
-    void spellCheck(const QString &text);
-    bool checkWord(QString word);
+  void highlightBlock(const QString &text);
+  void spellCheck(const QString &text);
+  bool checkWord(QString word);
 
 private:
-    struct HighlightingRule
-    {
-        QRegExp pattern;
-        QTextCharFormat format;
-    };
-    QVector<HighlightingRule> highlightingRules;
+  struct HighlightingRule {
+    QRegExp pattern;
+    QTextCharFormat format;
+  };
+  QVector<HighlightingRule> highlightingRules;
 
-    QRegExp commentStartExpression;
-    QRegExp commentEndExpression;
+  QRegExp commentStartExpression;
+  QRegExp commentEndExpression;
 
-    QTextCharFormat keywordFormat;
-    QTextCharFormat classFormat;
-    QTextCharFormat singleLineCommentFormat;
-    QTextCharFormat multiLineCommentFormat;
-    QTextCharFormat quotationFormat;
-    QTextCharFormat functionFormat;
+  QTextCharFormat keywordFormat;
+  QTextCharFormat classFormat;
+  QTextCharFormat singleLineCommentFormat;
+  QTextCharFormat multiLineCommentFormat;
+  QTextCharFormat quotationFormat;
+  QTextCharFormat functionFormat;
 
-    QString spell_dic, spell_encoding;
+  QString spell_dic, spell_encoding;
 
+  bool spellCheckActive, spellerError;
+  QTextCharFormat spellCheckFormat;
+  QTextCodec *codec;
 
-    bool spellCheckActive,spellerError;
-    QTextCharFormat spellCheckFormat;
-    QTextCodec *codec;
+  static WordsTrie *profileWords;
+  static WordsTrie *dictionaryWords;
 
-    static WordsTrie *profileWords ;
-    static WordsTrie *dictionaryWords;
+  QHash<QString, bool> *ignoreDictionary;
 
-    QHash<QString, bool> *ignoreDictionary;
-
-   // MdiChild *textEditorWindow;
-
+  // MdiChild *textEditorWindow;
 };
 
 #endif

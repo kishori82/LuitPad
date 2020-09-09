@@ -24,30 +24,25 @@ SOFTWARE.
 
 #include "qtextedittooltip.h"
 
-QTextEditToolTip *QTextEditToolTip::object=NULL;
+QTextEditToolTip *QTextEditToolTip::object = NULL;
 
-QTextEditToolTip::QTextEditToolTip()
-{
+QTextEditToolTip::QTextEditToolTip() {}
 
-}
-
-
-QTextEditToolTip * QTextEditToolTip::getQTextEditToolTip() {
-   if( object == 0) {
-       object = new QTextEditToolTip();
-       object->setFont( QFont("Kalpurush",10,0,false));
-   }
-   return object;
+QTextEditToolTip *QTextEditToolTip::getQTextEditToolTip() {
+  if (object == 0) {
+    object = new QTextEditToolTip();
+    object->setFont(QFont("Kalpurush", 10, 0, false));
+  }
+  return object;
 }
 
 void QTextEditToolTip::showTextEditToolTip(QString html, const QPoint pos) {
-    this->setHtml(html);
-    this->setReadOnly(true);
+  this->setHtml(html);
+  this->setReadOnly(true);
 
-    this->move(pos);
-    this->show();
+  this->move(pos);
+  this->show();
 }
-
 
 /*
  *

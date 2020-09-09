@@ -26,17 +26,15 @@ SOFTWARE.
 #define QTEXTEDITTOOLTIP_H
 #include <QTextEdit>
 
-
-class QTextEditToolTip : public QTextEdit
-{
+class QTextEditToolTip : public QTextEdit {
 private:
-    QTextEditToolTip();
+  QTextEditToolTip();
 
-    static QTextEditToolTip *object;
+  static QTextEditToolTip *object;
+
 public:
-    static QTextEditToolTip *getQTextEditToolTip();
-    void showTextEditToolTip(QString html, const QPoint pos);
-
+  static QTextEditToolTip *getQTextEditToolTip();
+  void showTextEditToolTip(QString html, const QPoint pos);
 };
 
 #endif // QTEXTEDITTOOLTIP_H

@@ -25,145 +25,139 @@ SOFTWARE.
 #ifndef MDICHILD_H
 #define MDICHILD_H
 
-#include <QTextEdit>
+#include <QAbstractItemView>
+#include <QApplication>
 #include <QCompleter>
-#include <QTextOption>
-#include <QTextStream>
-#include <QResizeEvent>
+#include <QFileDialog>
 #include <QList>
 #include <QMenu>
 #include <QPrinter>
-#include <QApplication>
-#include <QAbstractItemView>
+#include <QResizeEvent>
 #include <QScrollBar>
-#include <QFileDialog>
+#include <QTextEdit>
+#include <QTextOption>
+#include <QTextStream>
 #include <QToolTip>
 
+#include "src/characters/chartrie.h"
+#include "src/core/inputdialog.h"
+#include "src/core/tablemodel.h"
+#include "src/editor/highlighter.h"
 #include "src/editor/textedit.h"
 #include "src/editor/tooltipsingleton.h"
-#include "src/characters/chartrie.h"
+#include "src/phonetic/phonetic.h"
 #include "src/phonetic/wordstrie.h"
 #include "src/utils/utilities.h"
-#include "src/phonetic/phonetic.h"
-#include "src/core/tablemodel.h"
-#include "src/core/inputdialog.h"
-#include "src/editor/highlighter.h"
 
+class MdiChild : public TextEdit {
+  Q_OBJECT
 
-class MdiChild : public TextEdit
-{
-    Q_OBJECT
-
-//private slots:
+  // private slots:
   //  void copy();
 
 public:
-    ToolTipSingleton *toolTipControl;
-    CharTrie *charMapTree;
-    WordsTrie *wordMapTree;
+  ToolTipSingleton *toolTipControl;
+  CharTrie *charMapTree;
+  WordsTrie *wordMapTree;
 
+  void testPrinting();
 
-    void testPrinting();
+  MdiChild();
+  void newFile();
+  bool loadFile(const QString &fileName);
+  void readAsLuitPadFormat(QTextStream &in);
+  bool save();
+  bool saveAs();
+  bool saveFile(const QString &fileName);
+  bool saveAsHtml();
+  bool saveFileHtml(const QString &fileName);
 
-    MdiChild();
-    void newFile();
-    bool loadFile(const QString &fileName);
-    void readAsLuitPadFormat( QTextStream &in);
-    bool save();
-    bool saveAs();
-    bool saveFile(const QString &fileName);
-    bool saveAsHtml();
-    bool saveFileHtml(const QString &fileName);
+  bool saveAsPDF();
+  bool saveFilePDF(const QString &fileName);
+  bool exportOdf();
 
-    bool saveAsPDF();
-    bool saveFilePDF(const QString &fileName);
-    bool exportOdf();
+  void addContextMenu(QMenu *childMenu);
 
-    void addContextMenu(QMenu *childMenu);
-
-    void setDisable(bool value);
+  void setDisable(bool value);
   //  WordsTrie *wordMapTree;
 
-    QString userFriendlyCurrentFile();
-    QString currentFile() { return curFile; }
-    bool eventFilter(QObject *obj, QEvent *event);
-    void setCompleter(QCompleter *com);
-    void setToolTipSingleton(ToolTipSingleton *);
-    //void _ka();
+  QString userFriendlyCurrentFile();
+  QString currentFile() { return curFile; }
+  bool eventFilter(QObject *obj, QEvent *event);
+  void setCompleter(QCompleter *com);
+  void setToolTipSingleton(ToolTipSingleton *);
+  // void _ka();
 
 public slots:
-    //void setCompleter(QCompleter *com);
-     void showToolTipText() ;
-     void showVowelModToolTipText() ;
-     void showToolTip();
-     void computeToolTipText();
-     void resizeImageSize();
-     void updateCompleterModelOnTextChange();
+  // void setCompleter(QCompleter *com);
+  void showToolTipText();
+  void showVowelModToolTipText();
+  void showToolTip();
+  void computeToolTipText();
+  void resizeImageSize();
+  void updateCompleterModelOnTextChange();
 
 private:
-     void computeToolTipTextOnSpace();
+  void computeToolTipTextOnSpace();
 
 protected:
-    void closeEvent(QCloseEvent *event);
+  void closeEvent(QCloseEvent *event);
 
 private:
-    void wordToolTipText(QKeyEvent *e) ;
-    void characterToolTipText(QKeyEvent *event);
-    void expandListonPrefix();
-    void vowelModToolTipText();
-    CONFIG_STATES getConfigState();
+  void wordToolTipText(QKeyEvent *e);
+  void characterToolTipText(QKeyEvent *event);
+  void expandListonPrefix();
+  void vowelModToolTipText();
+  CONFIG_STATES getConfigState();
 
 private slots:
-    void documentWasModified();
+  void documentWasModified();
 
 private:
-    //bool event(QEvent *event);
-    void keyPressEvent( QKeyEvent *event );
-    void keyReleaseEvent(QKeyEvent *event);
+  // bool event(QEvent *event);
+  void keyPressEvent(QKeyEvent *event);
+  void keyReleaseEvent(QKeyEvent *event);
 
-    bool maybeSave();
-    void setCurrentFile(const QString &fileName);
-    QString strippedName(const QString &fullFileName);
-    void insertCompositeLetter();
-    void replaceDanda();
+  bool maybeSave();
+  void setCurrentFile(const QString &fileName);
+  QString strippedName(const QString &fullFileName);
+  void insertCompositeLetter();
+  void replaceDanda();
 
-
-    QString curFile;
-    bool isUntitled;
-    void contextMenuEvent(QContextMenuEvent *event);
-    QStringList getSpellingSuggestions(QHash<QString, QString> &candidateWordsInflectionPairs, unsigned int nMax);
-    void getWordInfo();
+  QString curFile;
+  bool isUntitled;
+  void contextMenuEvent(QContextMenuEvent *event);
+  QStringList
+  getSpellingSuggestions(QHash<QString, QString> &candidateWordsInflectionPairs,
+                         unsigned int nMax);
+  void getWordInfo();
 
 public slots:
-    void Ignore();
-    void showIdioms();
-    void showExamples();
-
+  void Ignore();
+  void showIdioms();
+  void showExamples();
 
 public:
-    //QStringList getWordPropositions(const QString word);
+  // QStringList getWordPropositions(const QString word);
 signals:
-   // void addWord(QString word);
+  // void addWord(QString word);
 
 protected:
-//	void createActions();
+  //	void createActions();
   //  void contextMenuEvent(QContextMenuEvent *event);
 
 private slots:
-//    void slot_addWord();
-//    void slot_ignoreWord();
+  //    void slot_addWord();
+  //    void slot_ignoreWord();
 private:
-    enum { MaxWords = 5 };
-    QAction *misspelledWordsActs[MaxWords];
+  enum { MaxWords = 5 };
+  QAction *misspelledWordsActs[MaxWords];
 
-    QPoint lastPos;
+  QPoint lastPos;
 
-    QStringList addedWords;
-    Highlighter *highlighter;
-    bool disable;
-
-
+  QStringList addedWords;
+  Highlighter *highlighter;
+  bool disable;
 };
-
 
 #endif
