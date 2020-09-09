@@ -80,7 +80,7 @@ seleka	চেলেকা
 sati	ছাটি
 sali	ছালি
 suwa	ছোৱা
-lu	লো
+lu	লোঁ
 
 //pleo
 he	হে

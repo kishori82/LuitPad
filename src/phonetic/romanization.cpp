@@ -299,8 +299,6 @@ bool compareUnicode(const QWordUnicode &a, const QWordUnicode &b) {
 }
 
 void Romanization::Romanize(QString inputFile, QHash<QString, QStringList> &roman2UnicodeMap) {
-
-
     QFile infile(inputFile);
      if(!infile.open(QIODevice::ReadOnly)) {
              QMessageBox::information(0, "error", infile.errorString());
@@ -316,13 +314,8 @@ void Romanization::Romanize(QString inputFile, QHash<QString, QStringList> &roma
      }
      QTextStream outStream(&outfile);
 #endif
-
-
-
      QString out_str;
      QString unicode_str;
-
-
 
 #ifdef   PRINT_ROMAN
      out_str.append("<html><head> \n");

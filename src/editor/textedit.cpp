@@ -58,9 +58,10 @@ void TextEdit::addNewWord(int i) {
    // qDebug() << "connected through  word no " << i;
     Profile *currProfile = Profile::getkeyBoard();
     currProfile->addWord(Utilities::getUnicodeString( newWords[i]->text()));
-    QString romanized = Romanization::convert2Roman(  Utilities::getUnicodeString( newWords[i]->text()));
+    QString romanized = Romanization::convert2Roman(Utilities::getUnicodeString(newWords[i]->text()));
     Phonetic::insertWordFromOutside(newWords[i]->text());
-    QMessageBox::information(0, "Added word & phonetic spelling", newWords[i]->text() + "\t" + romanized );
+    QMessageBox::information(0, "Added word & phonetic spelling", newWords[i]->text() + "\t" + romanized);
+
     /*foreach(QString unicodeWord, it.value() ) {
         charList.clear();
         foreach(QChar c, it.key())charList.append( Phonetic::phoneticEquivString(QString(c).toLower()));
@@ -68,7 +69,7 @@ void TextEdit::addNewWord(int i) {
        // qDebug() << charList << "  " << unicodeWord;
        insertWord(roman2UnicodeTree, charList, unicodeWord);
     }
-    */
+    */  
 }
 
 void TextEdit::replaceNewWord( int i) {

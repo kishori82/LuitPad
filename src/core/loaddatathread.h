@@ -78,6 +78,8 @@ class LoadDataThread : public QThread
         Phonetic::loadAllWords(dictionaryFile );
 
         Phonetic::createPhoneticTree(dictionaryFile);
+        Phonetic::addUserWordsToPhoneticTree("profile/"+ QLatin1String("DEFAULT.dat"));
+
         Phonetic::initializeDistances();
 
         Phonetic::initializeDeleteCharMap();

@@ -634,27 +634,25 @@ bool Profile::saveProfile(){
         return true;
         }
 
-bool Profile::addWord(const QString &newWord)
-    {
-
-  //  qDebug() << "before new word";
-    if(newWord.length() ==0  ) return false;
-   // qDebug() << " new word ";
+bool Profile::addWord(const QString &newWord) {
+    if (newWord.length() == 0) return false;
     QString fName =  QLatin1String("profile/")+  currentProfile + QLatin1String(".dat");
+
+    qDebug() << "Adding new word to file " << fName  << "\t" << newWord;
+
     QFile outFile(fName);
     QString outText;
 
     if (outFile.open(QIODevice::Append | QIODevice::Text))  {
         QTextStream outStream(&outFile);
-        outText =  QString("<word>\t") + newWord;
-        outText = outText;
+        outText =  QString("<word>") +  "\t" + newWord;
         outStream << outText + "\n";
-
         outFile.flush();
         outFile.close();
     }
 
  //   qDebug() << "In profile adding a word  Profile 661";
+   /*
     QHash<QString,QString> charMap;
     charMap[newWord] = newWord;
 
@@ -664,9 +662,8 @@ bool Profile::addWord(const QString &newWord)
    // Phonetic::insertWordFromOutside(newWord);
 
   //  qDebug() << "Done adding a word  Profile 665";
-
+   */
     return true;
-
 }
 
 
@@ -729,11 +726,15 @@ bool Profile::fill_keyboard(const QString &profName)
    // SimpleCrypt *crypto = SimpleCrypt::getEncryptor(Q_UINT64_C(0x23bacf02473fdea0));
     if(profName.length() ==0 ) return false;
 
-    QString fName = QLatin1String("profile/")+ profName.toLower() + QLatin1String(".dat");    
+    QString fName = QLatin1String("profile/")+ profName.toUpper() + QLatin1String(".dat");
+   /*
     if( profName==QString("DEFAULT")) {
-       fName= QString(":/files/DEFAULT.dat");
+        fName= QString(":/files/DEFAULT.dat");
     }
+    */
     QFile file(fName);
+
+
 
     QHash<QString, QString> charMap;
     QHash<QString, QString> profileWordMap;
@@ -741,53 +742,35 @@ bool Profile::fill_keyboard(const QString &profName)
     QStringList list ;
 
     CharTrie *charTrie = CharTrie::getCharTrie();
-    bool matra_order = false;
 
-
-    if (file.open(QIODevice::ReadOnly | QIODevice::Text))
-    {
-
+    if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
         currentProfile = profName;
         QTextStream in(&file);
         while (!in.atEnd()) {
-            QString inStr = in.readLine().trimmed();
-           // qDebug() << inStr;
-            QString str = inStr;
-            //QString str = crypto->decryptToString(inStr);
+            QString str = in.readLine().trimmed();
             if( str.length() > 0) {
                 //qDebug() << str;
                 list = str.split("\t");
 
-
                 // if it is a characted then add it
-                if( list.at(0).trimmed() == QString("<char>")) {
-                  charMap[list.at(1).trimmed().toLower()] = list.at(2 ).trimmed();
-                //  qDebug() << "<char> " << list.at(1 ).trimmed() <<"\t" << list.at(2 ).trimmed();
+                if (list.at(0).trimmed() == QString("<char>")) {
+                    charMap[list.at(1).trimmed().toLower()] = list.at(2 ).trimmed();
+                    //qDebug() << "<char> " << list.at(1 ).trimmed() <<"\t" << list.at(2 ).trimmed();
                 }
 
 
                 // add a word on <word>
-                if( list.at(0).trimmed() == QString("<word>")) {
-                  profileWordMap[list.at(1).trimmed().toLower()] = list.at(1 ).trimmed().toLower();
-                  // qDebug() << "adding a word";
+                if (list.at(0).trimmed() == QString("<word>")) {
+                   profileWordMap[list.at(1).trimmed().toLower()] = list.at(1).trimmed().toLower();
+                   //qDebug() << "adding a <word>";
                 }
 
                 // delete a word on <worddel>
-                if( list.at(0).trimmed() == QString("<worddel>")) {
-                  if(profileWordMap.contains(list.at(1).trimmed().toLower())) {
+                if (list.at(0).trimmed() == QString("<worddel>")) {
+                  if (profileWordMap.contains(list.at(1).trimmed().toLower())) {
                      profileWordMap.remove(list.at(1).trimmed().toLower());
                    //  qDebug() << "removing a word";
                   }
-                }
-
-                if( list.at(0).trimmed() == QString("<vowelmodifier_order>")) {
-                    if( list.at(1).trimmed()=="true" ) {
-                      //  qDebug() << "Matra order " << matra_order;
-                        matra_order = true;
-                    }
-                    else {
-                        matra_order = false;
-                    }
                 }
             }
          }
@@ -805,6 +788,9 @@ bool Profile::fill_keyboard(const QString &profName)
         Phonetic::createPhoneticTreeProfile(wordList);
      //   profileWords->printData();
         charTrie->LoadCharTreeFromProfile(charMap);
+    } else {
+         QMessageBox::information(0, "error", "make sure your profile in file " + fName);
+
     }
 
     file.close();

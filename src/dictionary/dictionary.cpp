@@ -101,7 +101,6 @@ void Dictionaries::loadAssameseEnglishDictionaries(
     while (!in2.atEnd()) {
         fields = in2.readLine().split('\t');
         if (fields.size() >= 3) {
-
             /*
            if(i < 10 ) {
                 qDebug() << fields;
@@ -110,7 +109,6 @@ void Dictionaries::loadAssameseEnglishDictionaries(
                     qDebug() << chr.unicode();
                 }
            }*/
-
            assamese->asmWrdIdWrd.insert(fields[0], fields[1]);
            //qDebug() <<fields[1];
            assamese->asmWrdWrdId.insert(fields[1], fields[0]);
@@ -153,8 +151,7 @@ void Dictionaries::loadAssameseEnglishDictionaries(
     QStringList lines = QString(qUncompress(file.readAll())).split('\n');
     //QStringList lines =  file.readAll()  // QString(file.readAll()).split('\n');
     //qDebug() << lines;
-
-    qDebug() << " Reading " << examplesFile;
+    // qDebug() << " Reading " << examplesFile;
     //while( !in3.atEnd()) {
     foreach (QString line, lines) {
         //examples.append(line)
