@@ -10,6 +10,7 @@
 #include <QFileInfo>
 #include <QIODevice>
 #include <QTextDocument>
+#include <QHelpEvent>
 
 #include <QTextBlock>
 #include <QTextFragment>
