@@ -156,7 +156,7 @@ MainWindow::MainWindow() : completer(0) {
   loadData->wait();
   waitScreen->hide();
 
-  setWindowTitle(tr("LuitPad 3.0.1"));
+  setWindowTitle(tr("LuitPad 3.0.2"));
   setUnifiedTitleAndToolBarOnMac(true);
 
   setCentralWidget(editor);
