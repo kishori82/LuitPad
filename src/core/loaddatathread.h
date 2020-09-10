@@ -1,9 +1,33 @@
+/*************************************************************************
+# MIT License
+
+Copyright (c) 2020 Kishori M. Konwar
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+***************************************************************************/
+
 #ifndef LOADDATATHREAD_H
 #define LOADDATATHREAD_H
 
-#include <QThread>
-#include <QRunnable>
 #include <QDebug>
+#include <QRunnable>
+#include <QThread>
 
 #include <QApplication>
 #include <QDesktopWidget>
@@ -14,110 +38,93 @@
 #include <QtGui/QApplication>
 #endif
 
-
-#include "src/phonetic/phonetic.h"
-#include "src/phonetic/wordstrie.h"
 #include "src/core/inflexTrie.h"
-#include "src/phonetic/romanization.h"
 #include "src/dictionary/dictionary.h"
+#include "src/phonetic/phonetic.h"
+#include "src/phonetic/romanization.h"
+#include "src/phonetic/wordstrie.h"
 
-class LoadDataThread : public QThread
-{
-    Q_OBJECT
-    void run (){
-        qDebug() << "Loading data.....";
+class LoadDataThread : public QThread {
+  Q_OBJECT
+  void run() {
+    qDebug() << "Loading data.....";
 
-        Romanization::InitializeMaps();
-        //QString dictionaryFile = ":/files/processed_dictionary.txt";
-        QString dictionaryFile = ":/files/T_WrdASMIdea.csv";
+    Romanization::InitializeMaps();
+    // QString dictionaryFile = ":/files/processed_dictionary.txt";
+    QString dictionaryFile = ":/files/T_WrdASMIdea.csv";
 
-        // dictionaryFile = ":/files/processed_temp.txt";
-        //dictionaryFile = ":/files/processed_dictionary.txt";
-      //  dictionaryFile  = ":/files/processed_dictionary.prefix_len_5.txt";
+    QString unicodeToRomanOverrideFile =
+        ":/files/unicode_to_roman_override.txt";
 
-    //    dictionaryFile = ":/files/processed_dictionary_Sumu_corrected_Feb_2013.txt";
+    Romanization::InitializeUnicodeToRomanOverrideMaps(
+        unicodeToRomanOverrideFile);
 
-        QString unicodeToRomanOverrideFile = ":/files/unicode_to_roman_override.txt";
+    WordsTrie *wordsMapTree = WordsTrie::getWordsTrie();
 
-        Romanization::InitializeUnicodeToRomanOverrideMaps(unicodeToRomanOverrideFile);
+    wordsMapTree->LoadDictionaryWords(dictionaryFile);
 
-        WordsTrie *wordsMapTree = WordsTrie::getWordsTrie();
+    Phonetic::setInflexTypes(":/files/inflexions_comb.txt");
+    Phonetic::createSingleInflections();
+    Phonetic::createInflexCombinations();
 
-        wordsMapTree->LoadDictionaryWords(dictionaryFile);
+    Phonetic::initializeCharPhoneticMap();
+    Phonetic::loadAllWords(dictionaryFile);
 
+    // add the phonetic words from the dictionary only for each character
+    Phonetic::createPhoneticTree(dictionaryFile);
 
-        Phonetic::setInflexTypes(":/files/inflexions_comb.txt");
-        Phonetic::createSingleInflections();
-        Phonetic::createInflexCombinations();
+    // add user defined words and character mappings 
+    Phonetic::addUserWordsToPhoneticTree("profile/" +
+                                         QLatin1String("DEFAULT.dat"));
 
-        Phonetic::initializeCharPhoneticMap();
-        Phonetic::loadAllWords(dictionaryFile );
+    Phonetic::initializeDistances();
 
-        Phonetic::createPhoneticTree(dictionaryFile);
-        Phonetic::initializeDistances();
+    Phonetic::initializeDeleteCharMap();
 
-        Phonetic::initializeDeleteCharMap();
+    InflexTrie *inflexTree = InflexTrie::getInflexTrie();
 
-        InflexTrie *inflexTree = InflexTrie::getInflexTrie();
+    inflexTree->LoadInflections(Phonetic::singleInflexionsReverse);
 
-        inflexTree->LoadInflections(Phonetic::singleInflexionsReverse);
+    Utilities::initializeAlphabetOrder();
 
-        Utilities::initializeAlphabetOrder();
+    QString IdeasFile = ":/files/T_IdeaBase.tsv";
+    QString engWrdIdFile = ":/files/T_WrdENGIdea.csv";
+    QString asmWrdWrdId = ":/files/T_WrdASMIdea.csv";
+    QString examplesFile = ":/files/T_WrdExamples.tsv.compressed";
+    QString idiomsFile = ":/files/T_Idioms.tsv";
+    QString poribhashaFile = ":/files/T_Poribhasha.tsv";
 
-        QString IdeasFile = ":/files/T_IdeaBase.tsv";
-        QString engWrdIdFile = ":/files/T_WrdENGIdea.csv";
-        QString asmWrdWrdId = ":/files/T_WrdASMIdea.csv";
-        QString examplesFile = ":/files/T_WrdExamples.tsv.compressed";
-        QString idiomsFile = ":/files/T_Idioms.tsv";
-        QString poribhashaFile = ":/files/T_Poribhasha.tsv";
+    LoadDictionary(IdeasFile, engWrdIdFile, asmWrdWrdId, examplesFile,
+                   idiomsFile, poribhashaFile);
 
-        LoadDictionary(
-                    IdeasFile,
-                    engWrdIdFile,
-                    asmWrdWrdId,
-                    examplesFile,
-                    idiomsFile,
-                    poribhashaFile
-                  );
+    // inflexTree->printData();
+  }
 
-
-
-        //inflexTree->printData();
-    }
 public:
-    explicit LoadDataThread(QObject *parent = 0);
-    
+  explicit LoadDataThread(QObject *parent = 0);
+
 signals:
-    
+
 public slots:
 
 private:
-    void LoadDictionary(
-            QString IdeasFile,
-            QString engWrdIdFile,
-            QString asmWrdWrdId,
-            QString examplesFile,
-            QString idiomsFile,
-            QString poribhashaFile
-         );
+  void LoadDictionary(QString IdeasFile, QString engWrdIdFile,
+                      QString asmWrdWrdId, QString examplesFile,
+                      QString idiomsFile, QString poribhashaFile);
 };
 
-
-class ShowTutorialThread : public QRunnable
-{
-    void run (){
-        showTutorial();
-        qDebug() << "Debug in the thread";
-
-    }
+class ShowTutorialThread : public QRunnable {
+  void run() {
+    showTutorial();
+    qDebug() << "Debug in the thread";
+  }
 
 public:
-    explicit ShowTutorialThread(QObject *parent = 0);
+  explicit ShowTutorialThread(QObject *parent = 0);
+
 private:
-    void center(QWidget &widget);
-    void showTutorial();
-
+  void center(QWidget &widget);
+  void showTutorial();
 };
-
 
 #endif // LOADDATATHREAD_H

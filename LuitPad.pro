@@ -1,13 +1,8 @@
-
 QT += core gui
 #unix|win32: LIBS += -lQtCore4
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets printsupport
 greaterThan(QT_MAJOR_VERSION, 4): DEFINES = QT_VERSION_5
-
-
-
-
 
 win64 {
      CONFIG+= static
