@@ -1653,7 +1653,7 @@ void MdiChild::getWordInfo() {
   qDebug() << "synonyms " << synonyms;
 */
 
-  QString prefix = "<div style=\"font-size:12px;\"> <table>";
+  QString prefix = "<div style=\"font-size:16px;\"> <table>";
   QString suffix = "</table></div>";
 
   QString htmlString = prefix;
