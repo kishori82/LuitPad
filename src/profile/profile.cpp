@@ -968,11 +968,11 @@ bool Profile::fill_keyboard(const QString &profName) {
 
   QString fName =
       QLatin1String("profile/") + profName.toUpper() + QLatin1String(".dat");
-  /*
+
    if( profName==QString("DEFAULT")) {
        fName= QString(":/files/DEFAULT.dat");
    }
-   */
+
   QFile file(fName);
 
   QHash<QString, QString> charMap;

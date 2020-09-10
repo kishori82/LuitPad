@@ -144,7 +144,7 @@ void Phonetic::createPhoneticTreeProfile(QStringList &wordList) {
 }
 
 void Phonetic::addUserWordsToPhoneticTree(const QString fileName) {
-  qDebug() << "Adding from the external users profile words";
+  qDebug() << "Adding from the external users profile words" << fileName;
   QStringList charList;
 
   QFile file(fileName);
@@ -159,7 +159,7 @@ void Phonetic::addUserWordsToPhoneticTree(const QString fileName) {
 
   while (!in.atEnd()) {
     fields = in.readLine().trimmed().split('\t');
-    if (fields.size() >= 1 && !already_inserted.contains(fields.at(1))) {
+    if (fields.size() >= 2 && !already_inserted.contains(fields.at(1))) {
       // add a word on <word>
       if (fields.at(0).trimmed() == QString("<word>")) {
         charList.clear();
