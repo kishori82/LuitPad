@@ -50,15 +50,19 @@ void TextEdit::deleteOldWord(int i) {
   currProfile->deleteWord(Utilities::getUnicodeString(oldWords[i]->text()));
 }
 
-void TextEdit::addNewWord(int i) {
+void TextEdit::addNewWord() {
   // qDebug() << "connected through  word no " << i;
   Profile *currProfile = Profile::getkeyBoard();
-  currProfile->addWord(Utilities::getUnicodeString(newWords[i]->text()));
+
+  currProfile->addWord(Utilities::getUnicodeString(newWord));
+
   QString romanized = Romanization::convert2Roman(
-      Utilities::getUnicodeString(newWords[i]->text()));
-  Phonetic::insertWordFromOutside(newWords[i]->text());
+                        Utilities::getUnicodeString(newWord));
+
+  Phonetic::insertWordFromOutside(newWord);
+
   QMessageBox::information(0, "Added word & phonetic spelling",
-                           newWords[i]->text() + "\t" + romanized);
+                           newWord + "\t" + romanized);
 
   /*foreach(QString unicodeWord, it.value() ) {
       charList.clear();

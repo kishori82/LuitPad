@@ -49,7 +49,8 @@ bool CharTrie::insertWord(TreeNode *charTreeRoot, QList<QString> &charList,
   TreeNode *curNode = charTreeRoot;
   QString newChar = charList.at(0);
 
-  if (curNode->links[newChar] == NULL)
+
+  if (!curNode->links.contains(newChar))
     curNode->links.insert(newChar, new TreeNode(NULL, false));
 
   charList.removeFirst();
@@ -58,7 +59,6 @@ bool CharTrie::insertWord(TreeNode *charTreeRoot, QList<QString> &charList,
     curNode->children++;
     insertWord(curNode->links[newChar], charList, unicodeChar);
   } else {
-    //     qDebug() << newChar;
     curNode->links[newChar]->unicode = unicodeChar;
     curNode->links[newChar]->fullWord = true;
   }

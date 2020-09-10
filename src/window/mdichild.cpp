@@ -47,13 +47,12 @@ void MdiChild::contextMenuEvent(QContextMenuEvent *event) {
     QHash<QString, QString> candidateWordInflexPairs;
 
     QStringList suggestedWordList;
-    QStringList newWordsList;
+ //   QStringList newWordsList;
     QStringList oldWordsList;
 
     WordsTrie *profileWords = WordsTrie::getProfileWordsTrie();
     WordsTrie *dictionaryWords = WordsTrie::getWordsTrie();
 
-    QString newWord;
     newWord = textUnderCursor();
 
     candidateWordsList = Phonetic::getInflectionalFormsX(newWord);
@@ -63,9 +62,10 @@ void MdiChild::contextMenuEvent(QContextMenuEvent *event) {
         if (profileWords->hasWord(str)) {
           oldWordsList.append(str);
           ignoreReplaceTest = true;
-        } else {
-          newWordsList.append(str);
         }
+        //else {
+         // newWordsList.append(str);
+        //}
       } else {
         ignoreReplaceTest = true;
       }
@@ -74,7 +74,7 @@ void MdiChild::contextMenuEvent(QContextMenuEvent *event) {
     candidateWordInflexPairs = Phonetic::getInflectionalFormsPairs(newWord);
     suggestedWordList = getSpellingSuggestions(candidateWordInflexPairs, 10);
 
-    // if for the first time
+    // if for the first time then we create the widgets only once
     if (rightClickCount == 0) {
       //  menu = TextEdit::createStandardContextMenu();
       resizeImage = new QAction(tr("Resize Image"), this);
@@ -90,10 +90,15 @@ void MdiChild::contextMenuEvent(QContextMenuEvent *event) {
       connect(copyForAscii, SIGNAL(triggered()), this, SLOT(copyForAsciiFn()));
       menu->addAction(copyForAscii);
 
-      addWord = menu->addMenu("Add to Dictionary");
-      addsignalMapper = new QSignalMapper(this);
-      QFont contextMenuFont = QFont("kalpurush", 14, 0, false);
+      addWord = new QAction(tr("Add to Dictionary"), this);
+      connect(addWord, SIGNAL(triggered()), this, SLOT(addNewWord()));
+      menu->addAction(addWord);
 
+      /**
+      addsignalMapper = new QSignalMapper(this);
+
+      connect(addsignalMapper, SIGNAL(mapped(int)), this,
+              SLOT(addNewWord(int)));
       int num_words = 10;
       for (int j = 0; j < num_words; j++) {
         newWords[j] = new QAction(tr("New"), this);
@@ -105,9 +110,12 @@ void MdiChild::contextMenuEvent(QContextMenuEvent *event) {
       for (int j = 0; j < num_words; j++) {
         connect(newWords[j], SIGNAL(triggered()), addsignalMapper, SLOT(map()));
       }
+
       connect(addsignalMapper, SIGNAL(mapped(int)), this,
               SLOT(addNewWord(int)));
+      */
 
+      /**
       deleteWord = menu->addMenu("Delete from Dictionary");
 
       deletesignalMapper = new QSignalMapper(this);
@@ -126,9 +134,10 @@ void MdiChild::contextMenuEvent(QContextMenuEvent *event) {
       }
       connect(deletesignalMapper, SIGNAL(mapped(int)), this,
               SLOT(deleteOldWord(int)));
+      */
 
       menu->addSeparator();
-
+      QFont contextMenuFont = QFont("kalpurush", 14, 0, false);
       meaning = menu->addMenu("Meanings");
       meaningText = new QAction(tr("show"), this);
       meaning->setToolTip(tr("<p></p>"));
@@ -198,8 +207,14 @@ void MdiChild::contextMenuEvent(QContextMenuEvent *event) {
               SLOT(replaceNewWord(int)));
     }
 
-    int newWordListSize = newWordsList.size();
+    if (!dictionaryWords->hasWord(newWord)) {
+        addWord->setVisible(true);
+    } else {
+        addWord->setVisible(false);
+    }
 
+    /*
+    int newWordListSize = newWordsList.size();
     for (int j = 0; j < 10; j++) {
       if (j < newWordListSize) {
         newWords[j]->setVisible(true);
@@ -208,11 +223,13 @@ void MdiChild::contextMenuEvent(QContextMenuEvent *event) {
         newWords[j]->setVisible(false);
       }
     }
+    */
+
     // if( ignoreReplaceTest==false ) { ignoreWord->setVisible(false);
     // replaceWord->setVisible(false); }
 
+    /*
     int oldWordListSize = oldWordsList.size();
-
     for (int j = 0; j < 10; j++) {
       if (j < oldWordListSize) {
         oldWords[j]->setVisible(true);
@@ -221,6 +238,7 @@ void MdiChild::contextMenuEvent(QContextMenuEvent *event) {
         oldWords[j]->setVisible(false);
       }
     }
+    */
 
     // add the possible correct spellings
     for (int j = 0; j < 10; j++) {

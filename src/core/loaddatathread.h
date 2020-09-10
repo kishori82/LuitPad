@@ -53,13 +53,6 @@ class LoadDataThread : public QThread {
     // QString dictionaryFile = ":/files/processed_dictionary.txt";
     QString dictionaryFile = ":/files/T_WrdASMIdea.csv";
 
-    // dictionaryFile = ":/files/processed_temp.txt";
-    // dictionaryFile = ":/files/processed_dictionary.txt";
-    //  dictionaryFile  = ":/files/processed_dictionary.prefix_len_5.txt";
-
-    //    dictionaryFile =
-    //    ":/files/processed_dictionary_Sumu_corrected_Feb_2013.txt";
-
     QString unicodeToRomanOverrideFile =
         ":/files/unicode_to_roman_override.txt";
 
@@ -77,7 +70,10 @@ class LoadDataThread : public QThread {
     Phonetic::initializeCharPhoneticMap();
     Phonetic::loadAllWords(dictionaryFile);
 
+    // add the phonetic words from the dictionary only for each character
     Phonetic::createPhoneticTree(dictionaryFile);
+
+    // add user defined words and character mappings 
     Phonetic::addUserWordsToPhoneticTree("profile/" +
                                          QLatin1String("DEFAULT.dat"));
 

@@ -54,31 +54,53 @@ bool Phonetic::insertWordFromOutside(QString unicodeWord) {
     charList.append(Phonetic::phoneticEquivString(QString(c).toLower()));
     //  qDebug() << Phonetic::phoneticEquivString(QString(c).toLower());
   }
-
-  insertWord(roman2UnicodeTree, charList,
-             Utilities::getUnicodeString(unicodeWord));
+  insertWord(roman2UnicodeTree, charList, Utilities::getUnicodeString(unicodeWord));
   return true;
 }
 
+bool Phonetic::insertWord(TreeNode *curNode, 
+                          QStringList &charList,
+                          QString unicodeWord) {
+    
+  QString newChar = charList.at(0);
+  //  qDebug() << unicodeWord;
+  if (curNode->links[newChar] == NULL)
+    curNode->links.insert(newChar, new TreeNode(NULL, false));
+
+  if (!charList.isEmpty()) charList.removeFirst();
+
+  if (charList.size() > 0) {
+     insertWord(curNode->links[newChar], charList, unicodeWord);
+  } else {
+     // perhaps the same phonetic sound has multiple words
+      if (!curNode->links[newChar]->roman2UnicodeList.contains(unicodeWord)) {
+         curNode->links[newChar]->roman2UnicodeList.append(unicodeWord);
+         //qDebug() << "full word" << unicodeWord;
+         curNode->links[newChar]->fullWord = true;
+      }
+  }
+  return true;
+}
+
+/**
 bool Phonetic::insertWord(TreeNode *curNode, QStringList &charList,
                           QString unicodeWord) {
   QString newChar = charList.at(0);
   //  qDebug() << unicodeWord;
   if (curNode->links[newChar] == NULL)
     curNode->links.insert(newChar, new TreeNode(NULL, false));
-
-  charList.removeFirst();
+  if (!charList.isEmpty()) charList.removeFirst();
 
   if (charList.size() > 0) {
-    insertWord(curNode->links[newChar], charList, unicodeWord);
+     insertWord(curNode->links[newChar], charList, unicodeWord);
   } else {
-    curNode->links[newChar]->roman2UnicodeList.append(unicodeWord);
+     curNode->links[newChar]->roman2UnicodeList.append(unicodeWord);
     //   qDebug() << "full word";
-    curNode->links[newChar]->fullWord = true;
+     curNode->links[newChar]->fullWord = true;
   }
-
   return true;
 }
+*/
 
 void Phonetic::createPhoneticTreeProfile(QStringList &wordList) {
 
@@ -122,6 +144,7 @@ void Phonetic::createPhoneticTreeProfile(QStringList &wordList) {
 }
 
 void Phonetic::addUserWordsToPhoneticTree(const QString fileName) {
+  qDebug() << "Adding from the external users profile words";
   QStringList charList;
 
   QFile file(fileName);
@@ -136,16 +159,15 @@ void Phonetic::addUserWordsToPhoneticTree(const QString fileName) {
 
   while (!in.atEnd()) {
     fields = in.readLine().trimmed().split('\t');
-
     if (fields.size() >= 1 && !already_inserted.contains(fields.at(1))) {
       // add a word on <word>
       if (fields.at(0).trimmed() == QString("<word>")) {
         charList.clear();
         foreach (QChar c, rom.convert2Roman(fields.at(1))) {
-          charList.append(Phonetic::phoneticEquivString(QString(c).toLower()));
+           charList.append(Phonetic::phoneticEquivString(QString(c).toLower()));
         }
         insertWord(roman2UnicodeTree, charList, fields.at(1));
-        already_inserted.insert(fields.at(1), true);
+        //already_inserted.insert(fields.at(1), true);
       }
     }
   }

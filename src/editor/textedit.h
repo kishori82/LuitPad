@@ -91,7 +91,7 @@ private:
 
 private slots:
   void insertCompletion(const QString &completion);
-  void addNewWord(int i);
+  void addNewWord();
   void replaceNewWord(int i);
   void deleteOldWord(int i);
 
@@ -117,7 +117,10 @@ protected:
 
 protected:
   QMenu *menu;
-  QMenu *addWord, *replaceWord;
+  //QMenu *addWord;
+  QAction *addWord;
+
+  QMenu *replaceWord;
   QMenu *deleteWord;
 
   QAction *resizeImage;
@@ -132,7 +135,10 @@ protected:
   QAction *idioms, *examples;
   QAction *synonymsText, *officialwordsText; // *examplesText, *idiomsText;
 
-  QAction *newWords[10], *oldWords[10], *replaceWords[10];
+  //QAction *newWords[10]
+  QString newWord;
+
+  QAction *oldWords[10], *replaceWords[10];
   QSignalMapper *deletesignalMapper, *addsignalMapper,
       *signalMapperReplaceWords;
   QPoint lastPosition;

@@ -132,7 +132,8 @@ MainWindow::MainWindow() : completer(0) {
   readSettings();
 
 #include <QThreadPool>
-#ifdef DEVELOPMENT_MENUS
+
+#ifndef DEVELOPMENT_MENUS
   createDevelopmentMenus();
 #endif
 
