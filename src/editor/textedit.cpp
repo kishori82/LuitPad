@@ -41,6 +41,7 @@ SOFTWARE.
 #include "src/utils/utilities.h"
 
 #include <QMimeData>
+#include <QInputDialog>
 
 // extern int validSoftware;
 
@@ -54,15 +55,27 @@ void TextEdit::addNewWord() {
   // qDebug() << "connected through  word no " << i;
   Profile *currProfile = Profile::getkeyBoard();
 
-  currProfile->addWord(Utilities::getUnicodeString(newWord));
+  QString roman = ""; //Romanization::convert2Roman(
+                        //Utilities::getUnicodeString(newWord));
 
-  QString romanized = Romanization::convert2Roman(
-                        Utilities::getUnicodeString(newWord));
+  bool ok;
+  QString text = QInputDialog::getText(this, tr("Enter English spelling"),
+                                       newWord, QLineEdit::Normal,
+                                       "", &ok);
+  if (ok && !text.isEmpty()) {
+      roman = text.toLower();
+  } else {
+      return;
+  }
+  // write to the profile file
+  currProfile->addWord(Utilities::getUnicodeString(newWord), roman);
+  //Phonetic::insertWordFromOutside(newWord);
+  Phonetic::addUserWord(roman, Utilities::getUnicodeString(newWord));
 
-  Phonetic::insertWordFromOutside(newWord);
-
+  /*
   QMessageBox::information(0, "Added word & phonetic spelling",
-                           newWord + "\t" + romanized);
+                           newWord + "\t" + roman);
+ */
 
   /*foreach(QString unicodeWord, it.value() ) {
       charList.clear();

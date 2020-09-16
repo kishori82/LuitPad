@@ -69,7 +69,7 @@ public:
   static Profile *getkeyBoard();
 
   void display();
-  bool addWord(const QString &newWord);
+  bool addWord(const QString &newWord, const QString &roman);
   bool deleteWord(const QString &word);
 
   // static QWidget *kbd;
@@ -85,6 +85,7 @@ public:
 
   static Profile *keyBoard;
   static QString currentProfile;
+
 
   void newProfile();
   void auto_fill_profile_combo(QString profilename = "");

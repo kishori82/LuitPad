@@ -194,7 +194,6 @@ void WordsTrie::get_choice(QStringList prefix, int choicesize, bool autoselect,
                            QList<QString> &choices) {
 
   choices.clear();
-
   QList<QString> prefix_list;
 
   for (int i = 0; i < prefix.length(); i++)
@@ -206,6 +205,7 @@ void WordsTrie::get_choice(QStringList prefix, int choicesize, bool autoselect,
   }
 
   get_choice_words(charTree, choices, prefix_list, choicesize, autoselect);
+
   return;
 }
 
@@ -328,7 +328,6 @@ void WordsTrie::getWordsFromTree(TreeNode *root, QStack<QString> &partword,
         word.append(QString("0x") + (*pit));
         ++pit;
       }
-      wordList << word;
     }
     partword.pop();
     ++it;

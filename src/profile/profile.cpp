@@ -10,12 +10,14 @@ Profile *Profile::keyBoard = NULL;
 QWidget *Profile::kbd = NULL;
 QString Profile::currentProfile = "DEFAULT";
 
+
 Profile *Profile::getkeyBoard() {
   if (keyBoard == NULL || kbd == NULL) {
     keyBoard = new Profile();
   }
   return keyBoard;
 }
+
 
 Profile::Profile(QWidget *parent) : QWidget(parent) {
   setModifierOrder(false);
@@ -61,6 +63,7 @@ Profile::Profile(QWidget *parent) : QWidget(parent) {
   outfile.close();
 
   kbd = NULL;
+
 }
 
 void Profile::display() {
@@ -870,20 +873,18 @@ bool Profile::saveProfile() {
   return true;
 }
 
-bool Profile::addWord(const QString &newWord) {
+bool Profile::addWord(const QString &newWord, const QString &roman) {
   if (newWord.length() == 0)
     return false;
   QString fName =
-      QLatin1String("profile/") + currentProfile + QLatin1String(".dat");
-
-  qDebug() << "Adding new word to file " << fName << "\t" << newWord;
+    QLatin1String("profile/") + currentProfile + QLatin1String(".dat");
 
   QFile outFile(fName);
   QString outText;
 
   if (outFile.open(QIODevice::Append | QIODevice::Text)) {
     QTextStream outStream(&outFile);
-    outText = QString("<word>") + "\t" + newWord;
+    outText = QString("<word>") + "\t" + newWord + "\t" + roman;
     outStream << outText + "\n";
     outFile.flush();
     outFile.close();
@@ -921,9 +922,6 @@ bool Profile::deleteWord(const QString &word) {
     outFile.flush();
     outFile.close();
   }
-
-  //   QHash<QString,QString> charMap;
-  // charMap[newWord] = newWord;
 
   WordsTrie *profileWords = WordsTrie::getProfileWordsTrie();
 
@@ -969,8 +967,13 @@ bool Profile::fill_keyboard(const QString &profName) {
   QString fName =
       QLatin1String("profile/") + profName.toUpper() + QLatin1String(".dat");
 
-   if( profName==QString("DEFAULT")) {
-       fName= QString(":/files/DEFAULT.dat");
+  if( profName==QString("DEFAULT")) {
+      if (!QFile::exists(fName)) {
+          if (!QFile::copy(":/file/DEFAULT.dat", fName)) {
+              QMessageBox::information(0, "error",
+                                       "Could not create file :" + fName);
+          }
+      }
    }
 
   QFile file(fName);
@@ -988,9 +991,7 @@ bool Profile::fill_keyboard(const QString &profName) {
     while (!in.atEnd()) {
       QString str = in.readLine().trimmed();
       if (str.length() > 0) {
-        // qDebug() << str;
         list = str.split("\t");
-
         // if it is a characted then add it
         if (list.at(0).trimmed() == QString("<char>")) {
           charMap[list.at(1).trimmed().toLower()] = list.at(2).trimmed();
@@ -1000,9 +1001,10 @@ bool Profile::fill_keyboard(const QString &profName) {
 
         // add a word on <word>
         if (list.at(0).trimmed() == QString("<word>")) {
-          profileWordMap[list.at(1).trimmed().toLower()] =
+            profileWordMap[list.at(1).trimmed().toLower()] =
               list.at(1).trimmed().toLower();
-          // qDebug() << "adding a <word>";
+
+            Phonetic::addUserWord(list.at(2), list.at(1));
         }
 
         // delete a word on <worddel>
@@ -1023,7 +1025,6 @@ bool Profile::fill_keyboard(const QString &profName) {
 
     for (it = profileWordMap.begin(); it != profileWordMap.end(); it++) {
       wordList.append(it.key());
-      //   qDebug() << it.key();
     }
     Phonetic::createPhoneticTreeProfile(wordList);
     //   profileWords->printData();

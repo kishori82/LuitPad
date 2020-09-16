@@ -45,6 +45,10 @@ typedef struct keyvalue {
 } QKeyValue;
 
 typedef struct wordUnicode {
+    wordUnicode() {}
+  wordUnicode(const QString wrd, const QString uni): word(wrd), unicode(uni) {
+  }
+
   QString word;
   QString unicode;
 } QWordUnicode;

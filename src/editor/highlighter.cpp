@@ -113,8 +113,9 @@ bool Highlighter::checkWord(QString word) {
 
   QStringList candidateWordsList = Phonetic::getInflectionalFormsX(word);
 
+  // checks if any of the inflexional forms are in the profile or the
+  // profile
   foreach (QString str, candidateWordsList) {
-    // qDebug() << "word " << str;
     if (Romanization::UnicodeToRomanOverrideMap.contains(
             Utilities::getUnicodeString(str)))
       return false;
@@ -122,6 +123,18 @@ bool Highlighter::checkWord(QString word) {
       return false;
     }
   }
+
+
+  foreach (QString str, candidateWordsList) {
+     if ( Phonetic::userwords_unicodexstr_phonetic->contains( Utilities::getUnicodeString(str)))
+      return false;
+  }
+
+
+
+
+
+
   return true;
 }
 

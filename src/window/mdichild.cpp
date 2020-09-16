@@ -1189,9 +1189,16 @@ void MdiChild::expandListonPrefix() {
   wordstrie->get_choice(prefix, 5, true, choices);
 
   QStringList newWordList;
+  if(newWord.size() >= 3) {
+      foreach (QString word, Phonetic::getUserWordsFromPrefix(Utilities::getUnicodeString(newWord))) {
+         newWordList.append(Utilities::getUnicode(word, "0x"));
+      }
+  }
+
   foreach (QString word, choices) {
     newWordList.append(Utilities::getUnicode(word, "0x"));
   }
+
   autocompleter->setModel(new QStringListModel(newWordList, autocompleter));
 
   QRect cr = cursorRect();
@@ -1265,12 +1272,25 @@ void MdiChild::wordToolTipText(QKeyEvent *e) {
   if (newWord.size() > 0) {
     if (!toolTipControl->hasAssamesePrefix(this)) {
       QList<QWordUnicode> pairedWordList;
-      Phonetic::phoneticWordChoices(newWord, pairedWordList, false);
+      Phonetic::phoneticWordChoices(newWord, pairedWordList, /* ProfileTree = */ false);
       // Phonetic::phoneticWordChoicesLengthBased(newWord, pairedWordList,
-      // false); Phonetic::phoneticWordChoices(newWord, pairedWordList,true);
+      // false);
+
+      QList<QWordUnicode> pairedUserWordList;
+      if (newWord.size() >= 3)
+      Phonetic::profileWordChoices(newWord, pairedUserWordList);
+
+      // Phonetic::phoneticWordChoices(newWord, pairedWordList, true);
+
       Phonetic::arrangeWordChoices(pairedWordList, newWordList,
                                    Phonetic::processPhoneticInput(
                                        Phonetic::phoneticEquivString(newWord)));
+
+      foreach (QWordUnicode word, pairedUserWordList) {
+          newWordList.insert(0, Utilities::getUnicode(word.unicode, "0x"));
+      }
+
+
     } else
       Phonetic::phoneticInflexChoices(newWord, newWordList);
   }

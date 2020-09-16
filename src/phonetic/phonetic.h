@@ -53,7 +53,7 @@ public:
   static QHash<QString, QString> *allInflexions;
   static QHash<QString, QString> *singleInflexions;
   static QHash<QString, QString> *singleInflexionsReverse;
-  static TreeNode *roman2UnicodeTree;
+  static TreeNode *roman2UnicodeTreeDefault;
   static TreeNode *roman2UnicodeTreeProfile;
 
   static QList<TreeNode *> treeNodeList;
@@ -62,11 +62,14 @@ public:
   static QHash<QString, QString> *allWords;
   static QHash<QString, QString> *phoneticMap;
   static QHash<QString, QString> *deleteCharMap;
+  static QHash<QString, QString> *userwords_phonetic_unicodexstr;
+    static QHash<QString, QString> *userwords_unicodexstr_phonetic;
 
   static QStringList getInflectionalForms(QString newWord);
   static QStringList getInflectionalFormsX(QString newWord);
   static QHash<QString, QString> getInflectionalFormsPairs(QString newWord);
   static QString getRootWord(QString newWord);
+  static QStringList getUserWordsFromPrefix(const QString &newWordPrefix);
 
   static void setInflexTypes(QString fileName);
   static void createInflexCombinations();
@@ -82,14 +85,16 @@ public:
   static bool toAsending(QWordRank &s1, QWordRank &s2);
   static bool toAsendingInflex(QKeyDistance &s1, QKeyDistance &s2);
   static void rankWords(QList<QWordUnicode> &words, QString word, int max = 15);
-  static bool markUsedWord(TreeNode *curNode, QStringList &charList, bool used,
+  static void markUsedWord(TreeNode *curNode, QStringList &charList, bool used,
                            unsigned int depth);
 
   static void createPhoneticTree(QString fileName);
   static void addUserWordsToPhoneticTree(const QString fileName);
 
+  static void addUserWord(const QString &roman, const QString &unicode);
+
   static void createPhoneticTreeProfile(QStringList &wordList);
-  static bool insertWord(TreeNode *curNode, QStringList &charList,
+  static void insertWord(TreeNode *curNode, QStringList &charList,
                          QString unicodeWord);
   static bool insertWordFromOutside(QString unicodeWord);
 
@@ -100,6 +105,9 @@ public:
   static void phoneticWordChoices(QString newWord,
                                   QList<QWordUnicode> &wordList,
                                   bool ProfileTree = false);
+
+  static void profileWordChoices(QString newWord, QList<QWordUnicode> &wordList);
+
   static void phoneticWordChoicesLengthBased(QString newWord,
                                              QList<QWordUnicode> &wordList,
                                              bool ProfileTree = false);
