@@ -1003,7 +1003,6 @@ bool Profile::fill_keyboard(const QString &profName) {
         if (list.at(0).trimmed() == QString("<word>")) {
             profileWordMap[list.at(1).trimmed().toLower()] =
               list.at(1).trimmed().toLower();
-
             Phonetic::addUserWord(list.at(2), list.at(1));
         }
 
