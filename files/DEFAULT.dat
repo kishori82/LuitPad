@@ -102,7 +102,7 @@
 
 <char>	0x9cc	ou
 
-<char>	0x9CD	zntl
+<char>	0x9CD0x200C	znt
 
 <char>	0x9E6	0
 

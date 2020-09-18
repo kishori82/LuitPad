@@ -833,7 +833,7 @@ bool Profile::saveProfile() {
        lbl[52]->text()+"\n"; outStream << outText) + "\n";
       */
 
-    outText = QString("<char>\t") + QString("0x9CD\t") + lbl[53]->text() + "\n";
+    outText = QString("<char>\t") + QString("0x9CD0x200C\t") + lbl[53]->text() + "\n";
     outStream << outText + "\n";
 
     outText = QString("<char>\t") + QString("0x9E6\t") + "0" + "\n";
@@ -995,7 +995,6 @@ bool Profile::fill_keyboard(const QString &profName) {
         // if it is a characted then add it
         if (list.at(0).trimmed() == QString("<char>")) {
           charMap[list.at(1).trimmed().toLower()] = list.at(2).trimmed();
-          // qDebug() << "<char> " << list.at(1 ).trimmed() <<"\t" << list.at(2
           // ).trimmed();
         }
 
@@ -1106,6 +1105,7 @@ bool Profile::fill_keyboard(const QString &profName) {
   lbl[52] -> setText(charMap.value(QString("0x994")));
   */
   lbl[53]->setText(charMap.value(QString("0x9cd")));
+  //lbl[53]->setText(charMap.value(QString("0x9be")));
 
   return false;
 }

@@ -534,8 +534,6 @@ QString Utilities::getUnicodeForWebPage(QString str, QString delim) {
 }
 
 QString Utilities::getUnicode(QString str, QString delim) {
-
-  //  qDebug() << "Getting unicode";
   return Utilities::createStringFromCodeList(Utilities::split(str, delim));
 }
 
@@ -580,43 +578,39 @@ bool Utilities::isAssamese(const QString &str) {
 }
 
 bool Utilities::isValidCompleterPrefix(QString str) {
-  QChar qchar;
 
   if (str.size() <= 0)
     return false;
 
   for (int i = 0; i < str.size(); i++) {
-    qchar = str.at(i);
-    if (!((2433 <= qchar.unicode() && qchar.unicode() <= 2554) ||
-
-          (qchar.unicode() == 0x27) || (qchar.unicode() == 0x19) ||
-          (qchar.unicode() == 0x2010) || (qchar.unicode() == 0x2011) ||
-          (qchar.unicode() == 0x2d))) {
-      //        qDebug() << "completer false";
+    if (!((2433 <= str[i].unicode() && str[i].unicode() <= 2554) ||
+          (str[i].unicode() == 0x2009) ||
+          (str[i].unicode() == 0x27) ||(str[i].unicode() == 0x19) ||
+          (str[i].unicode() == 0x2010) || (str[i].unicode() == 0x2011) ||
+          (str[i].unicode() == 0x2d) || (str[i].unicode() == 0x200c))) {
       return false;
     }
   }
-  // qDebug() << "completer true";
+
   return true;
 }
 
 QString Utilities::getUnicodeString(QString str) {
-  QChar qchar;
   QString unicodeString = "";
+
 
   if (str.size() <= 0)
     return unicodeString;
 
   for (int i = 0; i < str.size(); i++) {
-    qchar = str.at(i);
-    if ((2433 <= qchar.unicode() && qchar.unicode() <= 2554) ||
-        (qchar.unicode() == 0x27) || (qchar.unicode() == 0x19) ||
-        (qchar.unicode() == 0x2010) || (qchar.unicode() == 0x2011) ||
-        (qchar.unicode() == 0x2d)
+    if ((2433 <= str[i].unicode() && str[i].unicode() <= 2554) ||
+        (str[i].unicode() == 0x27) || (str[i].unicode() == 0x19) ||
+        (str[i].unicode() == 0x2010) || (str[i].unicode() == 0x2011) ||
+        (str[i].unicode() == 0x2d) || (str[i].unicode() == 0x200c)
 
     ) {
       unicodeString = unicodeString + "0x" +
-                      Utilities::convertToHexString(qchar.unicode()).toLower();
+                      Utilities::convertToHexString(str[i].unicode()).toLower();
     }
   }
 

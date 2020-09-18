@@ -1172,7 +1172,9 @@ QToolTip::hideText(); }
 }
 
 */
-
+/**
+ * @brief MdiChild::expandListonPrefix Fills the list of words for prefix completion mode
+ */
 void MdiChild::expandListonPrefix() {
   QString newWord;
   newWord = toolTipControl->getAssamesePrefix(this);
@@ -1215,6 +1217,12 @@ void MdiChild::expandListonPrefix() {
   autocompleter->complete(cr); // popup it up!
 }
 
+/**
+ * @brief MdiChild::characterToolTipText This function selects the character
+ *      in the character mode.
+ * @param event key event based on the which the chars are selected in to the
+ *        autocompleter model
+ */
 void MdiChild::characterToolTipText(QKeyEvent *event) {
   if (event->key() == 124) {
     replaceDanda();
@@ -1481,7 +1489,7 @@ void MdiChild::updateCompleterModelOnTextChange() {
 
   foreach (QChar str, completerWord) {
     stringlist.append(Utilities::convertToHexString(str.unicode()));
-    //     qDebug() << "Code : " << Utilities::convertToHexString(
+       // qDebug() << "Code : " << Utilities::convertToHexString(str.unicode());
     //     str.unicode()) ;
   }
 

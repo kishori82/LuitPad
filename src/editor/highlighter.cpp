@@ -61,11 +61,17 @@ void Highlighter::spellCheck(const QString &text) {
   if (spellCheckActive) {
     // split text into words
     QString str = text.simplified();
+
     if (!str.isEmpty()) {
+        /*
       QStringList Checkliste = str.split(QRegExp("([^\\w,^\\\\]|(?=\\\\))+"),
                                          QString::SkipEmptyParts);
+      */
+
+      QStringList Checkliste = str.split(QRegExp("\\s+"),
+                                         QString::SkipEmptyParts);
       int l, number;
-      //   qDebug() << "number of words " << Checkliste.size();
+
       // check all words
       for (int i = 0; i < Checkliste.size(); ++i) {
         str = Checkliste.at(i);
@@ -98,7 +104,6 @@ bool Highlighter::checkWord(QString word) {
   if (!Utilities::isAssamese(word)) {
     return false;
   }
-  // qDebug() << word;
 
   // if( Romanization::UnicodeToRomanOverrideMap.contains(
   // Utilities::getUnicodeString(word)) ) return false;
@@ -124,17 +129,10 @@ bool Highlighter::checkWord(QString word) {
     }
   }
 
-
   foreach (QString str, candidateWordsList) {
-     if ( Phonetic::userwords_unicodexstr_phonetic->contains( Utilities::getUnicodeString(str)))
+     if (Phonetic::userwords_unicodexstr_phonetic->contains( Utilities::getUnicodeString(str)))
       return false;
   }
-
-
-
-
-
-
   return true;
 }
 
