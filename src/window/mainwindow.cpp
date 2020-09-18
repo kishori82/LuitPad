@@ -165,6 +165,7 @@ MainWindow::MainWindow() : completer(0) {
   setWindowIcon(QIcon(":/images/logo3.png"));
 
   newFile(NEW);
+
 }
 
 void MainWindow::initCompleter() {
@@ -670,7 +671,9 @@ void MainWindow::createMessageText(MdiChild *child) {
 MdiChild *MainWindow::createMdiChild(FILETYPE type) {
 
   MdiChild *child = new MdiChild;
+
   setCentralWidget(editor);
+
   QMdiSubWindow *s = editor->addSubWindow(child);
 
   editor->setWindowIcon(QIcon(":/images/logo3.png"));

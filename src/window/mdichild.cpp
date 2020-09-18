@@ -316,9 +316,11 @@ MdiChild::MdiChild() {
    this->setLineWrapColumnOrWidth (10);
    this->setStyleSheet("margin: 20px");
   */
+
   this->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Preferred);
 
   Profile *profile = Profile::getkeyBoard();
+
   profile->fill_keyboard("DEFAULT");
 
   charMapTree = CharTrie::getCharTrie();
