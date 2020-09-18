@@ -41,6 +41,8 @@ SOFTWARE.
 #include "src/window/mainwindow.h"
 #include "src/window/mdichild.h"
 
+
+#define LUITPAD_VERSION  "LuitPad 3.0.4"
 #ifdef _WINDOWS
 #include "security.h"
 
@@ -156,7 +158,7 @@ MainWindow::MainWindow() : completer(0) {
   loadData->wait();
   waitScreen->hide();
 
-  setWindowTitle(tr("LuitPad 3.0.3"));
+  setWindowTitle(tr(LUITPAD_VERSION));
   setUnifiedTitleAndToolBarOnMac(true);
 
   setCentralWidget(editor);
