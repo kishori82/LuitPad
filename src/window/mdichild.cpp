@@ -53,7 +53,9 @@ void MdiChild::contextMenuEvent(QContextMenuEvent *event) {
     WordsTrie *profileWords = WordsTrie::getProfileWordsTrie();
     WordsTrie *dictionaryWords = WordsTrie::getWordsTrie();
 
-    newWord = textUnderCursor();
+   // newWord = textUnderCursor();
+    newWord = mouseSelectedText();
+
 
     candidateWordsList = Phonetic::getInflectionalFormsX(newWord);
     bool ignoreReplaceTest = false;

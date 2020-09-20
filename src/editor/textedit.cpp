@@ -55,6 +55,7 @@ void TextEdit::addNewWord() {
   // qDebug() << "connected through  word no " << i;
   Profile *currProfile = Profile::getkeyBoard();
 
+
   QString roman = ""; //Romanization::convert2Roman(
                         //Utilities::getUnicodeString(newWord));
 
@@ -266,12 +267,19 @@ void TextEdit::insertCompletion(const QString &completion) {
   setTextCursor(tc);
 }
 
+/**
+ * @brief TextEdit::mouseSelectedText returns mouse selected text
+ * @return mouse selected text
+ */
+QString TextEdit::mouseSelectedText() const {
+  QTextCursor tc = textCursor();
+  return tc.selectedText();
+}
+
+
 QString TextEdit::textUnderCursor() const {
   QTextCursor tc = textCursor();
   tc.select(QTextCursor::WordUnderCursor);
-
-  //  qDebug() << Utilities::getUnicodeString(tc.selectedText());
-
   return tc.selectedText();
 }
 

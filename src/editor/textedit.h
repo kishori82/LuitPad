@@ -99,6 +99,7 @@ private slots:
 
 protected:
   QString textUnderCursor() const;
+  QString mouseSelectedText() const;
   QString charUnderCursor() const;
 
 public:

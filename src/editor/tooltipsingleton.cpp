@@ -164,11 +164,15 @@ bool ToolTipSingleton::hasAssamesePrefix(TextEdit *textDocument) {
   tc.movePosition(QTextCursor::Left);
   tc.select(QTextCursor::WordUnderCursor);
   QString word = Utilities::reverse(tc.selectedText());
-  unsigned int romanCount = 0;
+   /*
+  return Utilities::isValidCompleterPrefix(word);
+  */
+  int romanCount = 0;
   for (int i = 0; i < word.size() && word.at(i).isLetter(); ++i) {
-    romanCount++;
+      romanCount++;
   }
   return (romanCount < word.size() ? true : false);
+
 }
 
 QString ToolTipSingleton::trimRomanDigitSuffix(TextEdit *textDocument) {

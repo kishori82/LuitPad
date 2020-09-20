@@ -234,11 +234,8 @@ void WordsTrie::get_choice_words(TreeNode *root, QList<QString> &choices,
 }
 
 bool WordsTrie::hasWord(QString word) {
-
   QStringList chars;
-
   chars = Utilities::getStringListFromUnicodeString(word);
-  // qDebug() << "Searching in WordsTrie 121" << chars;
   return _hasWord(charTree, chars);
 }
 

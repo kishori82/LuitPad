@@ -587,11 +587,12 @@ bool Utilities::isValidCompleterPrefix(QString str) {
           (str[i].unicode() == 0x2009) ||
           (str[i].unicode() == 0x27) ||(str[i].unicode() == 0x19) ||
           (str[i].unicode() == 0x2010) || (str[i].unicode() == 0x2011) ||
-          (str[i].unicode() == 0x2d) || (str[i].unicode() == 0x200c))) {
+          (str[i].unicode() == 0x2d) || (str[i].unicode() == 0x200c) ||
+          (str[i].unicode() == 0x0027)
+          )) {
       return false;
     }
   }
-
   return true;
 }
 
@@ -606,8 +607,8 @@ QString Utilities::getUnicodeString(QString str) {
     if ((2433 <= str[i].unicode() && str[i].unicode() <= 2554) ||
         (str[i].unicode() == 0x27) || (str[i].unicode() == 0x19) ||
         (str[i].unicode() == 0x2010) || (str[i].unicode() == 0x2011) ||
-        (str[i].unicode() == 0x2d) || (str[i].unicode() == 0x200c)
-
+        (str[i].unicode() == 0x2d) || (str[i].unicode() == 0x200c) ||
+        (str[i].unicode() == 0x0027)
     ) {
       unicodeString = unicodeString + "0x" +
                       Utilities::convertToHexString(str[i].unicode()).toLower();

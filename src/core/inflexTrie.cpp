@@ -72,8 +72,6 @@ QString InflexTrie::hasInflection(QString word) {
   QStringList chars;
 
   chars = Utilities::split(Utilities::reverseX(word), "");
-
-  // qDebug() << "Searching in WordsTrie 121" << chars;
   return _hasInflection(inflexTreeNode, chars);
 }
 
