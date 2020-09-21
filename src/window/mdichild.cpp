@@ -1135,7 +1135,7 @@ void MdiChild::showVowelModToolTipText() {
 }
 
 /* Original
-void MdiChild::characterToolTipText(QKeyEvent *event) {
+void MdiChild::characterAutoCompleterText(QKeyEvent *event) {
     if( event->key() == 124 ) {
        replaceDanda();
        return;
@@ -1222,12 +1222,14 @@ void MdiChild::expandListonPrefix() {
 }
 
 /**
- * @brief MdiChild::characterToolTipText This function selects the character
+ * @brief MdiChild::characterAutoCompleterText This function selects the character
  *      in the character mode.
  * @param event key event based on the which the chars are selected in to the
  *        autocompleter model
  */
-void MdiChild::characterToolTipText(QKeyEvent *event) {
+void MdiChild::characterAutoCompleterText(QKeyEvent *event) {
+
+
   if (event->key() == 124) {
     replaceDanda();
     return;
@@ -1238,9 +1240,14 @@ void MdiChild::characterToolTipText(QKeyEvent *event) {
     insertCompositeLetter();
     event->ignore();
   } else {
-    TextEdit::keyPressEvent(event);
+    try {
+       TextEdit::keyPressEvent(event);
+    } catch (...) {
+        qDebug() << "exception";
+    }
 
     QList<QKeyValue> choices;
+
     charMapTree->get_choice(toolTipControl->charPrefix(this), 4, false,
                             choices);
 
@@ -1346,7 +1353,7 @@ void MdiChild::keyPressEvent(QKeyEvent *event) {
     }
   }
   if (_state == F2) {
-    characterToolTipText(event);
+    characterAutoCompleterText(event);
     //       wordToolTipText(event);
   } else if (_state == F3) {
     wordToolTipText(event);

@@ -27,43 +27,20 @@ Profile::Profile(QWidget *parent) : QWidget(parent) {
     QDir().mkdir("profile");
   }
 
-  QString fName = QLatin1String(":files") + QDir::separator() +
-                  QLatin1String("DEFAULT.dat");
-  QString foutName = QLatin1String("profile") + QDir::separator() +
+  QString profName = "DEFAULT";
+
+  QString fName = QLatin1String("profile") + QDir::separator() +
                      QLatin1String("DEFAULT.dat");
 
-  QFile file(fName);
-  QFile outfile(foutName);
-
-  if (!isValidProfile("DEFAULT")) {
-    Utilities::warningBox(
-        QString("Do not see folder \"profile\"! \n") +
-        QString("So we will create a new DEFAULT profile in folder "
-                "\"profile\"\n\n") +
-        QString("But you can always replace the DEFAULT.dat file in the "
-                "\"profile\"") +
-        QString("folder if have your old DEFAULT.dat!! to restore your old "
-                "preferences and stored words!"));
-
-    if (file.open(QIODevice::ReadOnly | QIODevice::Text) &&
-        outfile.open(QIODevice::WriteOnly | QIODevice::Text)) {
-      QTextStream out(&outfile);
-      QTextStream in(&file);
-      QString outLine;
-      while (!in.atEnd()) {
-        QString inStr = in.readLine();
-        //  qDebug() << inStr;
-        outLine.append(inStr + "\n");
+  if( profName==QString("DEFAULT")) {
+      if (!QFile::exists(fName)) {
+          if (!QFile::copy(":/files/DEFAULT.dat", fName)) {
+              QMessageBox::information(0, "error",
+                                       "Could not create file :" + fName);
+          }
       }
-      out << outLine;
-    }
-  }
-
-  file.close();
-  outfile.close();
-
+   }
   kbd = NULL;
-
 }
 
 void Profile::display() {
@@ -964,14 +941,18 @@ bool Profile::fill_keyboard(const QString &profName) {
   if (profName.length() == 0)
     return false;
 
+  if (!QDir("profile").exists()) {
+    QDir().mkdir("profile");
+  }
+
   QString fName =
       QLatin1String("profile/") + profName.toUpper() + QLatin1String(".dat");
 
   if( profName==QString("DEFAULT")) {
       if (!QFile::exists(fName)) {
-          if (!QFile::copy(":/file/DEFAULT.dat", fName)) {
+          if (!QFile::copy(":/files/DEFAULT.dat", fName)) {
               QMessageBox::information(0, "error",
-                                       "Could not create file :" + fName);
+                                       "Could not create file -- " + fName);
           }
       }
    }

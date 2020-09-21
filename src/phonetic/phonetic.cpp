@@ -49,7 +49,16 @@ QHash<QString, QString> *Phonetic::userwords_unicodexstr_phonetic = NULL;
 QHash<QChar, QHash<QChar, float> *> *Phonetic::distances = NULL;
 
 Phonetic::Phonetic() {
+
 }
+
+void Phonetic::initUserWordHashes() {
+   if (userwords_phonetic_unicodexstr == NULL) {
+       userwords_phonetic_unicodexstr = new QHash<QString, QString>;
+       userwords_unicodexstr_phonetic = new QHash<QString, QString>;
+   }
+}
+
 bool Phonetic::insertWordFromOutside(QString unicodeWord) {
   QStringList charList;
 

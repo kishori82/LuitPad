@@ -93,6 +93,8 @@ public:
 
   static void addUserWord(const QString &roman, const QString &unicode);
 
+  static void initUserWordHashes();
+
   static void createPhoneticTreeProfile(QStringList &wordList);
   static void insertWord(TreeNode *curNode, QStringList &charList,
                          QString unicodeWord);

@@ -53,6 +53,7 @@ void Highlighter::enableSpellChecking(const bool state) {
   bool old = spellCheckActive;
   if (!spellerError)
     spellCheckActive = state;
+  qDebug() << "enable spell chaecking";
   if (old != spellCheckActive)
     rehighlight();
 }
@@ -98,7 +99,6 @@ void Highlighter::spellCheck(const QString &text) {
 }
 
 bool Highlighter::checkWord(QString word) {
-
   //    qDebug() << Utilities::getUnicodeString(word);
   //	check = pChecker->spell(encodedString.data());
   if (!Utilities::isAssamese(word)) {
@@ -108,8 +108,9 @@ bool Highlighter::checkWord(QString word) {
   // if( Romanization::UnicodeToRomanOverrideMap.contains(
   // Utilities::getUnicodeString(word)) ) return false;
   // qDebug() << " ignore list size " << ignoreDictionary->size();
-  if (ignoreDictionary != NULL && ignoreDictionary->contains(word))
+  if (ignoreDictionary != NULL && ignoreDictionary->contains(word)) {
     return false;
+  }
 
   if (profileWords == NULL)
     profileWords = WordsTrie::getProfileWordsTrie();
@@ -133,6 +134,7 @@ bool Highlighter::checkWord(QString word) {
      if (Phonetic::userwords_unicodexstr_phonetic->contains( Utilities::getUnicodeString(str)))
       return false;
   }
+
   return true;
 }
 

@@ -347,7 +347,13 @@ void TextEdit::charToolTip(QKeyEvent *e) {
 
 void TextEdit::wordToolTip(QKeyEvent *e) { QTextEdit::keyPressEvent(e); }
 
-void TextEdit::keyPressEvent(QKeyEvent *e) { QTextEdit::keyPressEvent(e); }
+void TextEdit::keyPressEvent(QKeyEvent *e) {
+    try{
+        QTextEdit::keyPressEvent(e);
+    } catch(std::exception &x) {
+        qDebug() << "exception " << x.what();
+    }
+}
 
 bool TextEdit::canInsertFromMimeData(const QMimeData *source) const {
   return source->hasImage() || source->hasUrls() ||

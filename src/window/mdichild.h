@@ -105,7 +105,7 @@ protected:
 
 private:
   void wordToolTipText(QKeyEvent *e);
-  void characterToolTipText(QKeyEvent *event);
+  void characterAutoCompleterText(QKeyEvent *event);
   void expandListonPrefix();
   void vowelModToolTipText();
   CONFIG_STATES getConfigState();

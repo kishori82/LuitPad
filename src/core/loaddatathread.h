@@ -63,6 +63,7 @@ class LoadDataThread : public QThread {
 
     wordsMapTree->LoadDictionaryWords(dictionaryFile);
 
+    Phonetic::initUserWordHashes();
     Phonetic::setInflexTypes(":/files/inflexions_comb.txt");
     Phonetic::createSingleInflections();
     Phonetic::createInflexCombinations();
@@ -74,8 +75,7 @@ class LoadDataThread : public QThread {
     Phonetic::createPhoneticTree(dictionaryFile);
 
     // add user defined words and character mappings 
-    Phonetic::addUserWordsToPhoneticTree("profile/" +
-                                         QLatin1String("DEFAULT.dat"));
+    // Phonetic::addUserWordsToPhoneticTree("profile/" + QLatin1String("DEFAULT.dat"));
 
     Phonetic::initializeDistances();
 
