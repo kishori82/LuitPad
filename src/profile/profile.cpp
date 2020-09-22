@@ -32,14 +32,15 @@ Profile::Profile(QWidget *parent) : QWidget(parent) {
   QString fName = QLatin1String("profile") + QDir::separator() +
                      QLatin1String("DEFAULT.dat");
 
-  if( profName==QString("DEFAULT")) {
-      if (!QFile::exists(fName)) {
-          if (!QFile::copy(":/files/DEFAULT.dat", fName)) {
-              QMessageBox::information(0, "error",
-                                       "Could not create file :" + fName);
-          }
+  if (profName==QString("DEFAULT")) {
+    if (!QFile::exists(fName)) {
+       if (!Utilities::copy_file(":/files/DEFAULT.dat", fName)) {
+          QMessageBox::information(0, "error",
+                  "Could not create file :" + fName);
+        }
       }
    }
+
   kbd = NULL;
 }
 
@@ -855,7 +856,6 @@ bool Profile::addWord(const QString &newWord, const QString &roman) {
   QString fName =
     QLatin1String("profile/") + currentProfile.toUpper() + QLatin1String(".dat");
 
-  QFile::setPermissions(fName, QFileDevice::ReadOwner|QFileDevice::WriteOwner);
   QFile outFile(fName);
   QString outText;
 
@@ -947,21 +947,14 @@ bool Profile::fill_keyboard(const QString &profName) {
     QDir().mkdir("profile");
   }
 
-  QString fName =
-      QLatin1String("profile/") + profName.toUpper() + QLatin1String(".dat");
+  QString fName = QLatin1String("profile/") + profName.toUpper() + QLatin1String(".dat");
 
-  if( profName==QString("DEFAULT")) {
-      if (!QFile::exists(fName)) {
-          if (!QFile::copy(":/files/DEFAULT.dat", fName)) {
-              QMessageBox::information(0, "error",
-                                       "Could not create file -- " + fName);
-          }
-          QFile::setPermissions(fName, QFileDevice::ReadOwner|QFileDevice::WriteOwner);
-      }
-   }
+  QFile infile(QString(":/files/DEFAULT.dat"));
+  if (profName.toUpper() == QString("DEFAULT") && !QFileInfo::exists(fName)) {
+      Utilities::copy_file(QString(":/files/DEFAULT.dat"), fName);
+  }
 
   QFile file(fName);
-
   QHash<QString, QString> charMap;
   QHash<QString, QString> profileWordMap;
 

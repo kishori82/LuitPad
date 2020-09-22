@@ -65,6 +65,7 @@ class LoadDataThread : public QThread {
 
     Phonetic::initUserWordHashes();
     Phonetic::setInflexTypes(":/files/inflexions_comb.txt");
+
     Phonetic::createSingleInflections();
     Phonetic::createInflexCombinations();
 
@@ -84,9 +85,7 @@ class LoadDataThread : public QThread {
     InflexTrie *inflexTree = InflexTrie::getInflexTrie();
 
     inflexTree->LoadInflections(Phonetic::singleInflexionsReverse);
-
     Utilities::initializeAlphabetOrder();
-
     QString IdeasFile = ":/files/T_IdeaBase.tsv";
     QString engWrdIdFile = ":/files/T_WrdENGIdea.csv";
     QString asmWrdWrdId = ":/files/T_WrdASMIdea.csv";

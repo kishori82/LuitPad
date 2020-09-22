@@ -57,6 +57,7 @@ SOFTWARE.
 #include "src/characters/chartrie.h"
 #include "src/core/constants.h"
 #include "src/window/mdichild.h"
+#include "src/utils/utilities.h"
 
 class Profile : public QWidget {
   Q_OBJECT

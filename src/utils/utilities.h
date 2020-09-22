@@ -62,6 +62,8 @@ public:
   static void trimRomanEnd(QString &newWord);
   static QString getField(QString str, QString delim, unsigned int i);
   static QString createStringFromCodeList(QList<QString> list);
+  static bool copy_file(const QString & sourcefile, const QString & destfile);
+
   static QStringList getStringListFromUnicodeString(QString unicodeString);
 
   static QString getCharacterUnicodeForHTML(QString string);

@@ -329,6 +329,7 @@ QMenu *MainWindow::getNewChildMenu() {
 }
 
 void MainWindow::newFile(FILETYPE type) {
+
   MdiChild *child = createMdiChild(type);
 
   if (child == NULL)
@@ -669,7 +670,6 @@ void MainWindow::createMessageText(MdiChild *child) {
 }
 
 MdiChild *MainWindow::createMdiChild(FILETYPE type) {
-
   MdiChild *child = new MdiChild;
 
   setCentralWidget(editor);

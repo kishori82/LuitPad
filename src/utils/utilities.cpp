@@ -480,6 +480,27 @@ QStringList Utilities::getStringListFromUnicodeString(QString unicodeString) {
   return stringlist;
 }
 
+bool Utilities::copy_file(const QString & sourcefile, const QString &destfile) {
+  QFile infile(sourcefile);
+  QFile outfile(destfile);
+  if (infile.open(QIODevice::ReadOnly | QIODevice::Text) &&
+      outfile.open(QIODevice::WriteOnly | QIODevice::Text)) {
+        QTextStream out(&outfile);
+        QTextStream in(&infile);
+        QString outLine;
+        while (!in.atEnd()) {
+           QString inStr = in.readLine();
+           outLine.append(inStr + "\n") ;
+        }
+        out << outLine;
+   } else {
+     return false;
+   }
+   infile.close();
+   outfile.close();
+   return true;
+}
+
 QString Utilities::createStringFromCodeList(QList<QString> list, int base) {
 
   QString text("");
