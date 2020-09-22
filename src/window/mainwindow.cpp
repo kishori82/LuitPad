@@ -42,7 +42,7 @@ SOFTWARE.
 #include "src/window/mdichild.h"
 
 
-#define LUITPAD_VERSION  "LuitPad 3.0.4"
+#define LUITPAD_VERSION  "LuitPad 3.0.5"
 #ifdef _WINDOWS
 #include "security.h"
 

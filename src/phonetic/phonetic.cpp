@@ -23,6 +23,7 @@ SOFTWARE.
 ******************************************************************************/
 
 #include "src/phonetic/phonetic.h"
+#include "src/profile/profile.h"
 #include "float.h"
 #include "src/utils/utilities.h"
 

@@ -662,7 +662,6 @@ bool Profile::saveProfile() {
   QFile outFile(fn);
   outFile.open(QIODevice::Append);
   QString outText;
-  //  qDebug() << "File to save in " << fn;
   if (!outFile.isOpen()) {
     qDebug() << "Error, unable to open" << fn << "for output";
     return false;
@@ -854,17 +853,21 @@ bool Profile::addWord(const QString &newWord, const QString &roman) {
   if (newWord.length() == 0)
     return false;
   QString fName =
-    QLatin1String("profile/") + currentProfile + QLatin1String(".dat");
+    QLatin1String("profile/") + currentProfile.toUpper() + QLatin1String(".dat");
 
+  QFile::setPermissions(fName, QFileDevice::ReadOwner|QFileDevice::WriteOwner);
   QFile outFile(fName);
   QString outText;
 
   if (outFile.open(QIODevice::Append | QIODevice::Text)) {
     QTextStream outStream(&outFile);
+
     outText = QString("<word>") + "\t" + newWord + "\t" + roman;
     outStream << outText + "\n";
     outFile.flush();
     outFile.close();
+  } else {
+    qDebug() << "Failed to open the profile " << fName;
   }
 
   //   qDebug() << "In profile adding a word  Profile 661";
@@ -920,7 +923,6 @@ bool Profile::isValidProfile(const QString &profName) {
 
   unsigned int valid_lines = 0;
   if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-    //    qDebug() << "have opened ";
     QTextStream in(&file);
     while (!in.atEnd()) {
       QString inStr = in.readLine().trimmed();
@@ -954,6 +956,7 @@ bool Profile::fill_keyboard(const QString &profName) {
               QMessageBox::information(0, "error",
                                        "Could not create file -- " + fName);
           }
+          QFile::setPermissions(fName, QFileDevice::ReadOwner|QFileDevice::WriteOwner);
       }
    }
 
@@ -1007,13 +1010,13 @@ bool Profile::fill_keyboard(const QString &profName) {
     }
     Phonetic::createPhoneticTreeProfile(wordList);
     //   profileWords->printData();
-    charTrie->LoadCharTreeFromProfile(charMap);
+    charTrie->LoadCharTreeFromProfile(charMap);    
+    file.close();
+
   } else {
     QMessageBox::information(0, "error",
                              "make sure your profile in file " + fName);
   }
-
-  file.close();
 
   if (kbd == NULL)
     return false;
